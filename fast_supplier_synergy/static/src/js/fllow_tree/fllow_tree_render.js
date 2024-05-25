@@ -233,6 +233,11 @@ export class FllowTreeRender extends Component {
             'date_expected': e.target.value,
         })
     }
+
+    async onlyConfirmStyleColorMaterialRequirementsClick(data){
+        let action = await this.ormService.call(this.props.resModel,'get_blank_order_bom_detail',[[]],data)
+        this.actionService.doAction(action)
+    }
 }
 
 FllowTreeRender.template = 'fast_supplier_synergy.FllowTreeRenderView'

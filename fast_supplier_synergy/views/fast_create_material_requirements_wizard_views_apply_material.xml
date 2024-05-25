@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="fast_create_material_requirements_wizard_form_view_apply_material" model="ir.ui.view">
+        <field name="name">fast_create_material_requirements_wizard_form_view_apply_material</field>
+        <field name="model">fast.create.material.requirements.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="default_code" readonly="1" force_save="1"
+                               options="{'no_open': True, 'no_create': True}"/>
+                    </group>
+                    <notebook>
+                        <page string="主料需求">
+                            <group>
+                                <div class="o_td_label" attrs="{'invisible': [('select_all_main', '=', False)]}">
+                                    <label for="select_all_main" string="全消"/>
+                                </div>
+                                <field name="select_all_main" nolabel="1" widget="boolean_toggle"
+                                       attrs="{'invisible': [('select_all_main', '=', False)]}"/>
+                                <div class="o_td_label" attrs="{'invisible': [('select_all_main', '=', True)]}">
+                                    <label for="select_all_main" string="全选"/>
+                                </div>
+                                <field name="select_all_main" nolabel="1" widget="boolean_toggle"
+                                       attrs="{'invisible': [('select_all_main', '=', True)]}"/>
+                            </group>
+                            <field name="main_order_line">
+                                <tree create="0" delete="0" editable="bottom">
+                                    <field name="is_apply" readonly="True"/>
+                                    <field name="select" />
+                                    <field name="product_default_code" readonly="True"/>
+                                    <field name="product_default_name" readonly="True"/>
+                                    <field name="color_cn_name" readonly="True"/>
+                                    <field name="order_qty" readonly="True"/>
+                                    <field name="apply_product_qty" readonly="True"/>
+                                    <field name="reality_product_qty" attrs="{'readonly':[('is_apply','=','True')]}" />
+                                    <field name="bom_need_qty" readonly="True"/>
+                                    <field name="bom_loss_qty" readonly="True"/>
+                                    <field name="bom_product_qty" readonly="True"/>
+                                    <field name="os_assist_product_qty" readonly="True"/>
+                                    <field name="assist_product_qty" readonly="True"/>
+                                    <field name="body" readonly="True"/>
+                                    <field name="partner_id" readonly="True"/>
+                                    <field name="partner_product_code" readonly="True"/>
+                                    <field name="f_width" readonly="True"/>
+                                    <field name="g_weight" readonly="True"/>
+                                    <field name="product_uom_conversio_char" readonly="True"/>
+                                    <field name="origin_product_ids" readonly="True" />
+                                    <field name="uom_po_id" invisible="1"/>
+                                    <field name="assist_uom_id" invisible="1"/>
+                                    <field name="erp_id"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group col="3" colspan="3">
+                                            <group>
+                                                <field name="product_default_code"/>
+                                                <field name="product_default_name"/>
+                                                <field name="color_cn_name"/>
+                                                <field name="bom_need_qty" />
+                                                <field name="bom_loss_qty" />
+                                            </group>
+                                            <group>
+                                                <field name="bom_product_qty" />
+                                                <field name="os_assist_product_qty" />
+                                                <field name="assist_product_qty" />
+                                                <field name="apply_product_qty"/>
+                                                <field name="body"/>
+                                            </group>
+                                            <group>
+                                                <field name="partner_id"
+                                                      />
+                                                <field name="partner_product_code"/>
+                                                <field name="f_width"/>
+                                                <field name="g_weight"/>
+                                                <field name="product_uom_conversio_char"/>
+                                            </group>
+                                        </group>
+                                        <field name="uom_po_id" />
+                                        <field name="assist_uom_id" />
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                    <notebook>
+                        <page string="辅料需求">
+                            <group>
+                                <div class="o_td_label" attrs="{'invisible': [('select_all_sub', '=', False)]}">
+                                    <label for="select_all_sub" string="全消"/>
+                                </div>
+                                <field name="select_all_sub" nolabel="1" widget="boolean_toggle"
+                                       attrs="{'invisible': [('select_all_sub', '=', False)]}"/>
+                                <div class="o_td_label" attrs="{'invisible': [('select_all_sub', '=', True)]}">
+                                    <label for="select_all_sub" string="全选"/>
+                                </div>
+                                <field name="select_all_sub" nolabel="1" widget="boolean_toggle"
+                                       attrs="{'invisible': [('select_all_sub', '=', True)]}"/>
+                            </group>
+                            <field name="sub_order_line">
+                                <tree create="0" delete="0" editable="bottom">
+                                    <field name="is_apply" readonly="True"/>
+                                    <field name="select" />
+                                    <field name="product_default_code" readonly="True"/>
+                                    <field name="product_default_name" readonly="True"/>
+                                    <field name="color_cn_name" readonly="True"/>
+                                    <field name="product_spec_remark" readonly="True"/>
+                                    <field name="order_qty" readonly="True"/>
+                                    <field name="apply_product_qty" readonly="True"/>
+                                    <field name="reality_product_qty" attrs="{'readonly':[('is_apply','=',True)]}"/>
+                                    <field name="remark" readonly="True"/>
+                                    <field name="bom_need_qty" readonly="True"/>
+                                    <field name="bom_loss_qty" readonly="True"/>
+                                    <field name="bom_product_qty" readonly="True"/>
+                                    <field name="os_assist_product_qty" readonly="True"/>
+                                    <field name="assist_product_qty"
+                                         readonly="True"/>
+                                    <field name="body"/>
+                                    <field name="origin_product_ids"/>
+                                    <field name="uom_po_id" />
+                                    <field name="assist_uom_id" />
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group colspan="3" col="3">
+                                            <group>
+                                                <field name="product_default_code"/>
+                                                <field name="product_default_name"/>
+                                                <field name="color_cn_name"/>
+                                                <field name="product_spec_remark"/>
+                                            </group>
+                                            <group>
+                                                <field name="bom_need_qty"/>
+                                                <field name="bom_loss_qty"/>
+                                                <field name="bom_product_qty" />
+                                                <field name="os_assist_product_qty"/>
+                                            </group>
+                                            <group>
+                                                <field name="assist_product_qty"/>
+                                                <field name="apply_product_qty"/>
+                                                <field name="body"/>
+                                            </group>
+                                            <field name="uom_po_id" invisible="1"/>
+                                            <field name="assist_uom_id" invisible="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>`
+                <footer>
+                  
+                    <button special="cancel" data-hotkey="z" string="返回"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="fast_create_material_requirements_wizard_action_apply_material" model="ir.actions.act_window">
+        <field name="name">确认待申领物料需求</field>
+        <field name="res_model">fast.create.material.requirements.wizard</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'extra-modal-max-95'}</field>
+        <field name="view_mode">form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0), (0, 0, {'view_mode': 'form', 'view_id': ref('fast_create_material_requirements_wizard_form_view_apply_material')})]"/>
+    </record>
+</odoo>

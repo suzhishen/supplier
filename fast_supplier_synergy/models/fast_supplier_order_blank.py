@@ -206,7 +206,7 @@ class BlankOrderDetail(models.Model):
     _name = 'fast.blank_order_detail'
     _description = '订单明细'
 
-    erp_id = fields.Integer('erp_id')
+
     blank_order_id = fields.Many2one('fast.supplier.order.blank', string='所属订单', ondelete='cascade')
     packing_list_detail_quantity = fields.One2many('fast.blank.packing_list_detail', 'blank_order_detail_id', string='相关装箱单明细', index=True)
 
@@ -331,7 +331,7 @@ class BlankOrderDetail(models.Model):
             limit=limit,
             offset=offset,
             fields=list(self._fields.keys()),
-            groupby=['product_color_name', 'po_name']
+            groupby='product_color_name'
         )
         datas = []
         foot_order_line_total = foot_incoming_line_total = foot_incomplete_line_total = 0
@@ -560,13 +560,61 @@ class BlankOrderDetail(models.Model):
         action['target'] = 'new'
         return action
 
+    """获取款色BOM物料（主料+辅料）用量明细"""
+    def get_blank_order_bom_detail(self,*args,**kwargs):
+        values = {'params':{}}
+        values['params']['datas'] = {
+            'po':kwargs.get('po',''),
+            'partner_name':kwargs.get('partner_name',''),
+            'product_tmpl_code':kwargs.get('product_tmpl_code',''),
+            'product_configuration_code':kwargs.get('product_configuration_code',''),
+        }
+        Dev_url = 'http://192.168.6.50:10010'
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url=f'{Dev_url}/leda/blank_order_material_bom_detail', json=values, headers=headers)
+        import json
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            result = data['result']
+            print(data)
+            wizard_id = self.env['fast.create.material.requirements.wizard'].sudo().create({
+                # 'outsource_order_blank_id': self.id,
+                # 'outsource_order_blank_line_ids': [(6, 0, product_tmpl_lines.ids)],
+                'default_code': 'fasfdsa',
+                'erp_id':result['data']['erp_id']
+            })
+            for line in result['data']['order_line']:
+                self.env['fast.create.material.requirements.wizard.line'].create({
+                    'order_qty': line['order_qty'],
+                    'product_id': line['product_id'],
+                    'product_default_code':  line['product_default_code'],
+                    'product_default_name':  line['product_default_name'],
+                    'color_cn_name':  line['color_cn_name'],
+                    'product_spec_remark':  line['product_spec_remark'],
+                    'conf_type':line['conf_type'],
+                    'os_assist_product_qty': line['os_assist_product_qty'],
+                    'assist_product_qty': line['assist_product_qty'],
+                    'bom_need_qty': line['bom_need_qty'],
+                    'bom_loss_qty': line['bom_loss_qty'],
+                    'bom_product_qty': line['bom_product_qty'],
+                    'apply_product_qty': line['apply_product_qty'],
+                    'body': line['body'],
+                    'order_id':wizard_id.id,
+                    'erp_id': line['erp_id'],
+                })
+            action = self.env.ref('fast_supplier_synergy.fast_create_material_requirements_wizard_action_apply_material').sudo().read()[0]
+            action['res_id'] = wizard_id.id
+            action['context'] = {'dialog_size': 'extra-modal-max-95'}
+            return action
+  
+
 
 class FastBlankOrderMaterialRequirements(models.Model):
     _name = 'fast.blank.order.material.requirements'
     _description = '订单中心--物料需求'
     _order = 'outsource_order_blank_id'
 
-    erp_id = fields.Integer('erp_id')
+ 
     # 关联主表
     outsource_order_blank_id = fields.Many2one('fast.supplier.order.blank', string='所属空白版委外加工单',
                                                ondelete='cascade')
@@ -630,7 +678,7 @@ class ProcessCost(models.Model):
     _description = '款式加工价格'
     _rec_name = 'name'
 
-    erp_id = fields.Integer('erp_id')
+
     blank_order_id = fields.Many2one('fast.supplier.order.blank', string='所属订单', ondelete='cascade')
 
     name = fields.Char(string='款式', help='空白版款号')
@@ -653,3 +701,5 @@ class ProcessCost(models.Model):
     def _compute_total_price(self):
         for res in self:
             res.price = res.process_price + res.management_price + res.other_price + res.bom_price
+
+
