@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="blank_configuration_form_view" model="ir.ui.view">
+            <field name="name">Blank Configuration Form</field>
+            <field name="model">fast.blank.configuration</field>
+            <field name="arch" type="xml">
+                <form edit="false" create="false" delete="false" string="Blank Configuration Form">
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+
+                            <button class="oe_stat_button" name="action_get_attachment_view_diagram" type="object"
+                                    icon="fa-paperclip">
+                                <field name="diagram_attr_count" widget="statinfo"/>
+                            </button>
+
+                            <button class="oe_stat_button" name="action_get_attachment_view_process" type="object"
+                                    icon="fa-paperclip">
+                                <field name="process_attr_count" widget="statinfo"/>
+                            </button>
+
+                            <button class="oe_stat_button" name="action_get_attachment_view_size" type="object"
+                                    icon="fa-paperclip">
+                                <field name="size_attr_count" widget="statinfo"/>
+                            </button>
+
+                            <button class="oe_stat_button" name="action_view_bom" type="object"
+                                    attrs="{'invisible':[('bom_count', '=', 0)]}" icon="fa-flask">
+                                <field string="款色BOM明细" name="bom_count" widget="statinfo"/>
+                            </button>
+
+
+                            <!--                            <button class="oe_stat_button" name="action_view_bom" type="object" icon="fa-flask">-->
+                            <!--                                <field string="BOM" name="blank_bom" widget="statinfo"/>-->
+                            <!--                            </button>-->
+                        </div>
+                        <field name="image_1920" widget="web_copy_image" class="oe_avatar" force_save="1"/>
+                        <div class="oe_title">
+                            <label for="default_code" string="款号"/>
+                            <h1>
+                                <field name="default_code" required="1" readonly="1" force_save="1"/>
+                            </h1>
+                            <div class="o_row">
+                                <span class="oe_inline">
+                                    <span>是否印花</span>
+                                    <span>
+                                        <field name="is_print_patterns" placeholder="是否印花" class="oe_inline"
+                                               force_save="1"
+                                               widget="boolean_toggle"
+                                               readonly="1"/>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <group col="3" string="产品信息" style="clear:both !important;">
+                            <group>
+                                <field name="categ_name" readonly="1"/>
+                                <field name="name" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="assist_uom_name" readonly="1"/>
+                                <field name="main_product_configuration_name" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="款式信息" colspan="2" col="2">
+                            <group>
+                                <field name="product_tmpl_id" readonly="1" force_save="1"/>
+                                <field name="product_id" force_save="1" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="untaxed_amount" widget="monetary" readonly="1"/>
+                                <field name="remark" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="主料成本" name="main_material_line">
+                                <field name="main_material_line" context="{'dialog_size':'extra-modal-max-80'}">
+                                    <tree decoration-danger="sum_price == 0" create="0" delete="0" edit="0">
+                                        <field name="product_id" readonly="1" force_save="1"/>
+                                        <field name="body" readonly="1" force_save="1" optional="show"/>
+                                        <field name="need_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="loss_qty" readonly="1" force_save="1"/>
+                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="business_price" readonly="1" force_save="1" optional="hide" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="spec" readonly="1" force_save="1" optional="show"/>
+                                        <field name="f_width" readonly="1" force_save="1" optional="show"/>
+                                        <field name="g_weight" readonly="1" force_save="1" optional="show"/>
+                                        <field name="uom_po_id" readonly="1" force_save="1" optional="hide"/>
+                                        <field name="assist_uom_id" readonly="1" force_save="1" optional="hide"/>
+                                        <field name="assist_uom_id" invisible="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <notebook>
+                            <page string="辅料成本" name="sub_material_line">
+                                <field name="sub_material_line" context="{'dialog_size':'extra-modal-max-80'}">
+                                    <tree decoration-danger="sum_price == 0" create="0" delete="0" edit="0">
+                                        <field name="product_id" readonly="1" force_save="1"/>
+                                        <field name="body" readonly="1" force_save="1" optional="show"/>
+                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="business_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="assist_uom_id" readonly="1" force_save="1" optional="hide"/>
+                                        <field name="assist_uom_id" readonly="1" force_save="1" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group>
+                            <group string="二次工艺费用">
+                                <field name="secondary_process_line" nolabel="1" colspan="2">
+                                    <tree create="0" delete="0" edit="0" decoration-danger="price == 0">
+                                        <field name="name" readonly="1"/>
+                                        <field name="partner_id" readonly="1"/>
+                                        <field name="price" readonly="1"/>
+                                        <field name="remark" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="其它费用">
+                                <field name="other_fee_line" nolabel="1" colspan="2">
+                                    <tree create="0" delete="0" edit="0" decoration-danger="price == 0">
+                                        <field name="name" readonly="1"/>
+                                        <field name="price" readonly="1"/>
+                                        <field name="remark" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="blank_configuration_tree_view" model="ir.ui.view">
+            <field name="name">Blank Configuration Tree</field>
+            <field name="model">fast.blank.configuration</field>
+            <field name="arch" type="xml">
+                <tree edit="false" create="false" string="Blank Configuration Tree">
+                    <field name="default_code" string="款号"/>
+                    <field name="name"/>
+                    <field name="categ_name"/>
+                    <field name="main_product_configuration_name"/>
+                    <field name="assist_uom_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="blank_configuration_search_view" model="ir.ui.view">
+            <field name="name">Blank Configuration Search</field>
+            <field name="model">fast.blank.configuration</field>
+            <field name="arch" type="xml">
+                <search string="Blank Configuration Search">
+                    <field name="default_code"/>
+                    <field name="name"/>
+                    <field name="categ_name"/>
+                    <field name="main_product_configuration_name"/>
+                    <field name="assist_uom_name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="blank_configuration_action_view" model="ir.actions.act_window">
+            <field name="name">基础资料</field>
+            <field name="res_model">fast.blank.configuration</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="fast_supplier_synergy.blank_configuration_search_view"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('fast_supplier_synergy.blank_configuration_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('fast_supplier_synergy.blank_configuration_form_view')})]"/>
+        </record>
+    </data>
+</odoo>

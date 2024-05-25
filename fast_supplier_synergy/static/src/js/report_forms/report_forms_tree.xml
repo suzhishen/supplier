@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="Report.FormsTree" owl="1">
+        <body>
+            <table class="layui-table" id="ID-table-demo-data">
+                <thead>
+                    <tr>
+                        <th lay-data="{field:'id', width:80, sort: true}" rowspan="3">箱号</th>
+                        <th lay-data="{field:'username', width:80}" rowspan="3">订单号</th>
+                        <th lay-data="{field:'sex', width:80, sort: true}" rowspan="3">款号</th>
+                        <th lay-data="{field:'city'}" rowspan="3">颜色</th>
+                        <th lay-data="{align:'center'}" colspan="14">尺码</th>
+                    </tr>
+                    <tr>
+                        <th lay-data="{field:'center'}">4</th>
+                        <th lay-data="{field:'center'">5</th>
+                        <th lay-data="{field:'center'">6</th>
+                        <th lay-data="{field:'center'">7</th>
+                        <th lay-data="{field:'center'">8</th>
+                        <th lay-data="{field:'center'">8-10</th>
+                        <th lay-data="{field:'center'">10-12</th>
+                        <th lay-data="{field:'center'">12-14</th>
+                        <th lay-data="{field:'center'">14-16</th>
+                        <th lay-data="{field:'center'">16</th>
+                        <th lay-data="{field:'center'">18/20</th>
+                        <th lay-data="{field:'center'">2T</th>
+                        <th lay-data="{field:'center'">3T</th>
+                        <th lay-data="{field:'center'">4T</th>
+                    </tr>
+                    <tr>
+                        <th lay-data="{align:'center'}">XXS</th>
+                        <th lay-data="{align:'center'}">XS</th>
+                        <th lay-data="{align:'center'}">S</th>
+                        <th lay-data="{align:'center'}">M</th>
+                        <th lay-data="{align:'center'}">L</th>
+                        <th lay-data="{align:'center'}">XL</th>
+                        <th lay-data="{align:'center'}">2XL</th>
+                        <th lay-data="{align:'center'}">3XL</th>
+                        <th lay-data="{align:'center'}">4XL</th>
+                        <th lay-data="{align:'center'}">5XL</th>
+                        <th lay-data="{align:'center'}">6XL</th>
+                    </tr>
+                </thead>
+            </table>
+        </body>
+    </t>
+</templates>

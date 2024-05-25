@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for fast.blank.packing_list_detail -->
+        <record id="seq_blank_packing_list_detail" model="ir.sequence">
+            <field name="name">空白版装箱单明细序列号</field>
+            <field name="code">fast.blank.packing_list_detail.seq</field>
+            <field name="prefix">PP</field>
+            <field name="number_next">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

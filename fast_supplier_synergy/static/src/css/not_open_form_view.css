@@ -1,0 +1,3 @@
+.not_open_form_view tbody {
+    pointer-events: none;
+}

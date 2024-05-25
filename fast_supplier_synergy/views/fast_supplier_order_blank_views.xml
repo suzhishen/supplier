@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="supplier_order_blank_fob_form_view" model="ir.ui.view">
+            <field name="name">Supplier Order Blank FOB Form</field>
+            <field name="model">fast.supplier.order.blank</field>
+            <field name="arch" type="xml">
+                <form create="false" delete="false" string="Supplier Order Blank FOB Form">
+                    <header>
+                        <button name="confirm_packing" type="object" string="确认接收"
+                                attrs="{'invisible': [('confirm_state', '!=', 'not_confirm')]}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group col="4" colspan="4">
+                            <group>
+                                <field name="processing_plant" readonly="1"/>
+                                <field name="order_quantity" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="date_planned" readonly="1"/>
+                                <field name="completed_quantity" readonly="1"/>
+                            </group>
+                            <group>
+                                <!--                                <field name="date_expected"/>-->
+                                <field name="unfinished_quantity" readonly="1"/>
+                                <field name="confirm_state" readonly="1" widget="badge"
+                                       decoration-success="confirm_state=='have_confirm'"
+                                       decoration-danger="confirm_state=='not_confirm'"/>
+                            </group>
+                            <group>
+                                <field name="type" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="订单明细" name="blank_order_detail_line" readonly="1">
+                                <widget name="fast_order_center_outsourced_order_show_tree"/>
+                            </page>
+                            <page string="已申领物料(主料)">
+                                <field name="main_material_order_line" force_save="1" readonly="1">
+                                    <tree>
+                                        <field name="product_default_code"/>
+                                        <field name="product_default_name"/>
+                                        <field name="color_value_name"/>
+                                        <field name="color_cn_name"/>
+                                        <field name="categ_name" optional="hide"/>
+                                        <field name="product_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="body"/>
+                                        <field name="assist_uom_name" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="已申领物料(辅料)">
+                                <field name="sub_material_order_line" force_save="1" readonly="1">
+                                    <tree>
+                                        <field name="product_default_code"/>
+                                        <field name="product_default_name"/>
+                                        <field name="color_value_name"/>
+                                        <field name="color_cn_name"/>
+                                        <field name="product_spec_name"/>
+                                        <field name="product_spec_remark"/>
+                                        <field name="categ_name" optional="hide"/>
+                                        <field name="product_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
+                                        <field name="body"/>
+                                        <field name="assist_uom_name" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="加工费用">
+                                <field name="partner_price_line" force_save="1" readonly="1" class="not_open_form_view">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="partner_name"/>
+                                        <field name="process_price"/>
+                                        <field name="management_price"/>
+                                        <field name="other_price"/>
+                                        <field name="price"/>
+                                        <field name="bom_price"/>
+                                        <field name="total_price"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="partner_name"/>
+                                            <field name="process_price"/>
+                                            <field name="management_price"/>
+                                            <field name="other_price"/>
+                                            <field name="price"/>
+                                            <field name="bom_price"/>
+                                            <field name="total_price"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                        <notebook>
+                            <page string="变更明细" name="blank_order_detail_line" readonly="1">
+                                <widget name="fast_order_center_change_order_show_tree"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="supplier_order_blank_fob_tree_view" model="ir.ui.view">
+            <field name="name">Supplier Order Blank FOB Tree</field>
+            <field name="model">fast.supplier.order.blank</field>
+            <field name="arch" type="xml">
+                <tree edit="false" create="false" string="Supplier Order Blank FOB Tree">
+                    <!--                    <widget name="web_ribbon" title="待完成" bg_color="bg-info" attrs="{'invisible': [('state', 'not in', [draft,part,done,cancel])]}"/>-->
+                    <!--                    <widget name="web_ribbon" title="已锁定" bg_color="bg-success" attrs="{'invisible': [('state', '=', False)]}"/>-->
+                    <!--                    <widget name="web_ribbon" title="已锁定" bg_color="bg-success" attrs="{'invisible': [('state', '=', False)]}"/>-->
+                    <field name="name"/>
+                    <field name="processing_plant"/>
+                    <field name="order_quantity"/>
+                    <field name="completed_quantity"/>
+                    <field name="unfinished_quantity"/>
+                    <field name="type"/>
+                    <field name="date_planned"/>
+                    <!--                    <field name="date_expected"/>-->
+                    <field name="state" widget="badge" decoration-success="state=='done'"
+                           decoration-info="state=='part'" decoration-danger="state=='cancel'"/>
+                    <field name="confirm_state" widget="badge" decoration-success="confirm_state=='have_confirm'"
+                           decoration-danger="confirm_state=='not_confirm'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="supplier_order_blank_fob_search_view" model="ir.ui.view">
+            <field name="name">Supplier Order Blank FOB Search</field>
+            <field name="model">fast.supplier.order.blank</field>
+            <field name="arch" type="xml">
+                <search string="Supplier Order Blank FOB Search">
+                    <field name="name"/>
+                    <field name="processing_plant"/>
+                    <separator/>
+                    <filter name="state_draft" string="待完成" domain="[('state', '=', 'draft')]"/>
+                    <filter name="state_part" string="部分完成" domain="[('state', '=', 'part')]"/>
+                    <filter name="state_done" string="已完成" domain="[('state', '=', 'done')]"/>
+                    <filter name="state_cancel" string="已取消" domain="[('state', '=', 'cancel')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="supplier_order_blank_fob_action_view" model="ir.actions.act_window">
+            <field name="name">订单中心</field>
+            <field name="res_model">fast.supplier.order.blank</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="context">{'search_default_state_draft': 1, 'search_default_state_part': 1}</field>
+            <field name="search_view_id" ref="fast_supplier_synergy.supplier_order_blank_fob_search_view"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('fast_supplier_synergy.supplier_order_blank_fob_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('fast_supplier_synergy.supplier_order_blank_fob_form_view')})]"/>
+        </record>
+    </data>
+</odoo>

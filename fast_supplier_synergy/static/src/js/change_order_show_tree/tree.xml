@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <div t-name="fast_supplier_synergy.change_order_show_tree" class="o_action" owl="1">
+        <div class="o_list_renderer o_renderer table-responsive fast_order_center_change_order_show_tree">
+            <t t-if="state.orderRecord.datas.length > 0">
+                <div t-if="state.orderRecord.state != 'done' and state.orderRecord.state != 'cancel'">
+                    <button t-if="state.apply_order_line_ids.length > 0"
+                            t-on-click="()=>this.applyChangeMaterialRequisitionBtn()" class="m-1 btn btn-primary">申请物料</button>
+                    <button t-if="state.chargeback_blank_order_datas.length > 0"
+                            t-on-click="()=>this.chargebackBlankOrderBtn()" class="m-1 btn btn-danger">退单</button>
+                </div>
+                <table class="o_list_table table table-sm table-hover position-relative mb-0 o_list_table_ungrouped table-striped"
+                       style="table-layout: fixed;">
+                    <thead>
+                        <tr class="thead-cus-style-tr">
+                            <th class="sequence text-center">#</th>
+                            <th class="style">款号</th>
+                            <th class="color color-th">颜色</th>
+                            <th class="order_line"><span>变更数</span></th>
+<!--                            <th class="order_line"><span>需求</span>（<span-->
+<!--                                    style="padding-right:5px !important">订单数</span>:<span class="text-success"-->
+<!--                                                                                             style="padding-left:5px !important;padding-right:5px !important">已交付数</span>:<span-->
+<!--                                    class="text-danger" style="padding-left:5px !important">未交付数</span>）</th>-->
+                            <th class="change">变更</th>
+                        </tr>
+                    </thead>
+                    <tbody class="ui-sortable">
+                        <t t-foreach="state.orderRecord.datas" t-as="product_configuration_datas"
+                           t-key="product_configuration_datas_index">
+                            <t t-foreach="product_configuration_datas.product_template_datas"
+                               t-as="product_template_datas" t-key="product_template_datas_index">
+                                <tr class="tbody-cus-style-tr">
+                                    <t t-if="product_template_datas_index == 0">
+                                        <td t-att-rowspan="product_configuration_datas.product_template_datas.length"
+                                            class="sequence text-center"><span t-esc="product_configuration_datas_index + 1"/></td>
+                                        <td t-att-rowspan="product_configuration_datas.product_template_datas.length"
+                                            class="style">
+                                            <span t-esc="product_configuration_datas.origin_name"/>
+                                        </td>
+                                    </t>
+                                    <td class="color" t-attf-class="{{product_template_datas.product_tmpl_total == 0?'record-qty_zero':''}}">
+                                        <span t-esc="product_template_datas.color_name"
+                                              style="margin-left:2px !important"/>
+                                    </td>
+                                    <td class="order_line"
+                                        t-attf-class="{{product_template_datas.product_tmpl_total == 0?'record-qty_zero':''}}">
+                                        <div class="order_line_content">
+                                            <div t-foreach="product_template_datas.product_datas"
+                                                 t-as="product_datas"
+                                                 t-key="product_datas_index">
+                                                <div>
+                                                    <span class="size-name" t-esc="product_datas.size_name"/>
+                                                    <span t-esc="product_datas.change_quantity"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="change">
+                                        <button type="button" t-att-class="product_configuration_datas.origin_name + '-' + product_template_datas.color_name"
+                                                class="layui-btn layui-btn-fluid" t-on-click="(ev)=>this.change_update_order_detail(ev)">确认变更</button>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+<!--                    <tfoot class="o_list_footer cursor-default"-->
+<!--                           t-if="state.orderRecord.foot_total and state.orderRecord.foot_total > 0">-->
+<!--                        <tr class="footer-cus-style-tr">-->
+<!--                            <td data-name="row_no"/>-->
+<!--                            <td colspan="2">-->
+<!--                                <span t-esc="state.orderRecord.foot_total"/>-->
+<!--                                <t t-if="state.orderRecord.foot_total == state.orderRecord.foot_total_done_qty">-->
+<!--                                    <span class="text-success size-done-qty"-->
+<!--                                          t-esc="state.orderRecord.foot_total_done_qty"/>-->
+<!--                                </t>-->
+<!--                                <t t-else="">-->
+<!--                                    <span class="text-warning size-done-qty"-->
+<!--                                          t-esc="state.orderRecord.foot_total_done_qty"/>-->
+<!--                                </t>-->
+<!--                                <t t-if="state.orderRecord.foot_total_un_done_qty > 0">-->
+<!--                                    <span class="text-danger size-undone-qty"-->
+<!--                                          t-esc="state.orderRecord.foot_total_un_done_qty"/>-->
+<!--                                </t>-->
+<!--                            </td>-->
+<!--                            <td colspan="5"-->
+<!--                                t-if="state.orderRecord.state != 'done' and state.orderRecord.state != 'cancel'"/>-->
+<!--                            <td colspan="4" t-else=""/>-->
+<!--                        </tr>-->
+<!--                    </tfoot>-->
+                </table>
+            </t>
+        </div>
+    </div>
+</templates>

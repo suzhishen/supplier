@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fast_order_center_follow_tree_blank_in_client" model="ir.actions.client">
+        <field name="name">空白版订单跟进-入库信息</field>
+        <field name="tag">fast_order_center_follow_tree_blank_in</field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="fast_blank_packing_list_report_action_view" model="ir.actions.client">
+            <field name="name">Report Forms</field>
+            <field name="tag">reportForms</field>
+            <field name="target">main</field>
+        </record>
+    </data>
+</odoo>

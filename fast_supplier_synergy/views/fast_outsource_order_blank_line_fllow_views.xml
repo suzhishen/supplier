@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--    <record id="fast_outsource_order_blank_line_search_fllow" model="ir.ui.view">-->
+<!--        <field name="name">fast_outsource_order_blank_line_search_fllow</field>-->
+<!--        <field name="model">fast.blank_order_detail</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search>-->
+<!--                <field name="name" string="PO#"/>-->
+<!--                <field name="product_id"/>-->
+<!--                <field name="partner_id"/>-->
+<!--                <field name="user_id"/>-->
+<!--                <separator/>-->
+<!--                <filter name="state_draft" string="待完成" domain="[('state', '=', 'draft')]"/>-->
+<!--                <filter name="state_part" string="部分完成" domain="[('state', '=', 'part')]"/>-->
+<!--                <filter name="state_done" string="已完成" domain="[('state', '=', 'done')]"/>-->
+<!--                <separator/>-->
+<!--                <filter name="is_closed_false" string="未关闭" domain="[('is_closed', '=', False)]"/>-->
+<!--                <filter name="is_closed_true" string="已关闭" domain="[('is_closed', '=', True)]"/>-->
+<!--                <separator/>-->
+<!--                <filter name="blank_order_type_bulk" string="大货" domain="[('order_id.blank_order_type', '=', 'bulk')]"/>-->
+<!--                <filter name="blank_order_type_sample" string="样品" domain="[('order_id.blank_order_type', '=', 'sample')]"/>-->
+<!--                <filter name="blank_order_type_ecomm" string="电商" domain="[('order_id.blank_order_type', '=', 'ecomm')]"/>-->
+<!--                <filter name="blank_order_type_prepare" string="备货" domain="[('order_id.blank_order_type', '=', 'prepare')]"/>-->
+<!--                <separator/>-->
+<!--                <filter name="type_a" string="FOB" domain="[('type', '=', 'A')]"/>-->
+<!--                <filter name="type_b" string="MTP" domain="[('type', '=', 'B')]"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="fast_outsource_order_blank_line_tree_fllow" model="ir.ui.view">
+        <field name="name">fast_outsource_order_blank_line_tree_fllow</field>
+        <field name="model">fast.blank_order_detail</field>
+        <field name="arch" type="xml">
+            <fllow_tree sample="1">
+                <field name="id"/>
+            </fllow_tree>
+        </field>
+    </record>
+
+    <record id="fast_outsource_order_blank_line_action_fllow" model="ir.actions.act_window">
+        <field name="name">订单跟进</field>
+        <field name="res_model">fast.blank_order_detail</field>
+<!--        <field name="domain">[('state', '!=', 'cancel')]</field>-->
+<!--        <field name="context">{'search_default_state_draft': 1, 'search_default_state_part': 1, 'search_default_is_closed_false': 1}</field>-->
+<!--        <field name="search_view_id" ref="fast_supplier_synergy.fast_outsource_order_blank_line_search_fllow"/>-->
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'fllow_tree', 'view_id': ref('fast_outsource_order_blank_line_tree_fllow')})]"/>
+    </record>
+
+    <record id="fast_outsource_order_blank_line_action_fllow_pending_review" model="ir.actions.act_window">
+        <field name="name">订单关闭待审核</field>
+        <field name="res_model">fast.blank_order_detail</field>
+<!--        <field name="domain">[('is_pending_review', '=', True), ('state', '!=', 'cancel')]</field>-->
+<!--        <field name="context">{'search_default_state_draft': 1, 'search_default_state_part': 1, 'search_default_is_closed_false': 1, 'is_pending_review_menu': True}</field>-->
+<!--        <field name="search_view_id" ref="fast_supplier_synergy.fast_outsource_order_blank_line_search_fllow"/>-->
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'fllow_tree', 'view_id': ref('fast_outsource_order_blank_line_tree_fllow')})]"/>
+    </record>
+</odoo>

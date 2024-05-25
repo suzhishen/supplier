@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="fast_blank_bom_form_view" model="ir.ui.view">
+            <field name="name">fast.blank.bom.form</field>
+            <field name="model">fast.blank.bom</field>
+            <field name="arch" type="xml">
+                <form create="false" edit="false" delete="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_tmpl_name"/>
+<!--                                <field name="product_name"/>-->
+<!--                                <field name="product_qty"/>-->
+                            </group>
+                            <group>
+                                <field name="version"/>
+<!--                                <field name="code"/>-->
+<!--                                <field name="type"/>-->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="物料明细">
+                                <field create="false" edit="false" delete="false" name="blank_bom_detail_line" widget="one2many">
+                                    <tree editable="bottom">
+                                        <field name="product_name"/>
+                                        <field name="body"/>
+                                        <field name="need_qty"/>
+                                        <field name="loss_qty"/>
+                                        <field name="product_qty"/>
+                                        <field name="product_uom_name"/>
+                                        <field name="product_unit_price"/>
+<!--                                        <field name="purchase_unit_price"/>-->
+<!--                                        <field name="standard_price"/>-->
+<!--                                        <field name="bom_product_template_attribute_name"/>-->
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids" colspan="4" nolabel="1"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="fast_blank_bom_tree_view" model="ir.ui.view">
+            <field name="name">fast.blank.bom.tree</field>
+            <field name="model">fast.blank.bom</field>
+            <field name="arch" type="xml">
+<!--                <tree sample="1" default_order="sequence, id">-->
+                <tree create="false" edit="false" delete="false">
+                    <field name="product_tmpl_name"/>
+<!--                    <field name="code" optional="show"/>-->
+<!--                    <field name="type"/>-->
+<!--                    <field name="product_name" optional="show"/>-->
+<!--                    <field name="product_qty" optional="show"/>-->
+<!--                    <field name="product_uom_nmae" optional="show"/>-->
+                    <field name="version" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_open_bom" model="ir.actions.act_window">
+            <field name="context"></field>
+            <field name="name">BOM</field>
+            <field name="res_model">fast.blank.bom</field>
+            <field name="domain">[]</field> <!-- Force empty -->
+        </record>
+    </data>
+</odoo>

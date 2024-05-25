@@ -1,0 +1,363 @@
+.fllow_tree_render_table {
+  overflow: auto;
+  margin: auto;
+  border: 1px solid #dddddd;
+  border-bottom: 0;
+  border-right: 0;
+  text-align: center;
+  align-items: center;
+  vertical-align: middle;
+
+  table {
+    border-collapse: separate;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  td, th {
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    box-sizing: border-box;
+    height: 25px;
+  }
+
+  th {
+    color: #31708f;
+    background-color: #d9edf7;
+    font-weight: bold;
+  }
+
+  tr:nth-child(even) {
+    background-color: #ffffff !important;
+  }
+
+  tr:nth-child(odd) {
+    background-color: #f9f9f9 !important;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5 !important;
+  }
+
+  td:nth-child(1),
+  th:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    width: 3vw !important;
+    background-color: #FFFFFF;
+  }
+
+  td:nth-child(2),
+  th:nth-child(2) {
+    position: sticky;
+    left: 3vw;
+    z-index: 1;
+    width: 6vw !important;
+    background-color: #FFFFFF;
+  }
+
+  td:nth-child(3),
+  th:nth-child(3) {
+    position: sticky;
+    left: 9vw;
+    z-index: 1;
+    width: 7vw !important;
+    background-color: #FFFFFF;
+  }
+
+  td:nth-child(4),
+  th:nth-child(4) {
+    position: sticky;
+    left: 16vw;
+    z-index: 1;
+    width: 5vw !important;
+    background-color: #FFFFFF;
+  }
+
+  td:nth-child(5),
+  th:nth-child(5) {
+    position: sticky;
+    left: 21vw;
+    z-index: 1;
+    width: 5vw !important;
+    background-color: #FFFFFF;
+  }
+
+  td:nth-child(6),
+  th:nth-child(6) {
+    position: sticky;
+    left: 26vw;
+    z-index: 1;
+    width: 7vw !important;
+    background-color: #FFFFFF;
+    padding-left: 3px;
+  }
+
+  thead tr th {
+    position: sticky;
+    top: 0;
+  }
+
+  th:nth-child(1),
+  th:nth-child(2),
+  th:nth-child(3),
+  th:nth-child(4),
+  th:nth-child(5),
+  th:nth-child(6),
+  {
+    z-index: 2;
+    background-color: #d9edf7;
+  }
+
+  .size {
+    width: 26vw !important;
+
+    .size-parent {
+      width: 100%;
+      display: flex;
+      text-align: start;
+
+      .size-child:first-child {
+        margin-left: 3px !important;
+      }
+
+      .size-child {
+        width: calc(100% / 7) !important;
+      }
+
+      .size-name {
+        font-weight: bold !important;
+      }
+
+      .size-name::after {
+        content: ":";
+        padding-right: 5px !important;
+      }
+    }
+
+    .size_input {
+      display: none;
+    }
+  }
+
+  .boxed-size {
+    width: 45vw !important;
+
+    .boxed-size-parent {
+      width: 100%;
+      display: flex;
+      text-align: start;
+
+      .boxed-size-child:first-child {
+        margin-left: 3px !important;
+      }
+
+      .boxed-size-child {
+        width: calc(100% / 7) !important;
+      }
+
+      .boxed-size-name {
+        font-weight: bold !important;
+      }
+
+      .boxed-size-name::after {
+        content: ":";
+        padding-right: 5px !important;
+      }
+    }
+
+    .boxed-size_input {
+      display: none;
+    }
+  }
+
+  input.invalid {
+    color: red;
+  }
+
+  .qty {
+    width: 5vw !important;
+
+    .qty-parent {
+      display: flex;
+
+      .qty-child {
+        align-self: center;
+        flex: 4;
+      }
+
+      .qty-child-btn {
+        align-self: center;
+        flex: 1;
+      }
+    }
+  }
+
+  .date {
+    width: 6vw !important;
+  }
+
+  .data_select {
+    width: 8vw;
+    text-align: center;
+
+    input {
+      border: none;
+      color: cornflowerblue;
+      background-color: inherit;
+    }
+  }
+
+  .zx_btn {
+    width: 4vw !important;
+
+    button {
+      width: 100%;
+    }
+
+    .layui-btn {
+      padding: 0px;
+    }
+  }
+
+  .user {
+    width: 5vw !important;
+  }
+
+  .material-state {
+    width: 6vw !important;
+
+    .material-state-parent {
+      display: flex;
+
+      .material-state-child {
+        align-self: center;
+        flex: 4;
+      }
+
+      .material-state-btn {
+        align-self: center;
+        flex: 1;
+      }
+    }
+  }
+
+  .style-name {
+    width: 12vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .operation {
+    width: 5vw;
+  }
+
+  .product-qty-less-than-zero {
+    color: red !important;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #e2e2e2;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d9edf7;
+
+    &:hover {
+      background-color: #f2f2f2;
+    }
+
+    &:active {
+      background-color: #f2f2f2;
+    }
+  }
+
+  & {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(49, 112, 143, 0.1) #f2f2f2;
+  }
+}
+
+@media(min-width: 1300px) {
+  .fllow_tree_render_table {
+    width: calc(100vw - 11vw) !important;
+    min-height: 30vh !important;
+    max-height: calc(100vh - 17vh) !important;
+
+    th:nth-child(6) {
+      text-align: center !important;
+    }
+
+    .size {
+      width: 31vw !important;
+    }
+
+    .boxed-size {
+      width: 45vw !important;
+    }
+  }
+}
+
+@media(min-width: 1500px) {
+  .fllow_tree_render_table {
+    width: calc(100vw - 10vw) !important;
+    min-height: 40vh !important;
+    max-height: calc(100vh - 17vh) !important;
+
+
+    th:nth-child(6) {
+      text-align: center !important;
+    }
+
+    .size {
+      width: 30vw !important;
+    }
+
+    .boxed-size {
+      width: 45vw !important;
+    }
+  }
+}
+
+@media(min-width: 1900px) {
+  .fllow_tree_render_table {
+    width: calc(100vw - 8vw) !important;
+    min-height: 50vh !important;
+    max-height: calc(100vh - 15vh) !important;
+
+    th:nth-child(6) {
+      text-align: center !important;
+    }
+
+    .size {
+      width: 28vw !important;
+    }
+
+    .boxed-size {
+      width: 28vw !important;
+    }
+  }
+}
+
+.fllow_tree_buttons_cus_style {
+  .alert-info-foot_order_line_total {
+    background-color: rgba(217, 237, 247, 0.15) !important;
+    color: rgb(49, 112, 143) !important;
+    border-color: rgb(49, 112, 143) !important;
+  }
+
+  .alert-info-foot_incoming_line_total {
+    background-color: rgba(203, 255, 207, 0.15) !important;
+    color: rgb(90, 168, 134) !important;
+    border-color: rgb(90, 168, 134) !important;
+  }
+
+  .alert-info-foot_incomplete_line_total {
+    background-color: rgba(228, 67, 63, 0.15) !important;
+    color: rgb(228, 67, 63) !important;
+    border-color: rgb(228, 67, 63) !important;
+  }
+}

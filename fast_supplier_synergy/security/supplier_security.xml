@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="module_fast_blank_configuration_category" model="ir.module.category">
+            <field name="name">基础资料</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <record id="fast_blank_configuration_user_self" model="res.groups">
+            <field name="name">只查看自己的数据</field>
+            <field name="category_id" ref="module_fast_blank_configuration_category"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <record id="fast_blank_configuration1_user_self" model="res.groups">
+            <field name="name">只查看自己的数据1</field>
+            <field name="category_id" ref="module_fast_blank_configuration_category"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
+        </record>
+
+        <!--   只查看自己的数据规则   -->
+        <record id="fast_blank_configuration_rule_user_self" model="ir.rule">
+            <field name="name">基础资料只查看自己的数据规则</field>
+            <field name="model_id" ref="model_fast_blank_configuration"/>
+            <field name="domain_force">[('partner_ids','=',user.id)]</field>
+            <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
+        </record>
+
+        <record id="fast_supplier_order_blank_rule_user_self" model="ir.rule">
+            <field name="name">订单中心只查看自己的数据规则</field>
+            <field name="model_id" ref="model_fast_supplier_order_blank"/>
+            <field name="domain_force"></field>
+            <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
+        </record>
+
+        <record id="fast_blank_packing_list_rule_user_self" model="ir.rule">
+            <field name="name">订单中心只查看自己的数据规则</field>
+            <field name="model_id" ref="model_fast_blank_packing_list"/>
+            <field name="domain_force"></field>
+            <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
+        </record>
+
+<!--        <record id="fast_supplier_security" model="res.groups">-->
+<!--            <field name="name">Fleet log services: Multi Company</field>-->
+<!--            <field name="model_id" ref="model_fleet_vehicle_log_services"/>-->
+<!--            <field name="global" eval="True"/>-->
+<!--            <field name="domain_force">[('company_id', 'in', company_ids + [False])]</field>-->
+<!--        </record>-->
+    </data>
+</odoo>

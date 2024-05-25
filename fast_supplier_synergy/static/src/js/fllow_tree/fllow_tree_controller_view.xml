@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="fast_supplier_synergy.FllowTreeView" owl="1">
+        <div class="fllow_tree_controller_wrapper w-100 h-100" t-ref="root">
+            <Layout display="props.display">
+                <t t-set-slot="layout-buttons">
+                    <t t-call="{{ props.buttonTemplate }}"/>
+                </t>
+                <t t-component="props.Renderer"
+                   standProps="props"
+                   model="model"
+                   resModel="props.resModel"/>
+            </Layout>
+        </div>
+    </t>
+
+    <t t-name="fast_supplier_synergy.fllow_tree.Buttons" owl="1">
+        <div class="o_list_buttons d-flex fllow_tree_buttons_cus_style" role="toolbar" aria-label="Main actions">
+            <t t-if="model.ormDatas and model.ormDatas.length > 0">
+                <button class="btn btn-link" title="下载Excel"
+                        t-on-click="()=>this.downloadExcel()">
+                    <i class="fa fa-download"/>
+                </button>
+                <div class="o_list_selection_box alert alert-info-foot_order_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
+                     role="alert">
+                    <strong>总需求数： <span class="font-monospace me-1"><span t-esc="model.state.foot_order_line_total"/></span></strong>
+                </div>
+                <div class="o_list_selection_box alert alert-info-foot_incoming_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
+                     role="alert">
+                    <strong>总入仓数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incoming_line_total"/></span></strong>
+                </div>
+                <div class="o_list_selection_box alert alert-info-foot_incomplete_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
+                     role="alert">
+                    <strong>总欠数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incomplete_line_total"/></span></strong>
+                </div>
+<!--                <button type="button" class="btn btn-primary ms-md-2" t-on-click="()=>this.create_package()">创建装箱单</button>-->
+            </t>
+        </div>
+    </t>
+
+</templates>

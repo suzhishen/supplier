@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="供应商协同端" id="supplier_synergy_menu" sequence="20"/>
+
+        <menuitem name="基础资料" id="blank_configuration_menu" parent="supplier_synergy_menu" action="blank_configuration_action_view" sequence="10"/>
+<!--        <menuitem name="基础资料" id="blank_configuration_menu" parent="supplier_synergy_menu" sequence="10"/>-->
+<!--        <menuitem name="基础资料" id="blank_configuration_menu_line" parent="blank_configuration_menu" action="blank_configuration_action_view" sequence="10"/>-->
+
+        <menuitem name="订单中心" id="blank_order_menu" parent="supplier_synergy_menu"  action="supplier_order_blank_fob_action_view" sequence="20"/>
+<!--        <menuitem name="订单中心" id="blank_order_menu" parent="supplier_synergy_menu"  sequence="30"/>-->
+<!--        <menuitem name="订单中心" id="blank_order_menu_line" parent="blank_order_menu" action="supplier_order_blank_fob_action_view" sequence="10"/>-->
+
+        <menuitem name="订单跟进" id="menu_fast_outsource_order_blank_line_action_fllow" parent="supplier_synergy_menu" sequence="30"
+                  action="fast_outsource_order_blank_line_action_fllow"/>
+
+
+        <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40"/>
+        <menuitem id="blank_packing_list_menu_line_list" name="空白版装箱单" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_action_view" sequence="10"/>
+<!--        <menuitem id="blank_packing_list_detail_menu_line" name="差异报表" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_detail_action_view" sequence="20"/>-->
+        <menuitem name="差异报表" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="30"/>
+
+
+        <menuitem id="financial_management_menu_line" name="财务管理" parent="supplier_synergy_menu" sequence="40"/>
+        <menuitem id="financial_management_menu_line_list" name="财务信息" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="10"/>
+        <menuitem name="往来账" id="financial_management_detail_menu_line" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="20"/>
+    </data>
+</odoo>

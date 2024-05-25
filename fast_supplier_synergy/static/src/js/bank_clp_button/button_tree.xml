@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="BlankClpButtonTemplates" t-inherit="web.ListView.Buttons" t-inherit-mode="primary" owl="1">
+        <xpath expr="(//div/*)[last()]" position="after">
+            <button class="btn btn-primary" type="button" t-on-click="synch_packing_list">
+                批量发送装箱单
+            </button>
+        </xpath>
+    </t>
+</templates>
