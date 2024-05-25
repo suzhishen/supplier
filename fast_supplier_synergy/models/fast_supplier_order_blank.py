@@ -220,6 +220,7 @@ class BlankOrderDetail(models.Model):
     unfinished_quantity = fields.Integer('待完成数量', compute='_compute_completed_quantity', store=True)
     # stored_quantity = fields.Char('供应商录入数量')
     confirm_state = fields.Selection(related='blank_order_id.confirm_state', string='确认接收状态', store=True)
+    date_planned = fields.Char('要求交期')
     date_expected = fields.Char('预计交期')
     change_quantity = fields.Char('变更数量')
 
@@ -330,7 +331,7 @@ class BlankOrderDetail(models.Model):
             limit=limit,
             offset=offset,
             fields=list(self._fields.keys()),
-            groupby='product_color_name'
+            groupby=['product_color_name', 'po_name']
         )
         datas = []
         foot_order_line_total = foot_incoming_line_total = foot_incomplete_line_total = 0
@@ -417,6 +418,108 @@ class BlankOrderDetail(models.Model):
             'foot_incoming_line_total': foot_incoming_line_total,
             'foot_incomplete_line_total': foot_incomplete_line_total,
         }
+
+
+    # # 获取列表数据
+    # @api.model
+    # def get_fllow_tree_render_view_datas(self, domain=[], limit=80, offset=0, page_groupby=[], front_context={}):
+    #     """
+    #     订单跟进界面数据
+    #     :return:
+    #     """
+    #     fields_list = [
+    #         'name',
+    #         'order_quantity',
+    #         'completed_quantity',
+    #         'unfinished_quantity',
+    #         ('blank_order_detail_line', ['id', 'product_color_name', 'date_planned', 'date_expected', 'product_color_name'])]
+    #     grouped_data = self.env['fast.supplier.order.blank'].search([('confirm_state', '=', 'have_confirm')])
+    #     blank_order_json = grouped_data.jsonify(fields_list)
+    #     datas = []
+    #     foot_order_line_total = foot_incoming_line_total = foot_incomplete_line_total = 0
+    #     for group_data in grouped_data:
+    #         foot_order_line_total += group_data.get('order_quantity')
+    #         foot_incoming_line_total += group_data.get('completed_quantity')
+    #         foot_incomplete_line_total += group_data.get('unfinished_quantity')
+    #         group_name = group_data.get('product_color_name')
+    #         group_records = self.env['fast.blank_order_detail'].search([('product_color_name', '=', group_name)])
+    #         blank_order_group_data = group_records.blank_order_id.read(
+    #             list(group_records.blank_order_id._fields.keys()))
+    #         value = {
+    #             'create_date': '下单日期',  # 下单日期
+    #             'partner_name': blank_order_group_data[0].get('processing_plant', ''),  # 加工厂
+    #             'po': blank_order_group_data[0].get('name', ''),  # PO#
+    #             'product_tmpl_code': group_name,  # 款色
+    #             'product_configuration_name': '款式名称',  # 款式名称
+    #             'date_planned': blank_order_group_data[0].get('date_planned', ''),  # 要求交期
+    #             # 'date_expected': blank_order_group_data[0].get('date_expected', ''),  # 预计交期
+    #             'order_type': 'FOB' if blank_order_group_data[0].get('type', '') else 'MTP',  # 外发类型
+    #             'order_line': []  # 需求明细
+    #         }
+    #         # 读取分组内的明细记录
+    #         blank_order_detail_group_data = group_records.read(list(group_records._fields.keys()))
+    #         # 输出分组内的明细记录
+    #         order_line_total = incoming_line_total = incomplete_line_total = 0
+    #         for index, detail_record in enumerate(blank_order_detail_group_data):
+    #             order_line_total += detail_record.get('order_quantity')
+    #             incoming_line_total += detail_record.get('completed_quantity')
+    #             incomplete_line_total += detail_record.get('unfinished_quantity')
+    #             if index == 0:
+    #                 value.update({
+    #                     'product_configuration_code': detail_record.get('name', ''),  # 款号
+    #                     # 'product_tmpl_code': detail_record.get('product_color_name', ''),    # 款色
+    #                     'date_expected': detail_record.get('date_expected') if detail_record.get('date_expected') and detail_record.get('date_expected') != 'false' else '',  # 预计交期
+    #                     'incoming_line': [],  # 入仓明细
+    #                     'incomplete_line': [],  # 欠数明细
+    #                     'packed_list': [],  # 已装箱明细
+    #                     'blank_order_type': '订单类型',  # 订单类型
+    #                 })
+    #             size_name = detail_record.get('product_name', '').split('-')[-1]
+    #             order_line_value = {
+    #                 'size_name': size_name,
+    #                 'product_qty': detail_record.get('order_quantity', ''),
+    #                 # 'stored_quantity': detail_record.get('stored_quantity')
+    #             }
+    #
+    #             blank_order_detail_record = self.env['fast.blank.packing_list_detail'].search([('blank_order_detail_id', '=', detail_record.get('id'))])
+    #             packed_list_value = {
+    #                 'size_name': size_name,
+    #                 'product_qty': sum(blank_order_detail_record.mapped('quantity')),
+    #                 # 'stored_quantity': detail_record.get('stored_quantity')
+    #             }
+    #             incomplete_line = {
+    #                 'size_name': size_name,
+    #                 'product_qty': detail_record.get('order_quantity', 0) - detail_record.get('completed_quantity', 0),
+    #                 'have_packed_qty': sum(blank_order_detail_record.mapped('quantity')),
+    #                 # 'stored_quantity': detail_record.get('stored_quantity')
+    #             }
+    #             value['order_line'].append(order_line_value)
+    #             value['packed_list'].append(packed_list_value)
+    #             value['incomplete_line'].append(incomplete_line)
+    #         value.update({
+    #             'line_ids': [x['id'] for x in blank_order_detail_group_data],  # 款色明细行
+    #             'order_line_total': order_line_total,  # 总需求数
+    #             'incoming_line_total': incoming_line_total,  # 总入仓数
+    #             'incomplete_line_total': incomplete_line_total,  # 总欠数
+    #         })
+    #         datas.append(value)
+    #
+    #         # 尺寸排序
+    #         for item in datas:
+    #             item['order_line'] = sorted(item['order_line'], key=lambda x: BlankSize.index(x['size_name'].lower()))
+    #             item['packed_list'] = sorted(item['packed_list'], key=lambda x: BlankSize.index(x['size_name'].lower()))
+    #             item['incoming_line'] = sorted(item['incoming_line'],
+    #                                            key=lambda x: BlankSize.index(x['size_name'].lower()))
+    #             item['incomplete_line'] = sorted(item['incomplete_line'],
+    #                                              key=lambda x: BlankSize.index(x['size_name'].lower()))
+    #
+    #     return {
+    #         'result': datas,
+    #         # 'result': [{'create_date': '2024/04/11', 'partner_name': '童心梦', 'po': 'F1939-1', 'product_configuration_code': 'M30050', 'product_configuration_name': 'PRO STANDARD BASKETBALL SHORT BLANK', 'product_tmpl_code': 'M30050-UNI', 'user_name': '陈兆婕', 'date_planned': '2024/04/30', 'date_expected': '2024/05/05', 'order_line': [{'size_name': 'S', 'product_qty': 74}, {'size_name': 'M', 'product_qty': 203}, {'size_name': 'L', 'product_qty': 312}, {'size_name': 'XL', 'product_qty': 322}, {'size_name': '2XL', 'product_qty': 266}, {'size_name': '3XL', 'product_qty': 54}], 'order_line_total': 1231, 'incoming_line': [], 'incoming_line_total': 0, 'incomplete_line': [{'size_name': 'S', 'product_qty': 74}, {'size_name': 'M', 'product_qty': 203}, {'size_name': 'L', 'product_qty': 312}, {'size_name': 'XL', 'product_qty': 322}, {'size_name': '2XL', 'product_qty': 266}, {'size_name': '3XL', 'product_qty': 54}], 'incomplete_line_total': 1231, 'order_type': 'FOB', 'sc_date': '', 'log_ids': [], 'blank_order_type': '电商'}, {'create_date': '2024/04/11', 'partner_name': '童心梦', 'po': 'F1939-1', 'product_configuration_code': 'M30050', 'product_configuration_name': 'PRO STANDARD BASKETBALL SHORT BLANK', 'product_tmpl_code': 'M30050-JBK', 'user_name': '陈兆婕', 'date_planned': '2024/04/30', 'date_expected': '2024/05/05', 'order_line': [{'size_name': 'S', 'product_qty': 115}, {'size_name': 'M', 'product_qty': 217}, {'size_name': 'L', 'product_qty': 291}, {'size_name': 'XL', 'product_qty': 361}, {'size_name': '2XL', 'product_qty': 274}, {'size_name': '3XL', 'product_qty': 88}], 'order_line_total': 1346, 'incoming_line': [], 'incoming_line_total': 0, 'incomplete_line': [{'size_name': 'S', 'product_qty': 114}, {'size_name': 'M', 'product_qty': 217}, {'size_name': 'L', 'product_qty': 291}, {'size_name': 'XL', 'product_qty': 361}, {'size_name': '2XL', 'product_qty': 274}, {'size_name': '3XL', 'product_qty': 88}], 'incomplete_line_total': 1345, 'order_type': 'FOB', 'sc_date': '', 'log_ids': [], 'blank_order_type': '电商'}],
+    #         'foot_order_line_total': foot_order_line_total,
+    #         'foot_incoming_line_total': foot_incoming_line_total,
+    #         'foot_incomplete_line_total': foot_incomplete_line_total,
+    #     }
 
     @api.model
     def action_open_fast_order_center_follow_tree_blank_in_client(self, args, **kwargs):

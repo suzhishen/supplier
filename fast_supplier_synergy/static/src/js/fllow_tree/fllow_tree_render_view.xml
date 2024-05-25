@@ -83,10 +83,10 @@
                                         <!--                                                t-on-click="()=>this.viewBlankIncomingDetail(data)">-->
                                         <!--                                            <i class="fa fa-eye"/>-->
                                         <!--                                        </button>-->
-                                        <button class="btn btn-link material-state-edit-btn" title="入库详情"
-                                                t-on-click="()=>this.actionReviewBlankIn(data)">
-                                            <i class="fa fa-eye"/>
-                                        </button>
+<!--                                        <button class="btn btn-link material-state-edit-btn" title="入库详情"-->
+<!--                                                t-on-click="()=>this.actionReviewBlankIn(data)">-->
+<!--                                            <i class="fa fa-eye"/>-->
+<!--                                        </button>-->
                                     </span>
                                 </div>
                             </td>

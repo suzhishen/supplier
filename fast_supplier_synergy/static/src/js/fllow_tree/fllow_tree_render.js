@@ -90,11 +90,13 @@ export class FllowTreeRender extends Component {
                     // 获取 iframe 的窗口对象
                     var iframeWin = window[layero.find('iframe')[0]['name']];
                     // var inputs = $(iframeWin.document).find('input');
-                    var inputs = iframeWin.document.getElementsByTagName('input');
+                    // var all_inputs = iframeWin.document.getElementsByTagName('input');
+
+                    var qs_inputs = iframeWin.document.getElementById('formData').getElementsByTagName('input');
                     var formData = {};
                     var updateDate = {};
-                    for (var i = 0; i < inputs.length; i++) {
-                        var input = inputs[i];
+                    for (var i = 0; i < qs_inputs.length; i++) {
+                        var input = qs_inputs[i];
                         if (input.name) {
                             if (formData[input.name]) {
                                 if(input.id) {
@@ -111,12 +113,38 @@ export class FllowTreeRender extends Component {
                             }
                         }
                     }
+
+                    //
+                    var hz_inputs = iframeWin.document.getElementById('hzBox').getElementsByTagName('input');
+                    var hz_formData = {};
+                    var hz_updateDate = {};
+                    for (var i = 0; i < hz_inputs.length; i++) {
+                        var input = hz_inputs[i];
+                        if (input.name) {
+                            if (hz_formData[input.name]) {
+                                if(input.id) {
+                                    hz_updateDate[input.id]  = input.value;
+                                }else {
+                                    hz_formData[input.name].push(input.value);
+                                }
+                            } else {
+                                if(input.id) {
+                                    hz_updateDate[input.id]  = input.value;
+                                }else {
+                                    hz_formData[input.name] = [input.value];
+                                }
+                            }
+                        }
+                    }
+
                     console.log(title);
                     console.log(formData);
                     console.log(updateDate);
+                    console.log(hz_formData);
+                    console.log(hz_updateDate);
                     // console.log("S: " + formData["S"]);
                     // console.log("M: " + formData["M"]);
-                    self.createDetail(data, formData, updateDate)
+                    self.createDetail(data, formData, updateDate, hz_formData)
                     layer.close(order_fllow_win);
                 }
             });
@@ -127,12 +155,13 @@ export class FllowTreeRender extends Component {
         console.log('确认执行操作')
     }
 
-    async createDetail(datas, quantitys_lsit, updateDate) {
+    async createDetail(datas, quantitys_lsit, updateDate, hz_formData) {
         let self = this
         await this.ormService.call('fast.blank.packing_list', 'create_blanK_packing_list', [[]], {
             datas: datas,
             quantitys_lsit: quantitys_lsit,
             updateDate_lsit: updateDate,
+            hz_updateDate_lsit: hz_formData,
         }).then(result => {
             console.log(result)
             if (result) {

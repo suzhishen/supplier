@@ -18,8 +18,15 @@
 <!--            <span style="color: cornflowerblue;">装箱明细</span>-->
 <!--        </div>-->
 <!--    </strong>-->
-<!--    <label for="S"><strong>S：-3</strong></label>-->
+<!--    <label for="S"><strong><span>S</span><span>：</span><span>-3</span></strong></label>-->
 <!--    <span id="S_span" style="margin-right: 1%;">-->
+<!--        <input type="text" class="layui-input" name="S" disabled>-->
+<!--        <button type="button" class="btn_class" onclick="editInput(event)">编辑</button>-->
+<!--    </span>-->
+<!--    <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('S')">加新箱</button>-->
+<!--    <br>-->
+<!--    <label for="3XL"><strong>3XL：300</strong></label>-->
+<!--    <span id="3XL_span" style="margin-right: 1%;">-->
 <!--        <input type="text" class="layui-input" name="S" disabled>-->
 <!--        <button type="button" class="btn_class" onclick="editInput(event)">编辑</button>-->
 <!--    </span>-->
@@ -38,11 +45,52 @@
 <form id="formData">
     <strong>
         <div>
-            <span style="width: 8%; padding: 2% 0px 0px 1%; display: inline-block;color: cornflowerblue;">尺码：欠数</span>
-            <span style="color: cornflowerblue;">装箱明细</span>
+            <span style="display: block; padding: 1% 0px 0px 0px; color: cornflowerblue;">
+                <span style="width: 4.5%; display: inline-block; text-align: right;">尺码</span>
+                <span>：</span>
+                <span>欠数</span>
+                <span style="padding-left: 1.5%; color: cornflowerblue;">装箱明细</span>
+            </span>
         </div>
     </strong>
 </form>
+<br>
+<hr>
+<form id="hzformData">
+    <strong>
+        <div style="padding: 1% 0px">
+            <span style="color: cornflowerblue;">
+                <span style="display: inline-block; text-align: right;">尾箱混装</span>
+            </span>
+        </div>
+    </strong>
+    <!--    <label for="X">-->
+    <!--        <strong><strong><span>S</span><span>：</span><span>-3</span></strong></strong>-->
+    <!--    </label>-->
+    <!--    <span id="S_span" style="margin-right: 1%;">-->
+    <!--        <input type="text" class="layui-input" name="x"/>-->
+    <!--    </span>-->
+    <!--    <label for="2XL">-->
+    <!--        <strong><strong><span>2XL</span><span>：</span><span>3000</span></strong></strong>-->
+    <!--    </label>-->
+    <!--    <span id="2XL_span" style="margin-right: 1%;">-->
+    <!--        <input type="text" class="layui-input" name="x"/>-->
+    <!--    </span>-->
+</form>
+<br>
+
+<div id="hzBox">
+<!--    <div class="hz_box">-->
+<!--        <span>XS：</span><input class="XS" type="text" value="123">-->
+<!--        <span>S：</span><input class="S" type="text" value="123">-->
+<!--        <span>4XL：</span><input class="4XL" type="text" value="123">-->
+<!--    </div>-->
+<!--    <div class="hz_box">-->
+<!--        <span>XS：</span><input class="XS" type="text" value="321">-->
+<!--        <span>S：</span><input class="S" type="text" value="321">-->
+<!--        <span>4XL：</span><input class="4XL" type="text" value="321">-->
+<!--    </div>-->
+</div>
 
 <script>
     function editInput(event) {
@@ -58,6 +106,28 @@
             input.disabled = true;
             button.textContent = '修 改';
         }
+    }
+
+    function addHzInput(inputId) {
+        console.log('addHzInput');
+        console.log('加尾箱');
+        input_data = $('#hzformData input')
+        var html = ''
+        for (var i = 0; i < input_data.length; i++) {
+            console.log(input_data[i])
+            if (i === 0) {
+                html += `<div class="hz_box">`
+            }
+            if (!input_data[i].value) {
+                continue
+            }
+            html += `<span>${input_data[i].name}：</span><input name=${input_data[i].name} type="text" value=${input_data[i].value}>`
+            if (i === (input_data.length - 1)) {
+                html += `</div>`
+            }
+            input_data[i].value = ''
+        }
+        $('#hzBox').append(html)
     }
 
     function addInput(inputId) {
@@ -109,17 +179,16 @@
                 } else {
                     // inputs += `<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}"/>`
                     inputs += `
-<span>
-<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>
+<span style="position: relative;">
+<input type="text" class="layui-input" style="width: 6%;" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>
  <button type="button" class="btn_class" onclick="editInput(event)">修 改</button>
 </span>`
                 }
                 index += 1
             }
-
-            labels += `<label for="${new_size[i].size_name}"><strong>${new_size[i].size_name}：${new_size[i].product_qty}</strong></label>
+            labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
             <span id="${new_size[i].size_name}_span">${inputs}</span>
-            <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('${new_size[i].size_name}')">加新箱</button>
+            <button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;" onclick="addInput('${new_size[i].size_name}')">加新箱</button>
             <br>`;
         }
 
@@ -135,6 +204,19 @@
                 event.target.classList.remove('invalid');
             }
         });
+
+
+        let hz_labels = ''
+        for (let i = 0; i < new_size.length; i++) {
+            hz_labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
+<span id="${new_size[i].size_name}_span" style="margin-right: 1%;"><input type="text" class="layui-input" name="${new_size[i].size_name}"/></span>`
+
+            if ((new_size.length - 1) == i) {
+                hz_labels += `<button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;" onClick="addHzInput('${new_size[i].size_name}')">加尾箱</button>`
+            }
+        }
+        $('#hzformData').append(hz_labels)
+
 
         // // 为每个添加按钮绑定点击事件
         // $('button').click(function () {

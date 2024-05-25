@@ -97,6 +97,7 @@ class FastBlankPackingList(models.Model):
             partner_name = datas.get('partner_name', '不存在po')
             quantitys_lsit = kwargs.get('quantitys_lsit', False)
             updateDate_lsit = kwargs.get('updateDate_lsit', False)
+            hz_updateDate_lsit = kwargs.get('hz_updateDate_lsit', False)
 
             records_ids = []
             detail_records = []
