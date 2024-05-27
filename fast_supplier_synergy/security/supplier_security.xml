@@ -7,7 +7,7 @@
         </record>
 
         <record id="fast_blank_configuration_user_self" model="res.groups">
-            <field name="name">只查看自己的数据</field>
+            <field name="name">只查看自己公司的协同数据</field>
             <field name="category_id" ref="module_fast_blank_configuration_category"/>
             <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
         </record>
@@ -29,14 +29,21 @@
         <record id="fast_supplier_order_blank_rule_user_self" model="ir.rule">
             <field name="name">订单中心只查看自己的数据规则</field>
             <field name="model_id" ref="model_fast_supplier_order_blank"/>
-            <field name="domain_force"></field>
+            <field name="domain_force">[('processing_plant', '=', user.company_id.name)]</field>
             <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
         </record>
 
         <record id="fast_blank_packing_list_rule_user_self" model="ir.rule">
-            <field name="name">订单中心只查看自己的数据规则</field>
+            <field name="name">空白版装箱单只查看自己的数据规则</field>
             <field name="model_id" ref="model_fast_blank_packing_list"/>
-            <field name="domain_force"></field>
+            <field name="domain_force">[('partner_name', '=', user.company_id.name)]</field>
+            <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
+        </record>
+
+        <record id="fast_supplier_order_blank_detail_rule_user_self" model="ir.rule">
+            <field name="name">订单跟进只查看自己的数据规则</field>
+            <field name="model_id" ref="model_fast_blank_order_detail"/>
+            <field name="domain_force">[('processing_plant', '=', user.company_id.name)]</field>
             <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
         </record>
 

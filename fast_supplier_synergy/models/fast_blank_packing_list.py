@@ -5,6 +5,9 @@ from odoo.tools import groupby
 import requests
 import re
 from odoo.exceptions import UserError, ValidationError
+import traceback
+import logging
+_logger = logging.getLogger(__name__)
 
 BlankSize = ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', 'os', '2t', '3t', '4t', '4', '5', '6', '7', '8', '8/10', '10/12', '12/14', '14/16', '16', '18/20']
 
@@ -91,19 +94,44 @@ class FastBlankPackingList(models.Model):
         创建空白版装箱单
         :return:
         """
+        def add_detail(detail_value, quantity, blank_order_detail, mixed_stowage=False, mixed_stowage_sequence=False):
+            """
+            :param detail_value: 存储明细的列表
+            :param quantity: 数量
+            :param blank_order_detail: 订单明细记录
+            :param mixed_stowage: 是否混装
+            :return:
+            """
+            value = {
+                'style_number': blank_order_detail.name,
+                'color': blank_order_detail.product_color_name.split('-')[-1],
+                'product_color_name': blank_order_detail.product_color_name,
+                'product_name': blank_order_detail.product_name,
+                'size': blank_order_detail.product_name.split('-')[-1],
+                'quantity': quantity,
+                'mixed_stowage': mixed_stowage,
+                'blank_order_detail_id': blank_order_detail.id,
+            }
+            if mixed_stowage_sequence:
+                value.update({'mixed_stowage_sequence': mixed_stowage_sequence})
+            detail_value.append((0, 0, value))
+
         try:
             datas = kwargs.get('datas', False)
             po_name = datas.get('po', '不存在po')
             partner_name = datas.get('partner_name', '不存在po')
-            quantitys_lsit = kwargs.get('quantitys_lsit', False)
-            updateDate_lsit = kwargs.get('updateDate_lsit', False)
-            hz_updateDate_lsit = kwargs.get('hz_updateDate_lsit', False)
+            quantitys_list = kwargs.get('quantitys_list', False)
+            updateDate_list = kwargs.get('updateDate_list', False)
+            hz_box_createDate_list = kwargs.get('hz_box_createDate_list', []) or []
+            hz_box_updateDate_list = kwargs.get('hz_box_updateDate_list', []) or []
 
             records_ids = []
             detail_records = []
             # 更新数量
-            for k, v in updateDate_lsit.items():
+            for k, v in updateDate_list.items():
                 record = self.env['fast.blank.packing_list_detail'].sudo().browse(int(k))
+                if not v:
+                    v = 0
                 if record.quantity != int(v):
                     record.quantity = v
                     records_ids.append(record.id)
@@ -112,33 +140,64 @@ class FastBlankPackingList(models.Model):
 
             detail_value = []
             quantity_list = []
-            for k, v in quantitys_lsit.items():
+            for k, v in quantitys_list.items():
                 product_name = datas.get('product_tmpl_code', '') + '-' + k
-                blank_order_detail = self.env['fast.blank_order_detail'].sudo().search(
-                    [('product_name', '=', product_name)], limit=1)
+                blank_order_detail = self.env['fast.blank_order_detail'].sudo().search([('product_name', '=', product_name)], limit=1)
                 if not blank_order_detail:
                     continue
 
                 for item in v:
-                    if not v or not item.replace(' ', ''):
+                    if not item or not item.replace(' ', ''):
                         continue
                     quantity_list.append({
                         'product_name': blank_order_detail.product_name,
                         'quantity': item,
                     })
+                    add_detail(detail_value, item, blank_order_detail)
+                    # detail_value.append((0, 0, {
+                    #     'style_number': blank_order_detail.name,
+                    #     'color': blank_order_detail.product_color_name.split('-')[-1],
+                    #     'product_color_name': blank_order_detail.product_color_name,
+                    #     'product_name': blank_order_detail.product_name,
+                    #     'size': blank_order_detail.product_name.split('-')[-1],
+                    #     'quantity': item,
+                    #     'blank_order_detail_id': blank_order_detail.id,
+                    # }))
 
-                    detail_value.append((0, 0, {
-                        'style_number': blank_order_detail.name,
-                        'color': blank_order_detail.product_color_name.split('-')[-1],
-                        'product_color_name': blank_order_detail.product_color_name,
+            blank_packing_list = self.env['fast.blank.packing_list'].search([('po', '=', po_name), ('synch_state', '=', 'not_synch')])
+            mixed_stowage_sequence = list(set(blank_packing_list.packing_list_detail_line.mapped('mixed_stowage_sequence')))
+            if not mixed_stowage_sequence:
+                mixed_stowage_sequence = [0]
+            sequence = max(mixed_stowage_sequence) + 1
+
+            # 更新混装数据
+            for item in hz_box_updateDate_list:
+                for k, v in item.items():
+                    record = self.env['fast.blank.packing_list_detail'].sudo().browse(int(k))
+                    if not v:
+                        v = 0
+                    if record.quantity != int(v):
+                        record.quantity = v
+                        records_ids.append(record.id)
+                    if not record.quantity:
+                        record.unlink()
+            # 创建混装数据
+            for index, box in enumerate(hz_box_createDate_list):
+                sequence += index
+                for k, v in box.items():
+                    product_name = datas.get('product_tmpl_code', '') + '-' + k
+                    blank_order_detail = self.env['fast.blank_order_detail'].sudo().search([('product_name', '=', product_name)], limit=1)
+                    if not blank_order_detail:
+                        continue
+
+                    if not v or not v.replace(' ', ''):
+                        continue
+                    quantity_list.append({
                         'product_name': blank_order_detail.product_name,
-                        'size': blank_order_detail.product_name.split('-')[-1],
-                        'quantity': item,
-                        'blank_order_detail_id': blank_order_detail.id,
-                    }))
+                        'quantity': v,
+                    })
+                    add_detail(detail_value, v, blank_order_detail, True, sequence)
 
-            blank_packing_list = self.env['fast.blank.packing_list'].search(
-                [('po', '=', po_name), ('synch_state', '=', 'not_synch')])
             if blank_packing_list:
                 now_packing_list_detail_ids = blank_packing_list.packing_list_detail_line.ids
                 blank_packing_list.write({
@@ -172,6 +231,7 @@ class FastBlankPackingList(models.Model):
                 'records_ids': records_ids + detail_records,
             }
         except Exception as e:
+            _logger.error(traceback.format_exc())
             return False
 
     def btn_print_packing_list_action(self):
@@ -233,6 +293,8 @@ class FastBlankPackingListDetail(models.Model):
     receive_state = fields.Selection([('not_receive', '未收货'), ('have_receive', '已收货')], string='收货状态',
                                      default='not_receive', compute='_compute_receive_state', store=True)
     sequence = fields.Integer(string='序号', compute='_compute_sequence', store=True)
+    mixed_stowage = fields.Boolean(string='是否混装', default=False)
+    mixed_stowage_sequence = fields.Integer('混装序号')
 
     @api.depends('quantity', 'packing_list_id', 'blank_order_detail_id')
     def _compute_sequence(self):
@@ -260,8 +322,17 @@ class FastBlankPackingListDetail(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        box_number = ''
+        mixed_stowage_sequence = False
         for v in vals_list:
-            v['box_number'] = self.env['ir.sequence'].next_by_code('fast.blank.packing_list_detail.seq') or 'New'
+            if v.get('mixed_stowage_sequence') == None:
+                v['box_number'] = self.env['ir.sequence'].next_by_code('fast.blank.packing_list_detail.seq') or 'New'
+            elif mixed_stowage_sequence != v.get('mixed_stowage_sequence'):
+                v['box_number'] = self.env['ir.sequence'].next_by_code('fast.blank.packing_list_detail.seq') or 'New'
+                box_number = v['box_number']
+                mixed_stowage_sequence = v.get('mixed_stowage_sequence')
+            else:
+                v['box_number'] = box_number
         return super(FastBlankPackingListDetail, self).create(vals_list)
 
     def btn_one_print_packing_list_action(self):
@@ -331,21 +402,47 @@ class FastBlankPackingListDetail(models.Model):
         :param kwargs: dict   款色, { product_code: 'M30050-GRY' }
         :return: [{}]
         """
-        records = self.search([]).read_group(
+        group_records = self.search([]).read_group(
             domain=[('product_color_name', '=', kwargs.get('product_code'))],
             fields=list(self._fields.keys()),
             groupby='product_name'
         )
         values = []
-        for record in records:
+        for record in group_records:
             values.append({
                 'size': record['product_name'].split('-')[-1],
                 'quantity': record['quantity'],
             })
         values = sorted(values, key=lambda x: BlankSize.index(x['size'].lower()))
-        records_detail = self.search([('product_color_name', '=', kwargs.get('product_code'))], order='id asc')
+        records_blank_order_detail = self.env['fast.blank_order_detail'].search([('product_color_name', '=', kwargs.get('product_code'))], limit=1)
+        records_detail = self.search([('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage', '=', False)], order='id asc')
+        mixed_stowage_records_detail = self.search([('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage', '=', True)], order='id asc')
+        mixed_stowage_records_json = mixed_stowage_records_detail.jsonify(['id', 'size', 'quantity', 'synch_state', 'mixed_stowage_sequence'])
+        mixed_stowage_sequence_value = {}
+        for item in mixed_stowage_records_json:
+            mixed_stowage_sequence_value.update({item['mixed_stowage_sequence']: []})
+        for item in mixed_stowage_records_json:
+            mixed_stowage_sequence_value[item['mixed_stowage_sequence']].append(item)
         existing_data = records_detail.jsonify(['id', 'size', 'quantity', 'synch_state'])
-        if not records_detail:
-            raise UserError(f'未找到该记录')
-        date_expected = records_detail[0].blank_order_detail_id.date_expected
-        return values, existing_data, date_expected
+        date_expected = ''
+        if records_blank_order_detail:
+            date_expected = records_blank_order_detail.date_expected
+        return values, existing_data, date_expected, mixed_stowage_sequence_value
+
+
+    # group_records = self.search([]).read_group(
+    #     domain=[('product_color_name', '=', kwargs.get('product_code'))],
+    #     fields=list(self._fields.keys()),
+    #     groupby='product_name'
+    # )
+    #
+    # # 获取每个组的完整记录信息
+    # full_records = {}
+    # for group in group_records:
+    #     if not group.get('__domain'):
+    #         continue
+    #     records = self.search_read(domain=group['__domain'], fields=list(self._fields.keys()))
+    #     full_records.update({
+    #         group['product_name']: records
+    #     })
+

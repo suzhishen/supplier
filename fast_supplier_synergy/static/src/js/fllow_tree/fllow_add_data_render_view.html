@@ -80,16 +80,16 @@
 <br>
 
 <div id="hzBox">
-<!--    <div class="hz_box">-->
-<!--        <span>XS：</span><input class="XS" type="text" value="123">-->
-<!--        <span>S：</span><input class="S" type="text" value="123">-->
-<!--        <span>4XL：</span><input class="4XL" type="text" value="123">-->
-<!--    </div>-->
-<!--    <div class="hz_box">-->
-<!--        <span>XS：</span><input class="XS" type="text" value="321">-->
-<!--        <span>S：</span><input class="S" type="text" value="321">-->
-<!--        <span>4XL：</span><input class="4XL" type="text" value="321">-->
-<!--    </div>-->
+    <!--    <div class="hz_box">-->
+    <!--        <span>XS：</span><input class="XS" type="text" value="123">-->
+    <!--        <span>S：</span><input class="S" type="text" value="123">-->
+    <!--        <span>4XL：</span><input class="4XL" type="text" value="123">-->
+    <!--    </div>-->
+    <!--    <div class="hz_box">-->
+    <!--        <span>XS：</span><input class="XS" type="text" value="321">-->
+    <!--        <span>S：</span><input class="S" type="text" value="321">-->
+    <!--        <span>4XL：</span><input class="4XL" type="text" value="321">-->
+    <!--    </div>-->
 </div>
 
 <script>
@@ -144,12 +144,15 @@
         lastInput.after(newInput);
     }
 
+
     $(document).ready(function () {
+        console.log('初始化装箱成功')
         let url = new URL(window.location.href);
         let searchParams = new URLSearchParams(url.search);
         let incomplete_line = JSON.parse(searchParams.get('incomplete_line'));
         let packed_list = JSON.parse(searchParams.get('packed_list'));
         let packed_size = JSON.parse(searchParams.get('packed_size'));
+        let mixed_stowage_list = JSON.parse(searchParams.get('mixed_stowage_list'));
 
         const new_size = [];
         incomplete_line.forEach(item => {
@@ -206,16 +209,37 @@
         });
 
 
+        // 尾箱混装展示数据
         let hz_labels = ''
         for (let i = 0; i < new_size.length; i++) {
-            hz_labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
+            if (new_size[i].product_qty > 0) {
+                hz_labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
 <span id="${new_size[i].size_name}_span" style="margin-right: 1%;"><input type="text" class="layui-input" name="${new_size[i].size_name}"/></span>`
+            }
 
             if ((new_size.length - 1) == i) {
                 hz_labels += `<button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;" onClick="addHzInput('${new_size[i].size_name}')">加尾箱</button>`
             }
         }
         $('#hzformData').append(hz_labels)
+
+        // 尾箱混装已有装箱的展示数据
+        var all_box_html = ``
+        for (let key in mixed_stowage_list) {
+            var box_html = `<div class="hz_box">`
+            mixed_stowage_list[key].forEach(record => {
+                if (record.synch_state === 'have_synch') {
+                    box_html += `<span>${record.size}：</span><input class=${record.size} type="text" value=${record.quantity} id=${record.id} disabled>`
+                } else {
+                    box_html += `<span>${record.size}：</span><input class=${record.size} type="text" value=${record.quantity} id=${record.id}>`
+                }
+            });
+            box_html += `</div>`
+            all_box_html += box_html
+        }
+        if (all_box_html) {
+            $('#hzBox').append(all_box_html)
+        }
 
 
         // // 为每个添加按钮绑定点击事件
@@ -224,7 +248,8 @@
         //     var inputId = $(this).prev('input').attr('id');
         //     addInput(inputId);
         // });
-    });
+    })
+    ;
 
 </script>
 </body>
