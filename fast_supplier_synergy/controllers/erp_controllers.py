@@ -197,33 +197,65 @@ class ErpController(http.Controller):
         try:
             json_data = json.loads(request.httprequest.data)
             name = json_data.get('name', '')
-            # remove_keys = ['blank_order_detail_line', 'main_material_order_line', 'sub_material_order_line', 'partner_price_line']
-            remove_keys = ['blank_order_detail_line', 'partner_price_line']
+            # # remove_keys = ['blank_order_detail_line', 'main_material_order_line', 'sub_material_order_line', 'partner_price_line']
+            # remove_keys = ['blank_order_detail_line', 'partner_price_line']
+            # value = {}
+            # for key in remove_keys:
+            #     if key in json_data:
+            #         value.update({
+            #             key: self.add_one2many_datas(json_data[key])
+            #         })
+            #         json_data.pop(key)
+            # json_data.update(value)
 
-            value = {}
-            for key in remove_keys:
-                if key in json_data:
-                    value.update({
-                        key: self.add_one2many_datas(json_data[key])
-                    })
-                    json_data.pop(key)
-
-            json_data.update(value)
             if not name:
                 raise OdooCustomHTTPException(400, '请传入 name 参数')
             blank_basics = request.env['fast.supplier.order.blank'].sudo()
             record = blank_basics.search([('name', '=', name)])
+            record_val = {
+                'name': json_data.get('name', ''),  # 订单号
+                'type': json_data.get('type'),  # 加工类型
+                'order_type': json_data.get('blank_order_type'),  # 订单类型
+                'processing_plant': json_data.get('processing_plant')['name'] if json_data.get('processing_plant') else '', # 加工厂
+                'order_quantity':  json_data.get('order_quantity', 0),  # 订单数量
+                'completed_quantity':  json_data.get('completed_quantity', 0),  # 已完成数量
+                'unfinished_quantity':  json_data.get('unfinished_quantity'),  # 待完成数量
+                'date_planned':  json_data.get('date_planned'),  # 要求交期
+                'state':  json_data.get('state'),  # 加工类型
+                'partner_price_line':  [],  # 相关费用
+                'blank_order_detail_line': [],  # 相关明细
+            }
+
+            # 相关费用
+            partner_price_line = []
+            for partner_price_record in json_data.get('partner_price_line', []):
+                partner_price_line.append((0, 0, partner_price_record))
+            record_val.update({'partner_price_line': partner_price_line})
+
+            # 相关明细
+            blank_order_detail_line = []
+            for blank_order_detail_record in json_data.get('blank_order_detail_line', []):
+                blank_order_detail_line.append((0, 0, {
+                    'name': blank_order_detail_record['name'] or '',
+                    'product_color_name': blank_order_detail_record['product_color_name'] or '',
+                    'product_name': blank_order_detail_record['product_default_code'] or '',
+                    'style_name': blank_order_detail_record['product_default_name'] or '',
+                    'order_quantity': blank_order_detail_record['order_quantity'],
+                }))
+            record_val.update({'blank_order_detail_line': blank_order_detail_line})
+
             if not record:
-                record.create(json_data)
+                record.create(record_val)
             else:
                 record.blank_order_detail_line.unlink()
                 # record.main_material_order_line.unlink()
                 # record.sub_material_order_line.unlink()
                 record.partner_price_line.unlink()
-                record.write(json_data)
+                record.write(record_val)
             message = '同步成功'
             print(json_data)
         except Exception as e:
+            _logger.error(traceback.format_exc())
             message = f'同步失败 {e}'
         return {
             'code': 200,

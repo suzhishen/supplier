@@ -18,6 +18,7 @@ class FastSupplierOrderBlank(models.Model):
     erp_id = fields.Integer('erp_id')
     name = fields.Char('订单号', copy=False, required=1, help='po号')
     type = fields.Selection([('A', 'FOB'), ('B', 'MTP')], copy=False, string='加工类型')
+    order_type = fields.Char('订单类型')
     processing_plant = fields.Char('加工厂')
     user_name = fields.Char('跟单员')
     order_quantity = fields.Integer('订单数量')
@@ -25,8 +26,7 @@ class FastSupplierOrderBlank(models.Model):
     unfinished_quantity = fields.Integer('待完成数量')
     date_planned = fields.Char('要求交期')
     # date_expected = fields.Date('预计交期')
-    state = fields.Selection([('draft', '待完成'), ('part', '部分完成'), ('done', '已完成'), ('cancel', '已取消')],
-                             string='状态', default='draft', copy=True)
+    state = fields.Selection([('draft', '待完成'), ('part', '部分完成'), ('done', '已完成'), ('cancel', '已取消')], string='状态', default='draft')
     partner_price_line = fields.One2many('fast.process_cost', 'blank_order_id', string='相关费用', index=True)
     blank_order_detail_line = fields.One2many('fast.blank_order_detail', 'blank_order_id', string='相关明细', index=True)
     main_material_order_line = fields.One2many('fast.blank.order.material.requirements', 'outsource_order_blank_id',
@@ -35,7 +35,7 @@ class FastSupplierOrderBlank(models.Model):
                                               string='相关物料需求(辅料)', domain=[('conf_type', '=', 'sub')])
     confirm_state = fields.Selection([('not_confirm', '未接收'), ('have_confirm', '已接收')], string='确认接收状态', default='not_confirm')
     change_state = fields.Selection([('not_change', '无需变更'), ('await_change', '待变更明细'), ('have_change', '已变更明细')], string='变更状态', default='not_change')
-    state = fields.Selection([('draft', '待完成'), ('part', '部分完成'), ('done', '已完成'), ('cancel', '已取消')], default='draft', string='状态')
+    order_date = fields.Char(string='下单日期')
 
     # @api.constrains('date_expected')
     # def _sync_erp_date_expected(self):
@@ -225,11 +225,12 @@ class BlankOrderDetail(models.Model):
     change_quantity = fields.Char('变更数量')
 
     # 后加
-    order_date = fields.Char(string='下单日期')
-    material_state = fields.Char('发料状态')
+    order_date = fields.Char(related='blank_order_id.order_date', string='下单日期')
+    type = fields.Selection(related='blank_order_id.type', string='外发类型')
+    order_type = fields.Char(related='blank_order_id.order_type', string='订单类型')
     style_name = fields.Char('款式名称')
-    order_type = fields.Char('订单类型')
-    order_state = fields.Char('订单状态')
+    order_remark = fields.Char('订单备注')
+    order_state = fields.Char('订单状态', help='如： 已关闭，未关闭')
 
     @api.depends('packing_list_detail_quantity.received_quantity', 'packing_list_detail_quantity.receive_state', 'packing_list_detail_quantity.difference_quantity')
     def _compute_completed_quantity(self):
@@ -347,17 +348,18 @@ class BlankOrderDetail(models.Model):
         foot_order_line_total = foot_incoming_line_total = foot_incomplete_line_total = 0
         for index, item in enumerate(full_records.values()):
             value = {
-                'create_date': '下单日期',  # 下单日期
+                'create_date': item[0].get('create_date', ''),  # 下单日期
                 'partner_name': item[0].get('processing_plant', ''),  # 加工厂
                 'po': item[0].get('name', ''),  # PO#
                 'product_tmpl_code': item[0]['product_color_name'],  # 款色
-                'product_configuration_name': '款式名称',  # 款式名称
+                'product_configuration_name': item[0].get('style_name', ''),  # 款式名称
                 'date_planned': item[0].get('date_planned') or '',  # 要求交期
                 'order_type': 'FOB' if item[0].get('type', '') else 'MTP',  # 外发类型
                 'product_configuration_code': item[0].get('name', ''),  # 款号
                 'date_expected': item[0].get('date_expected') if item[0].get('date_expected') and item[0].get('date_expected') != 'false' else '',  # 预计交期
                 'incomplete_line': [],  # 欠数明细
-                'blank_order_type': '订单类型',  # 订单类型
+                'blank_order_type': item[0].get('order_type', ''),  # 订单类型
+                'order_remark': item[0].get('order_remark', '') or '',  # 领料状态
             }
 
             order_line_total = 0
