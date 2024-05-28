@@ -218,6 +218,7 @@ class ErpController(http.Controller):
             record_val = {
                 'name': json_data.get('name', ''),  # 订单号
                 'type': json_data.get('type'),  # 加工类型
+                'order_date': json_data.get('order_date'),  # 下单日期
                 'order_type': json_data.get('blank_order_type'),  # 订单类型
                 'processing_plant': json_data.get('processing_plant')['name'] if json_data.get('processing_plant') else '', # 加工厂
                 'order_quantity':  json_data.get('order_quantity', 0),  # 订单数量

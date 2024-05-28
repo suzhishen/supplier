@@ -5,40 +5,43 @@
             <table class="layui-table" id="ID-table-demo-data">
                 <thead>
                     <tr>
-                        <th lay-data="{field:'id', width:80, sort: true}" rowspan="3">箱号</th>
-                        <th lay-data="{field:'username', width:80}" rowspan="3">订单号</th>
-                        <th lay-data="{field:'sex', width:80, sort: true}" rowspan="3">款号</th>
-                        <th lay-data="{field:'city'}" rowspan="3">颜色</th>
+                        <th lay-data="{field:'box_number', width:80, sort: true}" rowspan="3">箱号</th>
+                        <th lay-data="{field:'order_number', width:80}" rowspan="3">订单号</th>
+                        <th lay-data="{field:'style_number', width:80, sort: true}" rowspan="3">款号</th>
+                        <th lay-data="{field:'color'}" rowspan="3">颜色</th>
                         <th lay-data="{align:'center'}" colspan="14">尺码<span style="color:red"> / 差异数</span></th>
                     </tr>
                     <tr>
-                        <th lay-data="{field:'tz_4'}">4</th>
-                        <th lay-data="{field:'tz_5'">5</th>
-                        <th lay-data="{field:'tz_5'">6</th>
-                        <th lay-data="{field:'tz_7'">7</th>
-                        <th lay-data="{field:'tz_8'">8</th>
-                        <th lay-data="{field:'tz_8_10'">8-10</th>
-                        <th lay-data="{field:'tz_10_12'">10-12</th>
-                        <th lay-data="{field:'tz_12-14'">12-14</th>
-                        <th lay-data="{field:'tz_14_16'">14-16</th>
-                        <th lay-data="{field:'tz_16'">16</th>
-                        <th lay-data="{field:'tz_18_20'">18/20</th>
-                        <th lay-data="{field:'tz_2t'">2T</th>
-                        <th lay-data="{field:'tz_3t'">3T</th>
-                        <th lay-data="{field:'tz_4t'">4T</th>
+                        <th lay-data="{align:'center'}">4</th>
+                        <th lay-data="{align:'center'}">5</th>
+                        <th lay-data="{align:'center'}">6</th>
+                        <th lay-data="{align:'center'}">7</th>
+                        <th lay-data="{align:'center'}">8</th>
+                        <th lay-data="{align:'center'}">8-10</th>
+                        <th lay-data="{align:'center'}">10-12</th>
+                        <th lay-data="{align:'center'}">12-14</th>
+                        <th lay-data="{align:'center'}">14-16</th>
+                        <th lay-data="{align:'center'}">16</th>
+                        <th lay-data="{align:'center'}">18/20</th>
+                        <th lay-data="{align:'center'}">2T</th>
+                        <th lay-data="{align:'center'}">3T</th>
+                        <th lay-data="{align:'center'}">4T</th>
                     </tr>
                     <tr>
-                        <th lay-data="{align:'center'}">XXS</th>
-                        <th lay-data="{align:'center'}">XS</th>
-                        <th lay-data="{align:'center'}">S</th>
-                        <th lay-data="{align:'center'}">M</th>
-                        <th lay-data="{align:'center'}">L</th>
-                        <th lay-data="{align:'center'}">XL</th>
-                        <th lay-data="{align:'center'}">2XL</th>
-                        <th lay-data="{align:'center'}">3XL</th>
-                        <th lay-data="{align:'center'}">4XL</th>
-                        <th lay-data="{align:'center'}">5XL</th>
-                        <th lay-data="{align:'center'}">6XL</th>
+                        <th lay-data="{field:'xxs_4'}">XXS</th>
+                        <th lay-data="{field:'xs_5'}">XS</th>
+                        <th lay-data="{field:'s_6'}">S</th>
+                        <th lay-data="{field:'m_7'}">M</th>
+                        <th lay-data="{field:'l_8'}">L</th>
+                        <th lay-data="{field:'xl_8_10'}">XL</th>
+                        <th lay-data="{field:'2xl_10_12'}">2XL</th>
+                        <th lay-data="{field:'3xl_12_14'}">3XL</th>
+                        <th lay-data="{field:'4xl_14_16'}">4XL</th>
+                        <th lay-data="{field:'5xl_16'}">5XL</th>
+                        <th lay-data="{field:'6xl_18_20'}">6XL</th>
+                        <th lay-data="{field:'2t'}"> </th>
+                        <th lay-data="{field:'3t'}"> </th>
+                        <th lay-data="{field:'4t'}"> </th>
                     </tr>
                 </thead>
             </table>

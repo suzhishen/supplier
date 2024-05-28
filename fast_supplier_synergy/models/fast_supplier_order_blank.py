@@ -6,6 +6,7 @@ BlankSize = ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'
 
 import requests
 from odoo.exceptions import UserError, ValidationError
+import json
 Dev_url = 'http://192.168.6.50:10010'
 
 
@@ -348,17 +349,17 @@ class BlankOrderDetail(models.Model):
         foot_order_line_total = foot_incoming_line_total = foot_incomplete_line_total = 0
         for index, item in enumerate(full_records.values()):
             value = {
-                'create_date': item[0].get('create_date', ''),  # 下单日期
+                'create_date': item[0].get('order_date', '') or '',  # 下单日期
                 'partner_name': item[0].get('processing_plant', ''),  # 加工厂
-                'po': item[0].get('name', ''),  # PO#
+                'po': item[0].get('po_name', ''),  # PO#
                 'product_tmpl_code': item[0]['product_color_name'],  # 款色
-                'product_configuration_name': item[0].get('style_name', ''),  # 款式名称
+                'product_configuration_name': item[0].get('style_name', '') or '',  # 款式名称
                 'date_planned': item[0].get('date_planned') or '',  # 要求交期
                 'order_type': 'FOB' if item[0].get('type', '') else 'MTP',  # 外发类型
                 'product_configuration_code': item[0].get('name', ''),  # 款号
                 'date_expected': item[0].get('date_expected') if item[0].get('date_expected') and item[0].get('date_expected') != 'false' else '',  # 预计交期
                 'incomplete_line': [],  # 欠数明细
-                'blank_order_type': item[0].get('order_type', ''),  # 订单类型
+                'blank_order_type': item[0].get('order_type', '') or '',  # 订单类型
                 'order_remark': item[0].get('order_remark', '') or '',  # 领料状态
             }
 
@@ -443,18 +444,18 @@ class BlankOrderDetail(models.Model):
             'product_tmpl_code':kwargs.get('product_tmpl_code',''),
             'product_configuration_code':kwargs.get('product_configuration_code',''),
         }
-        Dev_url = 'http://192.168.6.50:10010'
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url=f'{Dev_url}/leda/blank_order_material_bom_detail', json=values, headers=headers)
-        import json
         if response.status_code == 200:
             data = json.loads(response.text)
             result = data['result']
             print(data)
+            if result['code'] != 2022:
+                raise UserError(result['msg'])
             wizard_id = self.env['fast.create.material.requirements.wizard'].sudo().create({
                 # 'outsource_order_blank_id': self.id,
                 # 'outsource_order_blank_line_ids': [(6, 0, product_tmpl_lines.ids)],
-                'default_code': 'fasfdsa',
+                'default_code': kwargs['product_tmpl_code'],
                 'erp_id':result['data']['erp_id']
             })
             for line in result['data']['order_line']:
@@ -472,6 +473,8 @@ class BlankOrderDetail(models.Model):
                     'bom_loss_qty': line['bom_loss_qty'],
                     'bom_product_qty': line['bom_product_qty'],
                     'apply_product_qty': line['apply_product_qty'],
+                    'f_width': line['f_width'],
+                    'g_weight': line['g_weight'],
                     'body': line['body'],
                     'order_id':wizard_id.id,
                     'erp_id': line['erp_id'],
@@ -480,7 +483,6 @@ class BlankOrderDetail(models.Model):
             action['res_id'] = wizard_id.id
             action['context'] = {'dialog_size': 'extra-modal-max-95'}
             return action
-  
 
 
 class FastBlankOrderMaterialRequirements(models.Model):
