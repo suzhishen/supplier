@@ -1,5 +1,5 @@
 import math
-
+import json
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 import concurrent.futures
@@ -79,7 +79,12 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
         Dev_url = 'http://192.168.6.50:10010'
         headers = {'Content-Type': 'application/json'}
         response = requests.post(url=f'{Dev_url}/supplier_sync_data_create_fast_blank_order_material_requirements_task', json={'params':{'datas':values}}, headers=headers)
-        print(response.text)
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            if data['result']['type'] == 'ok':
+                order_line
+
+
 
     @api.onchange('select_all_main')
     def onchange_select_all_main(self):

@@ -28,7 +28,7 @@
         'views/fast_blank_packing_list_views.xml',
         'views/report_forms_views.xml',
         'views/menu_views.xml',
-        'views/fast_create_material_requirements_wizard_views_apply_material.xml'
+        # 'views/fast_create_material_requirements_wizard_views_apply_material.xml',
     ],
     'assets': {
         'web.assets_backend': [

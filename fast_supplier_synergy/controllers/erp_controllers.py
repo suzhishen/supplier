@@ -43,6 +43,9 @@ class ErpController(http.Controller):
             datas.append((0, 0, item))
         return datas
 
+    @http.route('/erp/fast_blank_order_material_requirements_task', type='json', auto='none', csrf=False, methods=['POST'])
+    def  fast_blank_order_material_requirements_task(self,**kwargs):
+        pass
     @http.route(['/erp/update_company_info'], type='json', auto='none', csrf=False, methods=['POST'])
     def update_company_info(self):
         """ 更新公司信息 """

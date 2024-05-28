@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fast_blank_order_material_requirements_task_search" model="ir.ui.view">
+        <field name="name">fast_blank_order_material_requirements_task_search</field>
+        <field name="model">fast.blank.order.material.requirements.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="origin"/>
+                <field name="origin_product_tmpl_id"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <field name="color_value_id"/>
+                <field name="product_spec_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter name="this_apply_qty_than_zero" string="本次申领数>0" domain="[('this_apply_qty', '>', 0)]"/>
+                <separator/>
+                <filter name="conf_type_main" string="主料" domain="[('conf_type', '=', 'main')]"/>
+                <filter name="conf_type_sub" string="辅料" domain="[('conf_type', '=', 'sub')]"/>
+                <separator/>
+                <filter name="is_close_true" string="已关闭" domain="[('is_close', '=', True)]"/>
+                <filter name="is_close_false" string="未关闭" domain="[('is_close', '=', False)]"/>
+                <separator/>
+                <filter name="apply_state_none" string="未申领" domain="[('apply_state', '=', 'none')]"/>
+                <filter name="apply_state_part" string="部分申领" domain="[('apply_state', '=', 'part')]"/>
+                <filter name="apply_state_full" string="全部申领" domain="[('apply_state', '=', 'full')]"/>
+                <separator/>
+                <filter name="state_none" string="不可用" domain="[('state', '=', 'none')]"/>
+                <filter name="state_part" string="部分可用" domain="[('state', '=', 'part')]"/>
+                <filter name="state_full" string="全部可用" domain="[('state', '=', 'full')]"/>
+                <separator/>
+                <filter name="order_type_" string="裁床任务单" domain="[('order_type', '=', 'cut')]"/>
+                <filter name="order_type_" string="FOB订单" domain="[('order_type', '=', 'fob')]"/>
+                <filter name="order_type_" string="MTP订单" domain="[('order_type', '=', 'mtp')]"/>
+                <separator/>
+                <group expand="1" string="Group By" name="groupby">
+                    <filter string="PO#" name="groupby_origin" domain="[]" context="{'group_by': 'origin'}"/>
+                    <filter string="加工厂" name="groupby_partner_id" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="款号-颜色" name="groupby_origin_product_tmpl_id" domain="[]"
+                            context="{'group_by': 'origin_product_tmpl_id'}"/>
+                    <filter string="物料" name="groupby_product_configuration_id" domain="[]"
+                            context="{'group_by': 'product_configuration_id'}"/>
+                    <filter string="颜色" name="groupby_color_value_id" domain="[]"
+                            context="{'group_by': 'color_value_id'}"/>
+                    <filter string="规格" name="groupby_product_spec_id" domain="[]"
+                            context="{'group_by': 'product_spec_id'}"/>
+                    <filter string="物料分类" name="groupby_categ_id" domain="[]" context="{'group_by': 'categ_id'}"/>
+                    <filter string="跟单员" name="groupby_user_id" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="订单类型" name="groupby_order_type" domain="[]"
+                            context="{'group_by': 'order_type'}"/>
+                    <filter string="状态" name="groupby_state" domain="[]" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="fast_blank_order_material_requirements_task_tree" model="ir.ui.view">
+        <field name="name">fast_blank_order_material_requirements_task_tree</field>
+        <field name="model">fast.blank.order.material.requirements.task</field>
+        <field name="arch" type="xml">
+            <tree create="0" delete="0" duplicate="0" editable="bottom" expand="1"
+                  decoration-danger="reality_product_qty==0 or is_close==True"
+                  class="fast_blank_order_material_requirements_task_tree_cus_style">
+                <header>
+                    <button name="action_create_fast_material_application" type="object" confirm="确认继续操作吗？"
+                            class="oe_stat_button" string="生成领料单" groups="fast_order_center.group_fast_blank_order_material_requirements_task_editable"/>
+                    <button name="action_close" type="object" confirm="确认继续操作吗？" class="oe_stat_button"
+                            string="批量关闭" groups="fast_order_center.group_fast_blank_order_material_requirements_task_editable"/>
+                    <button name="action_open" type="object" confirm="确认继续操作吗？" class="oe_stat_button"
+                            string="批量打开" groups="fast_order_center.group_fast_blank_order_material_requirements_task_editable"/>
+                </header>
+                <field name="origin"/>
+                <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                <field name="origin_product_tmpl_id" options="{'no_create': True, 'no_open': True}"/>
+                <field name="product_default_code"/>
+                <field name="product_default_name"/>
+                <field name="color_cn_name"/>
+                <field name="product_spec_remark"/>
+                <field name="product_qty" widget="uom_float" options="{'uomField':'uom_po_id'}" sum="total"
+                       decoration-bf="1"/>
+                <button name="action_open_fast_blank_order_material_requirements_line_action" type="object"
+                        class="oe_stat_button fa fa-eye" title="需求详情"/>
+                <field name="reality_product_qty" widget="uom_float" options="{'uomField':'uom_po_id'}" sum="total"
+                       attrs="{'readonly':['|', ('apply_state', '=', 'full'), ('qty_log_order_line', '!=', [])]}"
+                       decoration-bf="1"/>
+                <button name="action_open_qty_log_order_line" type="object" class="oe_stat_button fa fa-eye" title="补数详情" attrs="{'invisible':[('qty_log_order_line', '=', [])]}"/>
+                <button name="action_add_reality_product_qty" type="object" class="oe_stat_button fa fa-plus text-danger"
+                        string="补数" groups="fast_order_center.group_fast_blank_order_material_requirements_task_editable"
+                        attrs="{'invisible':[('apply_state', '!=', 'full')]}"/>
+                <field name="done_apply_qty" widget="uom_float" options="{'uomField':'uom_po_id'}" sum="total"
+                       decoration-bf="1"
+                       decoration-danger="done_apply_qty==0"
+                       decoration-warning="done_apply_qty > 0 and reality_product_qty > done_apply_qty"
+                       decoration-success="done_apply_qty > 0 and done_apply_qty >= reality_product_qty"/>
+                <field name="pending_apply_qty" widget="uom_float" options="{'uomField':'uom_po_id'}" sum="total"
+                       decoration-bf="1"/>
+                <field name="this_po_occupancy_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"
+                       decoration-bf="1"
+                       decoration-danger="this_po_occupancy_qty==0"
+                       decoration-warning="this_po_occupancy_qty > 0 and reality_product_qty > this_po_occupancy_qty"
+                       decoration-success="this_po_occupancy_qty > 0 and this_po_occupancy_qty >= reality_product_qty"/>
+                <button name="action_view_po_fast_inventory_reservation_table_line" type="object"
+                        icon="fa-eye text-primary"
+                        title="查看本单占用库存" attrs="{'invisible':[('this_po_occupancy_qty', '&lt;=', 0)]}"/>
+                <field name="this_apply_qty" widget="uom_float" options="{'uomField':'uom_po_id'}" sum="total"
+                       decoration-bf="1" decoration-danger="this_apply_qty > 0"
+                       attrs="{'readonly':['|', ('apply_state', '=', 'full'), '&amp;', '&amp;', ('po_occupancy_can_use_qty', '&lt;=', 0), ('can_use_inventory_qty', '&lt;=', 0), ('this_po_occupancy_qty', '&lt;=', 0)]}"/>
+                <field name="remark" attrs="{'readonly':[('apply_state', '=', 'full')]}"/>
+                <field name="can_use_inventory_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"
+                       decoration-bf="1"
+                       decoration-danger="can_use_inventory_qty==0"
+                       decoration-warning="can_use_inventory_qty > 0 and reality_product_qty > can_use_inventory_qty"
+                       decoration-success="can_use_inventory_qty > 0 and can_use_inventory_qty >= reality_product_qty"/>
+                <field name="po_occupancy_can_use_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"
+                       decoration-bf="1"
+                       decoration-danger="po_occupancy_can_use_qty==0"
+                       decoration-warning="po_occupancy_can_use_qty > 0 and reality_product_qty > po_occupancy_can_use_qty"
+                       decoration-success="po_occupancy_can_use_qty > 0 and po_occupancy_can_use_qty >= reality_product_qty"/>
+                <button name="action_view_po_fast_inventory_reservation_table_line" type="object"
+                        icon="fa-eye text-primary"
+                        title="查看PO占用库存" attrs="{'invisible':[('po_occupancy_can_use_qty', '&lt;=', 0)]}"/>
+                <field name="state" widget="badge" decoration-danger="state=='none'" decoration-warning="state=='part'"
+                       decoration-success="state=='full'"/>
+                <field name="apply_state" widget="badge" decoration-danger="apply_state=='none'"
+                       decoration-warning="apply_state=='part'"
+                       decoration-success="apply_state=='full'"/>
+                <field name="body"/>
+                <field name="order_type" widget="badge" optional="show"
+                       decoration-primary="order_type=='cut'"
+                       decoration-info="order_type=='fob'"
+                       decoration-muted="order_type=='mtp'"/>
+                <field name="is_close" optional="show"/>
+                <field name="user_id" options="{'no_create': True, 'no_open': True}" widget="many2one_avatar_user"/>
+                <field name="assist_uom_id" invisible="1"/>
+                <field name="uom_po_id" invisible="1"/>
+                <field name="qty_log_order_line" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fast_blank_order_material_requirements_task_form" model="ir.ui.view">
+        <field name="name">fast_blank_order_material_requirements_task_form</field>
+        <field name="model">fast.blank.order.material.requirements.task</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0" edit="0" duplicate="0">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group col="3" colspan="3">
+                        <field name="uom_po_id" invisible="1"/>
+                        <group>
+                            <field name="origin"/>
+                            <field name="origin_product_tmpl_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="user_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="pending_apply_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"/>
+                        </group>
+                        <group>
+                            <field name="product_default_code"/>
+                            <field name="product_default_name"/>
+                            <field name="color_value_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="color_cn_name"/>
+                            <field name="product_spec_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="product_spec_remark"/>
+                        </group>
+                        <group>
+                            <field name="body"/>
+                            <field name="product_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"/>
+                            <field name="po_occupancy_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"/>
+                            <field name="can_use_inventory_qty" widget="uom_float" options="{'uomField':'uom_po_id'}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="fast_blank_order_material_requirements_task_action" model="ir.actions.act_window">
+        <field name="name">物料需求-待申领任务表</field>
+        <field name="res_model">fast.blank.order.material.requirements.task</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'search_default_is_close_false': 1, 'search_default_apply_state_none': 1,
+            'search_default_apply_state_part': 1}
+        </field>
+        <field name="search_view_id" ref="fast_order_center.fast_blank_order_material_requirements_task_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('fast_blank_order_material_requirements_task_tree')})]"/>
+    </record>
+
+    <record id="fast_blank_order_material_requirements_task_tree_readonly" model="ir.ui.view">
+        <field name="name">fast_blank_order_material_requirements_task_tree_readonly</field>
+        <field name="model">fast.blank.order.material.requirements.task</field>
+        <field name="inherit_id" ref="fast_order_center.fast_blank_order_material_requirements_task_tree"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+                <attribute name="duplicate">0</attribute>
+                <attribute name="delete">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="fast_blank_order_material_requirements_task_action_readonly" model="ir.actions.act_window">
+        <field name="name">物料需求-待申领任务表</field>
+        <field name="res_model">fast.blank.order.material.requirements.task</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'search_default_is_close_false': 1, 'search_default_apply_state_none': 1,
+            'search_default_apply_state_part': 1}
+        </field>
+        <field name="search_view_id" ref="fast_order_center.fast_blank_order_material_requirements_task_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('fast_blank_order_material_requirements_task_tree_readonly')})]"/>
+    </record>
+</odoo>
