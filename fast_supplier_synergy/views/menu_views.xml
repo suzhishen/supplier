@@ -14,15 +14,20 @@
         <menuitem name="订单跟进" id="menu_fast_outsource_order_blank_line_action_fllow" parent="supplier_synergy_menu" sequence="30"
                   action="fast_outsource_order_blank_line_action_fllow"/>
 
+        <menuitem id="packing_quantity_list_menu_line" name="装箱操作" parent="supplier_synergy_menu" sequence="35" action="fast_packing_action_fllow"/>
 
         <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40"/>
         <menuitem id="blank_packing_list_menu_line_list" name="空白版装箱单" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_action_view" sequence="10"/>
 <!--        <menuitem id="blank_packing_list_detail_menu_line" name="差异报表" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_detail_action_view" sequence="20"/>-->
-        <menuitem name="差异报表" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="30"/>
+<!--        <menuitem name="差异报表" id="box_number_difference_action_window1" parent="blank_packing_list_menu_line" action="box_number_difference_action_window" sequence="30"/>-->
 
+        <menuitem name="差异报表" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="40"/>
 
-        <menuitem id="financial_management_menu_line" name="财务管理" parent="supplier_synergy_menu" sequence="40"/>
-        <menuitem id="financial_management_menu_line_list" name="财务信息" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="10"/>
-        <menuitem name="往来账" id="financial_management_detail_menu_line" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="20"/>
+<!--        <menuitem id="financial_management_menu_line" name="财务管理" parent="supplier_synergy_menu" sequence="40"/>-->
+<!--        <menuitem id="financial_management_menu_line_list" name="财务信息" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="10"/>-->
+<!--        <menuitem name="往来账" id="financial_management_detail_menu_line" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="20"/>-->
+
+        <menuitem id="fast_config_menu_line" name="配置" parent="supplier_synergy_menu" sequence="40"/>
+        <menuitem id="fast_packing_config_menu_line_list" name="配置装箱超出占比" parent="fast_config_menu_line" action="fast_packing_follow_config_action_view" sequence="10"/>
     </data>
 </odoo>

@@ -1,5 +1,17 @@
+#report_table_body {
+  overflow: auto;
+  height: inherit;
+  scrollbar-width: none;
+}
+
 .layui-table {
   th {
     text-align: center;
+  }
+}
+
+#report_table_body {
+  .layui-table-header {
+    border-bottom: 2px solid #646464 !important;
   }
 }

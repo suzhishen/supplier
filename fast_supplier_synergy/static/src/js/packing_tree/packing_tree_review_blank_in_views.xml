@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <div t-name="fastOrderCenter.packingTreeBlankIn" class="o_action fast_order_center_packing_tree_blank_in_style" owl="1">
+        <div class="container-ul">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="slash-wrap">
+                            <p class="right" t-esc="state.record.po"/>
+                            <hr class="slash"/>
+                            <p class="left" t-esc="state.record.product_tmpl_code"/>
+                        </th>
+                        <th t-foreach="state.record.sizes" t-as="size" t-key="size_index">
+                            <t t-esc="size"/>
+                        </th>
+                        <th>总数</th>
+                    </tr>
+                    <tr>
+                        <th>订单数量</th>
+                        <th t-foreach="state.record.order_data" t-as="order" t-key="order_index">
+                            <t t-esc="order"/>
+                        </th>
+                        <th>
+                            <t t-esc="state.record.order_line_total"/>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="state.record.in_move_datas" t-as="in_move_line" t-key="in_move_line_index">
+                        <td>
+                            <span>(入仓)</span>
+                            <span t-esc="in_move_line.date"/>
+                            <span t-on-click="()=>this.viewInMoveDatas(in_move_line)">
+                                <i class="fa fa-eye"/>
+                            </span>
+                        </td>
+                        <td t-foreach="in_move_line.move_line_datas" t-as="incoming" t-key="incoming_index">
+                            <t t-if="incoming !== 0" t-esc="incoming"/>
+                        </td>
+                        <td>
+                            <t t-esc="in_move_line.qty"/>
+                        </td>
+                    </tr>
+                    <tr t-foreach="state.record.out_move_datas" t-as="out_move_line" t-key="out_move_line_index" class="text-danger">
+                        <td>
+                            <span class="text-danger">(退货)</span>
+                            <span t-esc="out_move_line.date"/>
+                            <span t-on-click="()=>this.viewOutMoveDatas(out_move_line)">
+                                <i class="fa fa-eye in-out-move-datas-style"/>
+                            </span>
+                        </td>
+                        <td t-foreach="out_move_line.move_line_datas" t-as="incoming" t-key="incoming_index">
+                            <t t-if="incoming !== 0" t-esc="incoming"/>
+                        </td>
+                        <td>
+                            <t t-esc="out_move_line.qty"/>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="bal-foot-warn" t-if="state.record.out_move_datas_summary_total > 0">
+                        <th class="data-tooltip-th" data-tooltip="所有的退货数量合计">退货数量<sup class="text-info p-1">?</sup></th>
+                        <th t-foreach="state.record.out_move_datas_summary" t-as="out_qty" t-key="out_qty_index">
+                            <t t-if="out_qty" t-esc="out_qty"/>
+                        </th>
+                        <th>
+                            <t t-esc="state.record.out_move_datas_summary_total"/>
+                        </th>
+                    </tr>
+                    <tr class="done-foot">
+                        <th class="data-tooltip-th" data-tooltip="入库数量 = 所有入库数 - 退货数">入库数量<sup class="text-info p-1">?</sup></th>
+                        <th t-foreach="state.record.in_move_datas_summary" t-as="done" t-key="done_index">
+                            <t t-esc="done"/>
+                        </th>
+                        <th>
+                            <t t-esc="state.record.in_move_datas_summary_total"/>
+                        </th>
+                    </tr>
+                    <tr class="bal-foot">
+                        <th class="data-tooltip-th" data-tooltip="未完成数 = 订单数量 - 入库数量">未完成数<sup class="text-info p-1">?</sup></th>
+                        <th t-foreach="state.record.unfinished_datas" t-as="bal" t-key="bal_index">
+                            <span t-if="bal" t-esc="bal" t-attf-class="{{bal &lt; 0 ? 'product-qty-less-than-zero':''}}"/>
+                        </th>
+                        <th>
+                            <t t-esc="state.record.unfinished_qty"/>
+                        </th>
+                    </tr>
+                    <tr class="bal-foot-warn" t-if="state.record.diff_qty > 0">
+                        <th class="data-tooltip-th" data-tooltip="差异数量 = 超入库数 + 未完成数">差异数量<sup class="text-info p-1">?</sup></th>
+                        <th t-foreach="state.record.diff_datas" t-as="diff" t-key="diff_index">
+                            <span t-if="diff" t-esc="diff" t-attf-class="{{diff &lt; 0 ? 'product-qty-less-than-zero':''}}"/>
+                        </th>
+                        <th>
+                            <t t-esc="state.record.diff_qty"/>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</templates>

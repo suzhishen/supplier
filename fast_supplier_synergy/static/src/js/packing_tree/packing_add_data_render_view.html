@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo</title>
+
+    <link rel="stylesheet" href="/web/static/lib/bootstrap/dist/css/bootstrap.css"/>
+    <script type="text/javascript" src="../../bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js"></script>
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="./packing_add_data_render_view.css" rel="stylesheet">
+    <style></style>
+</head>
+<body>
+<form id="formData">
+    <input id="deleteID" style="display: none">
+</form>
+<hr>
+<form id="hzformData">
+    <strong>
+        <div style="padding: 1% 0px">
+            <span style="color: cornflowerblue;">
+                <span style="display: inline-block; text-align: right; color: #29b1df">尾箱混装</span>
+            </span>
+        </div>
+    </strong>
+</form>
+<br>
+
+<div id="hzBox">
+</div>
+<script>
+    function batchInputShow(size_name) {
+        // 显示批量装箱输入框
+        console.log('batchInputShow')
+        $(`#span_x_j_${size_name}`).show()
+        $(`#batch_${size_name}`).hide()
+    }
+
+    // function editSaveRow(event) {
+    //     // 装箱数据表的编辑or保存【当前暂时去除】
+    //     console.log('editSaveRow')
+    //     var size_name = event.currentTarget.parentNode.parentNode.className
+    //     const row = event.target.closest('tr');
+    //     const inputs = row.querySelectorAll('input[type="text"]');
+    //     inputs.forEach(input => {
+    //         input.readOnly = !input.readOnly;
+    //     });
+    //     if (event.target.innerText === '保存') {
+    //         event.target.innerText = '编辑'
+    //     } else {
+    //         event.target.innerText = '保存'
+    //     }
+    //     var compute_result = compute_quty(size_name)
+    //     $(`.size_quty_${size_name}`)[0].innerText = compute_result
+    //     if ($(`.size_quty_${size_name}`)[1] !== undefined) {
+    //         $(`.size_quty_${size_name}`)[1].innerText = compute_result
+    //     }
+    // }
+
+    function deleteData(e) {
+        console.log('deleteData')
+        let id_value = $('#deleteID')[0].value
+        let now_value = e.currentTarget.parentNode.parentNode.id.toString()
+        var node = e.currentTarget.parentNode.parentNode
+        var size_name = e.currentTarget.parentNode.parentNode.className
+        parent.layer.confirm('确认删除吗？', {icon: 3}, function (e) {
+            if (now_value) {
+                if (id_value) {
+                    id_value += ',' + now_value
+                } else {
+                    id_value = now_value
+                }
+                $('#deleteID')[0].value = id_value
+            }
+            node.remove()
+            var compute_result = compute_quty(size_name)
+            size_qty_hz_change(size_name, compute_result)
+            parent.layer.msg('已删除，最终保存后生效', {icon: 1});
+        }, function () {
+            parent.layer.msg('已取消');
+        });
+    }
+
+    function deleteHzData(e) {
+        console.log('deleteHzData')
+        let id_value = $('#deleteID')[0].value
+        var node = e.currentTarget.parentNode
+        parent.layer.confirm('确认删除吗？', {icon: 3}, function (e) {
+            node.remove()
+            var box_input = node.getElementsByTagName('input')
+            for(var i=0; i<box_input.length; i++){
+                var now_value = box_input[i].id
+                if (id_value) {
+                    id_value += ',' + now_value
+                } else {
+                    id_value = now_value
+                }
+                $('#deleteID')[0].value = id_value
+                var size_name = box_input[i].getAttribute('data-size_name')
+                var compute_result = compute_quty(size_name)
+                size_qty_hz_change(size_name, compute_result)
+            }
+            parent.layer.msg('已删除，最终保存后生效', {icon: 1});
+        }, function () {
+            parent.layer.msg('已取消');
+        });
+    }
+
+    function selectData(e) {
+        console.log('selectData')
+        let size = e.target.name;
+        if (size === undefined) {
+            size = e.target.parentNode.name
+        }
+        $(`#select_${size} .accordion-button`).click()
+    }
+
+    function checkBeforeData() {
+        console.log('checkBeforeData');
+        // parent.layer.open({
+        //     type: 1,
+        //     offset: 't',
+        //     anim: 'slideDown', // 从上往下
+        //     area: ['100%', '50%'],
+        //     shade: 0.1,
+        //     shadeClose: true,
+        //     fixed: false,
+        //     id: 'ID-demo-layer-direction-t',
+        //     content: '<div style="padding: 16px;">任意 HTML 内容</div>'
+        // });
+    }
+
+    function addHzInput(inputId) {
+        console.log('addHzInput');
+        input_data = $('#hzformData input')
+        var html = ''
+        for (var i = 0; i < input_data.length; i++) {
+            if (i === 0) {
+                html += `<div class="hz_box">`
+            }
+            if (!input_data[i].value) {
+                continue
+            }
+            html += `<span>${input_data[i].name}：</span><input class="hz_input_${input_data[i].name}" data-size_name="${input_data[i].name}" name=${input_data[i].name} type="text" value=${input_data[i].value} disabled><button class="delete-btn" onclick="deleteHzData(event)">&times;</button>`
+            if (i === (input_data.length - 1)) {
+                html += `</div>`
+            }
+        }
+        if (html === '<div class="hz_box">') {
+            for (var i = 0; i < input_data.length; i++) {
+                input_color(input_data.eq(i))
+            }
+            parent.layer.msg('未检测到输入数据');
+        } else {
+            parent.layer.confirm('请确认此款颜色已完成生产', {icon: 3}, function (e) {
+                $('#hzBox').append(html)
+                for (var i = 0; i < input_data.length; i++) {
+                    if (input_data[i].value) {
+                        var compute_result = compute_quty(input_data[i].name, input_data[i].value)
+                        size_qty_hz_change(input_data[i].name, compute_result)
+                        input_data[i].value = ''
+                    }
+                }
+                parent.layer.msg('尾箱添加成功', {icon: 1});
+            }, function () {
+                parent.layer.msg('已取消');
+            });
+        }
+    }
+
+    function singleAddInput(size_name) {
+        // 单个添加，点击 + 号添加数据
+        console.log('singleAddInput');
+        var index = $(`#select_tbody_${size_name} tr`).length + 1
+        var single_number = $(`#single_${size_name}`)[0].value
+
+        if (!/^[0-9]*$/.test(single_number)) {
+            parent.layer.msg('请确认输入的是数字');
+            return
+        }
+
+        if (single_number) {
+            var newRow = $(`
+<tr class="${size_name}">
+    <th scope="row">${index}</th>
+    <td>${size_name}</td>
+    <td><input data-size_name="${size_name}" type="text" class="x_${size_name}" value="1" readOnly></td>
+    <td><input data-size_name="${size_name}" type="text" class="j_${size_name}" value="${single_number}" readOnly></td>
+    <td style="text-align: right;">
+<!--        <button type="button" class="layui-btn layui-btn-sm" onclick="editSaveRow(event)">编辑</button>-->
+        <button type="button" class="layui-btn layui-btn-sm" onclick="deleteData(event)"><i class="layui-icon layui-icon-delete"></i></button>
+    </td>
+</tr>`);
+            $(`#select_tbody_${size_name}`).prepend(newRow);
+            // 点击加号添加数据时自动展示下拉数据
+            if ($(`#collapseOne_${size_name}`)[0].className !== 'accordion-collapse collapse show') {
+                $(`#select_${size_name} .accordion-button`).click()
+            }
+            var compute_result = compute_quty(size_name)
+            size_qty_hz_change(size_name, compute_result)
+            $(`#single_${size_name}`)[0].value = ''
+        } else {
+            input_color($(`#single_${size_name}`))
+            parent.layer.msg('未检测到输入数据');
+        }
+    }
+
+    function batchAddInput(size_name) {
+        // 批量添加，点击 + 号添加数据
+        console.log('batchAddInput');
+        var index = $(`#select_tbody_${size_name} tr`).length + 1
+        var one_number = $(`#span_x_j_${size_name} input`)[0].value
+        var two_number = $(`#span_x_j_${size_name} input`)[1].value
+
+        if (!/^[0-9]*$/.test(one_number) || !/^[0-9]*$/.test(two_number)) {
+            parent.layer.msg('请确认输入的是数字');
+            return
+        }
+
+        if (one_number && two_number) {
+            var newRow = $(`
+<tr class="${size_name}">
+    <th scope="row">${index}</th>
+    <td>${size_name}</td>
+    <td><input data-size_name="${size_name}" type="text" class="x_${size_name}" value="${one_number}" readOnly></td>
+    <td><input data-size_name="${size_name}" type="text" class="j_${size_name}" value="${two_number}" readOnly></td>
+    <td style="text-align: right;">
+<!--        <button type="button" class="layui-btn layui-btn-sm" onclick="editSaveRow(event)">编辑</button>-->
+        <button type="button" class="layui-btn layui-btn-sm" onclick="deleteData(event)"><i class="layui-icon layui-icon-delete"></i></button>
+    </td>
+</tr>`);
+            $(`#select_tbody_${size_name}`).prepend(newRow);
+            // 清空输入框数据
+            $(`#span_x_j_${size_name} input`)[0].value = ''
+            $(`#span_x_j_${size_name} input`)[1].value = ''
+            // 点击加号添加数据时自动展示下拉数据
+            if ($(`#collapseOne_${size_name}`)[0].className !== 'accordion-collapse collapse show') {
+                $(`#select_${size_name} .accordion-button`).click()
+            }
+        } else {
+            if (!one_number) {
+                input_color($(`#span_x_j_${size_name} input`).eq(0))
+            }
+            if (!two_number) {
+                input_color($(`#span_x_j_${size_name} input`).eq(1))
+            }
+            parent.layer.msg('未检测到输入数据');
+        }
+        var compute_result = compute_quty(size_name)
+        size_qty_hz_change(size_name, compute_result)
+    }
+
+    function compute_quty(size_name) {
+        // 计算未完成数
+        var all_quty = $(`.size_quty_${size_name}`)[0].getAttribute('data-quantity')
+        var have_synch_packed_qty = $(`.size_quty_${size_name}`)[0].getAttribute('data-have_synch_packed_qty')
+        var now_quty = all_quty - have_synch_packed_qty
+        const rows = document.querySelectorAll(`#select_tbody_${size_name} tr`);
+        product_quty = 0;
+        rows.forEach(row => {
+                const xInput = row.querySelector('input[class^="x_"]');
+                const jInput = row.querySelector('input[class^="j_"]');
+                const xValue = parseInt(xInput.value);
+                const jValue = parseInt(jInput.value);
+                const product = xValue * jValue;
+                product_quty += product;
+            }
+        )
+
+        const hz_rows = document.querySelectorAll(`.hz_input_${size_name}`);
+        hz_rows.forEach(hz_row => {
+                const product = parseInt(hz_row.value);
+                product_quty += product;
+            }
+        )
+
+        return parseInt(now_quty) - parseInt(product_quty)
+    }
+
+    function size_qty_hz_change(size_name, product_quty) {
+        // 装箱数据的变化以及混装检测为0时隐藏
+        $(`.size_quty_${size_name}`)[0].innerText = product_quty
+        if ($(`.size_quty_${size_name}`)[1] !== undefined) {
+            $(`.size_quty_${size_name}`)[1].innerText = product_quty
+            if (!product_quty) {
+                $(`#hz_span_${size_name}`).hide()
+            } else {
+                $(`#hz_span_${size_name}`).show()
+            }
+        }
+    }
+
+    function input_color(dom) {
+        // 改变输入框颜色
+        console.log(dom)
+        dom.css('border-color', 'red');
+        setTimeout(() => {
+            dom.css('border-color', '');
+        }, 3000);
+    }
+
+
+    $(document).ready(function () {
+        console.log('初始化装箱成功')
+        let url = new URL(window.location.href);
+        let searchParams = new URLSearchParams(url.search);
+        let incomplete_line = JSON.parse(searchParams.get('incomplete_line'));
+        let packed_list = JSON.parse(searchParams.get('packed_list'));
+        let packed_size = JSON.parse(searchParams.get('packed_size'));
+        let mixed_stowage_sequence_value = JSON.parse(searchParams.get('mixed_stowage_sequence_value'));
+        let packing_detail_follow_val = JSON.parse(searchParams.get('packing_detail_follow_val'));
+        let packing_follow_config_val = JSON.parse(searchParams.get('packing_follow_config_val'));
+
+        const new_size = [];
+        incomplete_line.forEach(item => {
+            const packedItem = packed_list.find(packed => packed.size === item.size_name);
+            const quantity = packedItem ? item.product_qty - packedItem.quantity : item.product_qty;
+            new_size.push({
+                "size_name": item.size_name,
+                "have_synch_packed_qty": item.have_synch_packed_qty,
+                "product_qty": quantity,
+                "quantity": packedItem ? packedItem.quantity : 0
+            });
+        });
+
+        var data_list = []
+        packing_detail_follow_val.forEach(item => {
+            data_list.push(item.size)
+        })
+
+        var html = ''
+        new_size.forEach(datas => {
+            var size_name = datas.size_name
+            var have_synch_packed_qty = datas.have_synch_packed_qty
+            var product_qty = datas.product_qty
+            var quantity = datas.quantity + datas.product_qty
+            if (!product_qty && !data_list.includes(size_name)) {
+                return
+            }
+            html += `<label for="${size_name}"><div class="input-group-text btnSize"><span>尺码</span><span>：</span><span data-quantity="${quantity}" data-have_synch_packed_qty="${have_synch_packed_qty}" style="width: 35%;display: inline-flex;">${size_name}</span></div></label>
+            <div class="input-group-text btnQuantity"><span>未装箱数</span><span>：</span><span data-quantity="${quantity}" data-have_synch_packed_qty="${have_synch_packed_qty}" class="size_quty_${size_name}">${product_qty}</span></div>
+                <input placeholder="件数" id="single_${size_name}" data-size_name="${size_name}" type="text" class="layui-input">
+                <button type="button" class="layui-btn"
+                        style="margin-left: 0.5%;padding: 0px;width: 35px;height:auto;line-height: inherit;"
+                        onclick="singleAddInput('${size_name}')"><i class="btn_icon layui-icon layui-icon-add-1" style="font-size: 27px;"></i>
+                </button>
+                <button type="button" class="layui-btn layui-btn-sm" id="batch_${size_name}" style="margin-left: 0.5%;" onclick="batchInputShow('${size_name}')">批量装箱</button>
+                <span id="span_x_j_${size_name}" style="display: none;">
+                    <input placeholder="箱数" data-size_name="${size_name}" type="text" class="layui-input">
+                    <span style="font-size: 23px; vertical-align: middle;">×</span>
+                    <input placeholder="每箱件数"  data-size_name="${size_name}" type="text" class="layui-input" style="margin: 0px;">
+                    <button type="button" class="layui-btn" style="margin-left: 0.5%;padding: 0px;width: 35px;height:auto;line-height: inherit;"
+                            onclick="batchAddInput('${size_name}')"><i class="btn_icon layui-icon layui-icon-add-1" style="font-size: 27px;"></i></button>
+                </span>
+            <button type="button" class="layui-btn" style="margin-left: 0.5%;padding: 0px;width: 35px;height:auto;line-height: inherit;" name="${size_name}"
+                    onclick="selectData(event)"><i class="btn_icon layui-icon layui-icon-triangle-d" style="font-size: 27px;"></i></button>
+
+            <div class="accordion" id="select_${size_name}" style="width: 50%;">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne_${size_name}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne_${size_name}"
+                                aria-expanded="true" aria-controls="collapseOne_${size_name}">
+                        </button>
+                    </h2>
+                    <div id="collapseOne_${size_name}" class="accordion-collapse collapse" aria-labelledby="headingOne_${size_name}"
+                         data-bs-parent="#select_${size_name}">
+                        <div class="accordion-body">
+                            <table class="table table-striped select_table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width:8%">#</th>
+                                    <th scope="col" style="width:15%">尺码</th>
+                                    <th scope="col" style="width:20%">箱数</th>
+                                    <th scope="col" style="width:30%">每箱 / 件数</th>
+                                    <th scope="col" style="width:27%"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="select_tbody_${size_name}">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        });
+        $('#formData').append(html)
+
+        // 判断输入框是否输入非数字
+        $('#formData').on('input', 'input', function (event) {
+            console.log(event)
+            const input = event.target.value;
+            if (!/^[0-9]*$/.test(input)) {
+                event.target.classList.add('invalid');
+                layui.layer.tips('请确认输入的是数字', event.target, {tips: 1});
+                return
+            } else {
+                event.target.classList.remove('invalid');
+            }
+
+            // 计算输入百分比
+            var size_name = event.target.getAttribute('data-size_name')
+            var number_value = $(`.size_quty_${size_name}`)[0].getAttribute('data-quantity')
+            // var number_value = $(`.size_quty_${size_name}`)[0].id
+            var now_number_value = $(`.size_quty_${size_name}`)[0].innerText
+            var bfb = 0
+            packing_follow_config_val.forEach(item => {
+                if (parseInt(number_value) <= parseInt(item.number) && !bfb) {
+                    bfb = parseInt(item.percentage)
+                }
+            })
+            var single_number = $(`#single_${size_name}`)[0].value
+            var one_number = $(`#span_x_j_${size_name} input`)[0].value
+            var two_number = $(`#span_x_j_${size_name} input`)[1].value
+            // var max_nuber = Math.ceil(parseInt(number_value) / bfb)
+            var max_nuber = Math.floor((parseInt(number_value) * bfb) / 100)
+            // 获取输入框的值并转换为数字
+            var now_number = parseInt(one_number) * parseInt(two_number)
+            // 检查输入的值是否大于等于百分比
+            if ((single_number || now_number) > (parseInt(now_number_value) + max_nuber)) {
+                // 如果输入的值大于等于百分比，则恢复为先前的值
+                // event.target.value = event.target.dataset.previousValue || '';
+                event.target.classList.add('invalid');
+                layui.layer.tips('检测到装箱差异过大，请检查输入的数量是否有误', event.target, {tips: 1});
+            } else {
+                // 保存输入框的值
+                event.target.classList.remove('invalid');
+                event.target.dataset.previousValue = event.target.value;
+            }
+        });
+
+        // 混装判断输入框是否输入非数字
+        $('#hzformData').on('input', 'input', function (event) {
+            console.log('监听输入框')
+            const input = event.target.value;
+            if (!/^[0-9]*$/.test(input)) {
+                event.target.classList.add('invalid');
+            } else {
+                event.target.classList.remove('invalid');
+            }
+            // 计算输入百分比
+            var size_name = event.target.getAttribute('data-size_name')
+            var number_value = $(`.size_quty_${size_name}`)[0].getAttribute('data-quantity')
+            var now_number_value = $(`.size_quty_${size_name}`)[0].innerText
+            var bfb = 0
+            packing_follow_config_val.forEach(item => {
+                if (parseInt(number_value) <= parseInt(item.number) && !bfb) {
+                    bfb = parseInt(item.percentage)
+                }
+            })
+            var max_nuber = Math.floor((parseInt(number_value) * bfb) / 100)
+            // 获取输入框的值并转换为数字
+            var now_number = parseInt(event.target.value)
+            // 检查输入的值是否大于等于百分比
+            if (now_number > (parseInt(now_number_value) + max_nuber)) {
+                // 如果输入的值大于等于百分比，则恢复为先前的值
+                event.target.value = event.target.dataset.previousValue || '';
+            } else {
+                // 保存输入框的值为先前的值
+                event.target.dataset.previousValue = event.target.value;
+            }
+        });
+
+        // 添加不混装的展示数据
+        packing_detail_follow_val.forEach(datas => {
+            var size_name = datas.size
+            var record_id = datas.id
+            var packing_quantity = datas.packing_quantity
+            var number_units = datas.number_units
+            var index = $(`#select_tbody_${size_name} tr`).length + 1
+            var newRow = $(`
+<tr id="${record_id}" class="${size_name}">
+    <th scope="row">${index}</th><td>${size_name}</td>
+    <td><input data-size_name="${size_name}" type="text" class="x_${size_name}" value="${packing_quantity}" readOnly>
+    </td><td><input data-size_name="${size_name}" type="text" class="j_${size_name}" value="${number_units}" readOnly></td>
+    <td style="text-align: right;">
+<!--        <button type="button" class="layui-btn layui-btn-sm" onclick="editSaveRow(event)">编辑</button>-->
+        <button type="button" class="layui-btn layui-btn-sm" onclick="deleteData(event)"><i class="layui-icon layui-icon-delete"></i></button>
+    </td>
+</tr>`);
+            $(`#select_tbody_${size_name}`).prepend(newRow);
+            // 自动展示下拉数据
+            if ($(`#collapseOne_${size_name}`)[0].className !== 'accordion-collapse collapse show') {
+                $(`#select_${size_name} .accordion-button`).click()
+            }
+        })
+
+
+        // 尾箱混装展示数据
+        let hz_labels = ''
+        for (let i = 0; i < new_size.length; i++) {
+            if (new_size[i].product_qty > 0) {
+                hz_labels += `<span><span id="hz_span_${new_size[i].size_name}" style="margin-right: 1%;"><div class="input-group-text" id="btnGroupAddon" style="display: inline-flex;height: 28px;font-size: 13px;border-radius: 2px 0px 0px 2px;"><span>${new_size[i].size_name}</span><span>：</span><span class="size_quty_${new_size[i].size_name}">${new_size[i].product_qty}</span></div><input data-size_name="${new_size[i].size_name}" type="text" class="layui-input" name="${new_size[i].size_name}"/></span></span>`
+            }
+
+            if ((new_size.length - 1) == i) {
+                hz_labels += `<button type="button" class="layui-btn" style="margin-left: 0.5%;padding: 0px;width: 35px;height:auto;line-height: inherit;" onClick="addHzInput(event)"><i class="btn_icon layui-icon layui-icon-add-1" style="font-size: 27px;"/></button>`
+            }
+        }
+        $('#hzformData').append(hz_labels)
+
+        // 尾箱混装已有装箱的展示数据
+        var all_box_html = ``
+        for (let key in mixed_stowage_sequence_value) {
+            var box_html = `<div class="hz_box">`
+            mixed_stowage_sequence_value[key].forEach(record => {
+                box_html += `<span>${record.size}：</span><input class="hz_input_${record.size}" data-size_name="${record.size}" class=${record.size} type="text" value=${record.quantity} id=${record.packing_detail_follow_id.id} disabled><button class="delete-btn" onclick="deleteHzData(event)">&times;</button>`
+                // if (record.synch_state === 'have_synch') {
+                //     box_html += `<span>${record.size}：</span><input data-size_name="${record.size}" class=${record.size} type="text" value=${record.quantity} id=${record.id} disabled><button class="delete-btn" onclick="deleteHzData(event)">&times;</button>`
+                // } else {
+                //     box_html += `<span>${record.size}：</span><input data-size_name="${record.size}" class=${record.size} type="text" value=${record.quantity} id=${record.id}><button class="delete-btn" onclick="deleteHzData(event)">&times;</button>`
+                // }
+            });
+            box_html += `</div>`
+            all_box_html += box_html
+        }
+        if (all_box_html) {
+            $('#hzBox').append(all_box_html)
+        }
+
+
+        // // 为每个添加按钮绑定点击事件
+        // $('button').click(function () {
+        //     // 获取与按钮对应的input的id
+        //     var inputId = $(this).prev('input').attr('id');
+        //     batchAddInput(inputId);
+        // });
+    })
+    ;
+
+</script>
+</body>
+</html>

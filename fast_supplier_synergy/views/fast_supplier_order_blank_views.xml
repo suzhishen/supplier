@@ -23,18 +23,17 @@
                                 <field name="order_quantity" readonly="1"/>
                             </group>
                             <group>
-                                <field name="date_planned" readonly="1"/>
+<!--                                <field name="date_planned" readonly="1"/>-->
+                                <field name="unfinished_quantity" readonly="1"/>
                                 <field name="completed_quantity" readonly="1"/>
                             </group>
                             <group>
                                 <!--                                <field name="date_expected"/>-->
-                                <field name="unfinished_quantity" readonly="1"/>
+<!--                                <field name="unfinished_quantity" readonly="1"/>-->
+                                <field name="type" readonly="1"/>
                                 <field name="confirm_state" readonly="1" widget="badge"
                                        decoration-success="confirm_state=='have_confirm'"
                                        decoration-danger="confirm_state=='not_confirm'"/>
-                            </group>
-                            <group>
-                                <field name="type" readonly="1"/>
                             </group>
                         </group>
                         <notebook>
@@ -53,7 +52,8 @@
                                         <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
-                                        <field name="body"/>
+                                        <field name="bom_price"/>
+<!--                                        <field name="body"/>-->
                                         <field name="assist_uom_name" invisible="1"/>
                                     </tree>
                                 </field>
@@ -72,7 +72,8 @@
                                         <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
-                                        <field name="body"/>
+                                        <field name="bom_price"/>
+<!--                                        <field name="body"/>-->
                                         <field name="assist_uom_name" invisible="1"/>
                                     </tree>
                                 </field>
@@ -133,7 +134,7 @@
                     <field name="completed_quantity"/>
                     <field name="unfinished_quantity"/>
                     <field name="type"/>
-                    <field name="date_planned"/>
+<!--                    <field name="date_planned"/>-->
                     <!--                    <field name="date_expected"/>-->
                     <field name="state" widget="badge" decoration-success="state=='done'"
                            decoration-info="state=='part'" decoration-danger="state=='cancel'"/>

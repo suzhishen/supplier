@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="fast_packing_line_tree_fllow" model="ir.ui.view">
+        <field name="name">fast_packing_tree_fllow</field>
+        <field name="model">fast.blank_order_detail</field>
+        <field name="arch" type="xml">
+            <packing_tree sample="1">
+                <field name="id"/>
+            </packing_tree>
+        </field>
+    </record>
+
+    <record id="fast_packing_action_fllow" model="ir.actions.act_window">
+        <field name="name">装箱操作</field>
+        <field name="res_model">fast.blank_order_detail</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'packing_tree', 'view_id': ref('fast_packing_line_tree_fllow')})]"/>
+    </record>
+</odoo>

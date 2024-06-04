@@ -3,44 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Demo</title>
+    <title>装箱</title>
     <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
-    <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
     <link href="../../layui/css/layui.css" rel="stylesheet">
     <link href="./fllow_add_data_render_view.css" rel="stylesheet">
     <style></style>
 </head>
 <body>
-<!--<form id="formData">-->
-<!--    <strong>-->
-<!--        <div>-->
-<!--            <span style="width: 8%; padding: 2% 0px 0px 1%; display: inline-block;color: cornflowerblue;">尺码：欠数</span>-->
-<!--            <span style="color: cornflowerblue;">装箱明细</span>-->
-<!--        </div>-->
-<!--    </strong>-->
-<!--    <label for="S"><strong><span>S</span><span>：</span><span>-3</span></strong></label>-->
-<!--    <span id="S_span" style="margin-right: 1%;">-->
-<!--        <input type="text" class="layui-input" name="S" disabled>-->
-<!--        <button type="button" class="btn_class" onclick="editInput(event)">编辑</button>-->
-<!--    </span>-->
-<!--    <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('S')">加新箱</button>-->
-<!--    <br>-->
-<!--    <label for="3XL"><strong>3XL：300</strong></label>-->
-<!--    <span id="3XL_span" style="margin-right: 1%;">-->
-<!--        <input type="text" class="layui-input" name="S" disabled>-->
-<!--        <button type="button" class="btn_class" onclick="editInput(event)">编辑</button>-->
-<!--    </span>-->
-<!--    <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('S')">加新箱</button>-->
-
-
-<!--    <br><label for="M"><strong>M：-4</strong></label>-->
-<!--    <span id="M_span"><input type="text" class="layui-input" name="M"><button>单独控制</button></span>-->
-<!--    <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('M')">加新箱</button>-->
-<!--    <br><label for="L"><strong>L：56</strong></label>-->
-<!--    <span id="L_span"><input type="text" class="layui-input" name="L"><button>单独控制</button></span>-->
-<!--    <button type="button" class="layui-btn layui-bg-blue" onclick="addInput('L')">加新箱</button>-->
-<!--    <br>-->
-<!--</form>-->
 
 <form id="formData">
     <strong>
@@ -64,32 +33,10 @@
             </span>
         </div>
     </strong>
-    <!--    <label for="X">-->
-    <!--        <strong><strong><span>S</span><span>：</span><span>-3</span></strong></strong>-->
-    <!--    </label>-->
-    <!--    <span id="S_span" style="margin-right: 1%;">-->
-    <!--        <input type="text" class="layui-input" name="x"/>-->
-    <!--    </span>-->
-    <!--    <label for="2XL">-->
-    <!--        <strong><strong><span>2XL</span><span>：</span><span>3000</span></strong></strong>-->
-    <!--    </label>-->
-    <!--    <span id="2XL_span" style="margin-right: 1%;">-->
-    <!--        <input type="text" class="layui-input" name="x"/>-->
-    <!--    </span>-->
 </form>
 <br>
 
 <div id="hzBox">
-    <!--    <div class="hz_box">-->
-    <!--        <span>XS：</span><input class="XS" type="text" value="123">-->
-    <!--        <span>S：</span><input class="S" type="text" value="123">-->
-    <!--        <span>4XL：</span><input class="4XL" type="text" value="123">-->
-    <!--    </div>-->
-    <!--    <div class="hz_box">-->
-    <!--        <span>XS：</span><input class="XS" type="text" value="321">-->
-    <!--        <span>S：</span><input class="S" type="text" value="321">-->
-    <!--        <span>4XL：</span><input class="4XL" type="text" value="321">-->
-    <!--    </div>-->
 </div>
 
 <script>
@@ -110,11 +57,9 @@
 
     function addHzInput(inputId) {
         console.log('addHzInput');
-        console.log('加尾箱');
         input_data = $('#hzformData input')
         var html = ''
         for (var i = 0; i < input_data.length; i++) {
-            console.log(input_data[i])
             if (i === 0) {
                 html += `<div class="hz_box">`
             }
@@ -135,7 +80,6 @@
         var lastInput = $('#' + inputId).parent().find('input').last();
         var newInput = $('<input type="text" class="layui-input">').attr('name', inputId);
         if (lastInput.length === 0) {
-            console.log(lastInput)
             lastInput = $('#' + inputId + '_span');
             newInput = $('<input type="text" class="layui-input">').attr('name', inputId);
             lastInput.append(newInput);
@@ -160,12 +104,10 @@
             const quantity = packedItem ? item.product_qty - packedItem.quantity : item.product_qty;
             new_size.push({"size_name": item.size_name, "product_qty": quantity, 'save_data': []});
         });
-        console.log(new_size);
         // 处理显示未录入的数据
         for (let i = 0; i < new_size.length; i++) {
             for (let j = 0; j < packed_size.length; j++) {
                 if (new_size[i].size_name === packed_size[j].size) {
-                    // new_size[i].save_data.push(packed_size[j].quantity)
                     new_size[i].save_data.push(packed_size[j])
                 }
             }
@@ -180,7 +122,6 @@
                 if (new_size[i].save_data[index].synch_state === 'have_synch') {
                     inputs += `<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>`
                 } else {
-                    // inputs += `<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}"/>`
                     inputs += `
 <span style="position: relative;">
 <input type="text" class="layui-input" style="width: 6%;" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>
@@ -194,12 +135,11 @@
             <button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;" onclick="addInput('${new_size[i].size_name}')">加新箱</button>
             <br>`;
         }
-
         $('#formData').append(labels)
 
         // $('#formData').on('change', 'input', function (event) {
         $('#formData').on('input', 'input', function (event) {
-            console.log(event.target.value)
+            console.log('监听输入')
             const input = event.target.value;
             if (!/^[0-9]*$/.test(input)) {
                 event.target.classList.add('invalid');
@@ -216,8 +156,7 @@
                 hz_labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
 <span id="${new_size[i].size_name}_span" style="margin-right: 1%;"><input type="text" class="layui-input" name="${new_size[i].size_name}"/></span>`
             }
-
-            if ((new_size.length - 1) == i) {
+            if ((new_size.length - 1) === i) {
                 hz_labels += `<button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;" onClick="addHzInput('${new_size[i].size_name}')">加尾箱</button>`
             }
         }
@@ -248,8 +187,7 @@
         //     var inputId = $(this).prev('input').attr('id');
         //     addInput(inputId);
         // });
-    })
-    ;
+    });
 
 </script>
 </body>

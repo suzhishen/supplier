@@ -16,12 +16,19 @@
                             <th class="sequence text-center">#</th>
                             <th class="style">款号</th>
                             <th class="color color-th">颜色</th>
-                            <th class="order_line"><span>变更数</span></th>
+                            <th class="order_line">
+                                <span>尺码：</span>
+                                <span style="color:#31bdec">变更前</span>
+                                <span> / </span>
+                                <span style="color:red">变更数</span>
+                                <span> / </span>
+                                <span style="color:#16b777">变更后</span>
+                            </th>
 <!--                            <th class="order_line"><span>需求</span>（<span-->
 <!--                                    style="padding-right:5px !important">订单数</span>:<span class="text-success"-->
 <!--                                                                                             style="padding-left:5px !important;padding-right:5px !important">已交付数</span>:<span-->
 <!--                                    class="text-danger" style="padding-left:5px !important">未交付数</span>）</th>-->
-                            <th class="change">变更</th>
+<!--                            <th class="change">变更</th>-->
                         </tr>
                     </thead>
                     <tbody class="ui-sortable">
@@ -50,15 +57,19 @@
                                                  t-key="product_datas_index">
                                                 <div>
                                                     <span class="size-name" t-esc="product_datas.size_name"/>
-                                                    <span t-esc="product_datas.change_quantity"/>
+                                                    <span style="color: #31bdec;" t-esc="product_datas.order_quantity"/>
+                                                    <span> / </span>
+                                                    <span style="color:red" t-esc="product_datas.change_quantity"/>
+                                                    <span> / </span>
+                                                    <span style="color:#16b777" t-esc="product_datas.change_quantity_after"/>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="change">
-                                        <button type="button" t-att-class="product_configuration_datas.origin_name + '-' + product_template_datas.color_name"
-                                                class="layui-btn layui-btn-fluid" t-on-click="(ev)=>this.change_update_order_detail(ev)">确认变更</button>
-                                    </td>
+<!--                                    <td class="change">-->
+<!--                                        <button type="button" t-att-class="product_configuration_datas.origin_name + '-' + product_template_datas.color_name"-->
+<!--                                                class="layui-btn layui-btn-fluid" t-on-click="(ev)=>this.change_update_order_detail(ev)">确认变更</button>-->
+<!--                                    </td>-->
                                 </tr>
                             </t>
                         </t>

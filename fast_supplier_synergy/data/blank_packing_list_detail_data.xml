@@ -10,5 +10,15 @@
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+
+
+        <record id="seq_blank_packing_list" model="ir.sequence">
+            <field name="name">空白版装箱单号序列号</field>
+            <field name="code">fast.blank.packing_list.seq</field>
+            <field name="prefix">ZXDH</field>
+            <field name="number_next">1</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
     </data>
 </odoo>

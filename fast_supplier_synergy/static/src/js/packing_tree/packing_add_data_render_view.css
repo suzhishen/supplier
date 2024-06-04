@@ -1,0 +1,222 @@
+#formData label {
+    width: 8.5%;
+    padding: 2% 0px 0px 2%;
+    display: inline-block;
+
+}
+
+#formData label span:first-child {
+    width: 40%;
+    display: inline-block;
+    text-align: right;
+}
+
+
+#formData input {
+    width: 5%;
+    height: 28px;
+    /*margin-right: 1%;*/
+    margin: 0px 0px 0px 1%;
+    display: inline-block;
+    padding-left: 0px;
+    text-align: center;
+}
+
+#formData button {
+    background-color: #31bdec;
+}
+
+#formData input::placeholder {
+    font-size: 12px;
+}
+
+
+input.invalid {
+    color: red;
+}
+
+.btn_class {
+    position: absolute;
+    writing-mode: vertical-lr;
+    top: -11px;
+    height: 38px;
+    font-size: 14px;
+    width: 20px;
+    color: #ffff;
+    background-color: #1e9fff;
+    border: none;
+    right: 4.5px;
+    cursor: pointer;
+}
+
+input[disabled] {
+    cursor: no-drop;
+}
+
+
+#hzformData {
+    padding-left: 2%;
+}
+
+#hzformData label {
+    width: auto;
+    display: inline-block;
+}
+
+
+#hzformData input {
+    width: 5%;
+    height: 28px;
+    /*margin-right: 1%;*/
+    /*margin: 0px 0px 0px 0.5%;*/
+    display: inline-block;
+    padding-left: 2px;
+    border-radius: 0px 2px 2px 0px
+}
+
+#hzformData button {
+    background-color: #31bdec;
+}
+
+.hz_box {
+    position: relative;
+    margin-left: 2%;
+    padding: 5px;
+    width: 100px;
+    float: left;
+    /*border: 1px solid burlywood;*/
+    background: burlywood;
+}
+
+.delete-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: #f1585a;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 21px;
+    line-height: 20px;
+    text-align: center;
+}
+
+/*.delete-btn::after {*/
+/*    content: '删除';*/
+/*    position: absolute;*/
+/*    top: -24px;*/
+/*    right: 50%;*/
+/*    transform: translateX(50%);*/
+/*    background-color: black;*/
+/*    color: white;*/
+/*    padding: 2px 5px;*/
+/*    border-radius: 3px;*/
+/*    font-size: 12px;*/
+/*    white-space: nowrap;*/
+/*    opacity: 0;*/
+/*    transition: opacity 0.5s;*/
+/*}*/
+
+/*.delete-btn:hover::after {*/
+/*    opacity: 1;*/
+/*}*/
+
+.hz_box span {
+    width: 47%;
+    display: inline-block;
+    text-align: right;
+}
+
+.hz_box input {
+    width: 49%;
+    border: none;
+    padding: 2px;
+    background-color: navajowhite;
+}
+
+
+.btn_icon {
+    font-size: 28px;
+    /*font-weight: 900;*/
+    color: #ffffff;
+}
+
+.btn_detail {
+    font-size: 28px;
+    position: relative;
+    top: 6px;
+}
+
+
+
+/*下拉*/
+.accordion-item {
+    border: none !important;
+    text-align: center;
+}
+
+.accordion-item table {
+    font-size: 13px;
+    margin-bottom: 0px;
+}
+
+.accordion-button {
+    padding: 0px;
+}
+
+.accordion-header {
+    width: 0px;
+    height: 0px;
+}
+
+.accordion-button::after {
+    width: 0px;
+    height: 0px;
+}
+
+.select_table input {
+    width: 100% !important;
+    background-color: inherit;
+    border: none;
+    text-align: center;
+    margin-left: -1% !important;
+}
+
+.accordion-body {
+    padding: 0.5rem 1rem 0 1.25rem !important;
+}
+
+.accordion-body th {
+    vertical-align: middle;
+}
+
+.accordion-body td {
+    vertical-align: middle;
+}
+
+.btnSize {
+    padding: 0px;
+    height: 28px;
+    border-radius: 2px;
+    text-align: center;
+    display: flex;
+    line-height: 28px;
+    color: #505050;
+    font-size: 13px;
+}
+
+.btnQuantity {
+    display: inline-flex;
+    height: 28px;
+    font-size: 13px;
+    color: #505050;
+    width: 10.5%;
+    border-radius: 2px;
+}
+
+.table > :not(caption) > * > * {
+    padding: .5px;
+}

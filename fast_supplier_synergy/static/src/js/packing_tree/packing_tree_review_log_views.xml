@@ -1,0 +1,92 @@
+<template>
+    <div t-name="fastOrderCenter.packingTreeReviewLog">
+        <style>
+            body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            }
+
+            .container-ul {
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex;
+            justify-content: center;
+            color: #7a8489;
+            }
+
+            .container-ul .timeline {
+            background-color: #ffffff;
+            width: 30vw;
+            position: relative;
+            padding: 0 !important;
+            border-left: 2px solid #ccc;
+            list-style: none;
+            }
+
+            .container-ul .timeline .timeline-item {
+            height: 6vh !important;
+            position: relative;
+            padding-left: 12px;
+            }
+
+            .container-ul .timeline .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -7px;
+            width: 10px;
+            height: 10px;
+            background-color: #bcbcbe;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            }
+
+            .container-ul .timeline .timeline-item:last-child {
+            margin-bottom: 0;
+            }
+
+            .container-ul .timeline .timeline-item .title {
+            font-size: 1.2rem;
+            }
+
+            .container-ul .timeline .timeline-item .content {
+            font-size: .95rem;
+            }
+
+            .container-ul .timeline .active {
+            color: #31708f;
+            }
+
+            .container-ul .timeline .active::before {
+            background-color: #31708f;
+            }
+        </style>
+        <div class="container-ul">
+            <ul class="timeline">
+                <t t-foreach="datas" t-as="line" t-key="line_index">
+                    <t t-if="line_index == 0">
+                        <li class="timeline-item active">
+                            <div class="title">
+                                <span t-esc="line.content"/>
+                            </div>
+                            <div class="content">
+                                <span t-esc="line.create_info"/>
+                            </div>
+                        </li>
+                    </t>
+                    <t t-else="">
+                        <li class="timeline-item">
+                            <div class="title">
+                                <span t-esc="line.content"/>
+                            </div>
+                            <div class="content">
+                                <span t-esc="line.create_info"/>
+                            </div>
+                        </li>
+                    </t>
+                </t>
+            </ul>
+        </div>
+    </div>
+</template>

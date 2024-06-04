@@ -22,7 +22,7 @@
         <record id="fast_blank_configuration_rule_user_self" model="ir.rule">
             <field name="name">基础资料只查看自己的数据规则</field>
             <field name="model_id" ref="model_fast_blank_configuration"/>
-            <field name="domain_force">[('partner_ids','=',user.id)]</field>
+            <field name="domain_force">[('partner_ids','=',user.company_id.partner_id.id)]</field>
             <field name="groups" eval="[(4,ref('fast_blank_configuration_user_self'))]"/>
         </record>
 

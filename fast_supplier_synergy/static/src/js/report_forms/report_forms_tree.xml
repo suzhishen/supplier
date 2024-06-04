@@ -1,49 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
     <t t-name="Report.FormsTree" owl="1">
-        <body>
-            <table class="layui-table" id="ID-table-demo-data">
-                <thead>
+        <script type="text/javascript" src="fast_supplier_synergy/static/src/layui/layui.js"/>
+        <body id="report_table_body">
+            <!--            <table class="layui-table" id="report_table" lay-data="{url:'/api/packing_list_difference', page:true}">-->
+            <table class="layui-table" id="report_table">
+                <thead style="border-bottom: 2px solid #8f8f8f;">
                     <tr>
                         <th lay-data="{field:'box_number', width:80, sort: true}" rowspan="3">箱号</th>
                         <th lay-data="{field:'order_number', width:80}" rowspan="3">订单号</th>
                         <th lay-data="{field:'style_number', width:80, sort: true}" rowspan="3">款号</th>
                         <th lay-data="{field:'color'}" rowspan="3">颜色</th>
-                        <th lay-data="{align:'center'}" colspan="14">尺码<span style="color:red"> / 差异数</span></th>
-                    </tr>
-                    <tr>
-                        <th lay-data="{align:'center'}">4</th>
-                        <th lay-data="{align:'center'}">5</th>
-                        <th lay-data="{align:'center'}">6</th>
-                        <th lay-data="{align:'center'}">7</th>
-                        <th lay-data="{align:'center'}">8</th>
-                        <th lay-data="{align:'center'}">8-10</th>
-                        <th lay-data="{align:'center'}">10-12</th>
-                        <th lay-data="{align:'center'}">12-14</th>
-                        <th lay-data="{align:'center'}">14-16</th>
-                        <th lay-data="{align:'center'}">16</th>
-                        <th lay-data="{align:'center'}">18/20</th>
-                        <th lay-data="{align:'center'}">2T</th>
-                        <th lay-data="{align:'center'}">3T</th>
-                        <th lay-data="{align:'center'}">4T</th>
-                    </tr>
-                    <tr>
-                        <th lay-data="{field:'xxs_4'}">XXS</th>
-                        <th lay-data="{field:'xs_5'}">XS</th>
-                        <th lay-data="{field:'s_6'}">S</th>
-                        <th lay-data="{field:'m_7'}">M</th>
-                        <th lay-data="{field:'l_8'}">L</th>
-                        <th lay-data="{field:'xl_8_10'}">XL</th>
-                        <th lay-data="{field:'2xl_10_12'}">2XL</th>
-                        <th lay-data="{field:'3xl_12_14'}">3XL</th>
-                        <th lay-data="{field:'4xl_14_16'}">4XL</th>
-                        <th lay-data="{field:'5xl_16'}">5XL</th>
-                        <th lay-data="{field:'6xl_18_20'}">6XL</th>
-                        <th lay-data="{field:'2t'}"> </th>
-                        <th lay-data="{field:'3t'}"> </th>
-                        <th lay-data="{field:'4t'}"> </th>
+                        <th lay-data="{align:'center'}" colspan="14">
+                            <span>尺码</span>
+                            <span style="color:#31bdec"> / 装箱件数</span>
+                            <span style="color:#16b777"> / 实发件数</span>
+                            <span style="color:red"> / 差异数</span>
+                        </th>
                     </tr>
                 </thead>
+                <tbody style="text-align: center;">
+                    <t t-foreach="data" t-as="item" t-key="item.box_number">
+                        <tr>
+                            <td>
+                                <span t-esc="item.box_number"/>
+                            </td>
+                            <td>
+                                <span t-esc="item.po"/>
+                            </td>
+                            <td>
+                                <span t-esc="item.style_number"/>
+                            </td>
+                            <td>
+                                <span t-esc="item.color"/>
+                            </td>
+                            <td>
+                                <span t-esc="item.str"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                    <!--                    <tr>-->
+                    <!--                        <t t-foreach="data" t-as="item" t-key="item.id">-->
+                    <!--                            <td><span t-esc="item"/></td>-->
+                    <!--                        </t>-->
+                    <!--                    </tr>-->
+
+                    <!--                    <tr>-->
+                    <!--                        <td><span>123</span></td>-->
+                    <!--                        <td>箱号</td>-->
+                    <!--                        <td>订单号</td>-->
+                    <!--                        <td>款号</td>-->
+                    <!--                        <td>款号</td>-->
+                    <!--                        <td>颜色</td>-->
+                    <!--                        <td>xxs_4</td>-->
+                    <!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td>箱号1</td>-->
+                    <!--                        <td>订单号1</td>-->
+                    <!--                        <td>款号1</td>-->
+                    <!--                        <td>款号1</td>-->
+                    <!--                        <td>颜色1</td>-->
+                    <!--                        <td>xs_5</td>-->
+                    <!--                    </tr>-->
+
+                </tbody>
             </table>
         </body>
     </t>

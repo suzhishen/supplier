@@ -171,9 +171,9 @@ class ErpController(http.Controller):
             partner_data = json_data.get('partner_data') or []
             res_partner_ids = []
             for item in partner_data:
-                res_partner = request.env['res.partner'].sudo().search([('erp_partner_id', '=', item['id'])])
+                res_partner = request.env['res.partner'].sudo().search(['|', ('name', '=', item['name']), ('erp_partner_id', '=', item['id'])])
                 if res_partner:
-                    value = {'name': item['name']}
+                    value = {'name': item['name'], 'erp_partner_id': item['id']}
                     res_partner.write(value)
                     res_partner_ids.append(res_partner.id)
                 else:
@@ -224,7 +224,6 @@ class ErpController(http.Controller):
                 'order_quantity':  json_data.get('order_quantity', 0),  # 订单数量
                 'completed_quantity':  json_data.get('completed_quantity', 0),  # 已完成数量
                 'unfinished_quantity':  json_data.get('unfinished_quantity'),  # 待完成数量
-                'date_planned':  json_data.get('date_planned'),  # 要求交期
                 'state':  json_data.get('state'),  # 加工类型
                 'partner_price_line':  [],  # 相关费用
                 'blank_order_detail_line': [],  # 相关明细
@@ -245,6 +244,7 @@ class ErpController(http.Controller):
                     'product_name': blank_order_detail_record['product_default_code'] or '',
                     'style_name': blank_order_detail_record['product_default_name'] or '',
                     'order_quantity': blank_order_detail_record['order_quantity'],
+                    'date_planned':  blank_order_detail_record['date_planned'] or '',  # 要求交期
                 }))
             record_val.update({'blank_order_detail_line': blank_order_detail_line})
 
@@ -378,12 +378,9 @@ class ErpController(http.Controller):
             domain.append(('product_name', '=', blank_order_return['product_id']))
             return_record = request.env['fast.blank_order_detail'].sudo().search(domain)
             if return_record:
-                change_quantity = blank_order_return['product_qty'] - blank_order_return['un_done_qty']
-                return_record.change_quantity = str(change_quantity)
-                if change_quantity > 0:
-                    return_record.change_quantity = f"-{blank_order_return['product_qty'] + change_quantity}"
-                if not change_quantity:
-                    return_record.change_quantity = f"-{str(blank_order_return['product_qty'])}"
+                return_record.change_quantity = f"-{blank_order_return['product_qty']}"
+                return_record.order_quantity -= int(blank_order_return['product_qty'])
+                return_record.unfinished_quantity = return_record.order_quantity - int(blank_order_return['done_qty'])
             else:
                 return {
                     'code': 400,
@@ -412,6 +409,15 @@ class ErpController(http.Controller):
             'code': 200,
             'message': '更新成功',
         }
+
+    @http.route('/erp/blank_order_process_cost_synchronous', type='json', auth="none", csrf=False, methods=['POST'])
+    def blank_order_onchange_synchronous(self, **kwargs):
+        """ 供应商协同端 订单同步 加工费用 """
+        json_data = json.loads(request.httprequest.data)
+        print(json_data)
+
+
+
 
 
 

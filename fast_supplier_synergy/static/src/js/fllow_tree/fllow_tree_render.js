@@ -26,20 +26,20 @@ export class FllowTreeRender extends Component {
         this.rpc = useService('rpc');
     }
 
-    initZPLPrint(datas, quantitys_list, updateDate, records_ids) {
+    initZPLPrint(datas, quantitys_list, updateData, records_ids) {
         BrowserPrint.getDefaultDevice("printer", (device) => {
             this.selected_device = device;
-            this.onPrintUPC(datas, quantitys_list, updateDate, records_ids)
+            this.onPrintUPC(datas, quantitys_list, updateData, records_ids)
         }, () => {
             alert('初始化失败')
         })
     }
 
-    async onPrintUPC(datas, quantitys_list, updateDate, records_ids) {
+    async onPrintUPC(datas, quantitys_list, updateData, records_ids) {
         let result = await this.ormService.call('fast.blank.packing_list_detail', 'get_save_clp_label_zpl_data', [[]], {
             datas: datas,
             quantitys_list: quantitys_list,
-            updateDate_list: updateDate,
+            updateData_list: updateData,
             records_ids: records_ids,
         })
         this.selected_device.send(result, undefined, (error) => {
@@ -60,23 +60,18 @@ export class FllowTreeRender extends Component {
         self.ormService.call('fast.blank.packing_list_detail', 'get_packed_list_datas', [], {
             'product_code': data.product_tmpl_code
         }).then(result => {
-            console.log(result)
-            if (!result[2]) {
-                layer.msg('请先填写预计交期')
-                return
-            }
             let incompleteLineJson = JSON.stringify(data.incomplete_line);
             let incompleteLineEncoded = encodeURIComponent(incompleteLineJson);
             // let packedListJson = JSON.stringify(data.packed_list);
             // let packedListEncoded = encodeURIComponent(packedListJson);
-            let packedListJson = JSON.stringify(result[0]);
+            let packedListJson = JSON.stringify(result.data);
             let packedListEncoded = encodeURIComponent(packedListJson);
-            let packedSizeJson = JSON.stringify(result[1]);
+            let packedSizeJson = JSON.stringify(result.existing_data);
             let packedSizeEncoded = encodeURIComponent(packedSizeJson);
-            let mixedStowageJson = JSON.stringify(result[3]);
+            let mixedStowageJson = JSON.stringify(result.mixed_stowage_sequence_value);
             let mixedStowageEncoded = encodeURIComponent(mixedStowageJson);
             let order_fllow_win = layui.layer.open({
-                title: data.product_tmpl_code,
+                title: data.po + ' / ' + data.product_tmpl_code,
                 type: 2,
                 area: ['80%', '85%'],
                 // content: `fast_supplier_synergy/static/src/js/fllow_tree/fllow_add_data_render_view.html?incomplete_line=${incompleteLineEncoded}&packed_list=${packedListEncoded}`,
@@ -96,19 +91,19 @@ export class FllowTreeRender extends Component {
 
                     var qs_inputs = iframeWin.document.getElementById('formData').getElementsByTagName('input');
                     var formData = {};
-                    var updateDate = {};
+                    var updateData = {};
                     for (var i = 0; i < qs_inputs.length; i++) {
                         var input = qs_inputs[i];
                         if (input.name) {
                             if (formData[input.name]) {
                                 if (input.id) {
-                                    updateDate[input.id] = input.value;
+                                    updateData[input.id] = input.value;
                                 } else {
                                     formData[input.name].push(input.value);
                                 }
                             } else {
                                 if (input.id) {
-                                    updateDate[input.id] = input.value;
+                                    updateData[input.id] = input.value;
                                 } else {
                                     formData[input.name] = [input.value];
                                 }
@@ -118,20 +113,20 @@ export class FllowTreeRender extends Component {
 
                     // {s:['3','4'], m['4','3']}
                     var hz_inputs = iframeWin.document.getElementById('hzBox').getElementsByTagName('input');
-                    var hz_updateDate = {};
+                    var hz_updateData = {};
                     var hz_formData = {};
                     for (var i = 0; i < hz_inputs.length; i++) {
                         var input = hz_inputs[i];
                         if (input.name) {
                             if (hz_formData[input.name]) {
                                 if (input.id) {
-                                    hz_updateDate[input.id] = input.value;
+                                    hz_updateData[input.id] = input.value;
                                 } else {
                                     hz_formData[input.name].push(input.value);
                                 }
                             } else {
                                 if (input.id) {
-                                    hz_updateDate[input.id] = input.value;
+                                    hz_updateData[input.id] = input.value;
                                 } else {
                                     hz_formData[input.name] = [input.value];
                                 }
@@ -143,10 +138,10 @@ export class FllowTreeRender extends Component {
                     var hz_box_input = iframeWin.document.querySelectorAll('.hz_box');
                     console.log(hz_box_input)
                     var hz_box_createData_list = []
-                    var hz_box_updateDate_list = []
+                    var hz_box_updateData_list = []
                     for (var i = 0; i < hz_box_input.length; i++) {
                         var hz_box_createData = {};
-                        var hz_box_updateDate = {};
+                        var hz_box_updateData = {};
                         var hz_input_ele = hz_box_input[i].getElementsByTagName('input')
                         for (var j = 0; j < hz_input_ele.length; j++) {
                             var input = hz_input_ele[j];
@@ -154,22 +149,22 @@ export class FllowTreeRender extends Component {
                                 hz_box_createData[input.name] = input.value;
                             }
                             if (input.id) {
-                                hz_box_updateDate[input.id] = input.value;
+                                hz_box_updateData[input.id] = input.value;
                             }
                         }
                         hz_box_createData_list.push(hz_box_createData)
-                        hz_box_updateDate_list.push(hz_box_updateDate)
+                        hz_box_updateData_list.push(hz_box_updateData)
                     }
 
                     console.log(title);
                     console.log(formData);
-                    console.log(updateDate);
+                    console.log(updateData);
                     console.log(hz_formData);
                     console.log(hz_box_createData_list);
-                    console.log(hz_updateDate);
+                    console.log(hz_updateData);
                     // console.log("S: " + formData["S"]);
                     // console.log("M: " + formData["M"]);
-                    self.createDetail(data, formData, updateDate, hz_box_createData_list, hz_box_updateDate_list)
+                    self.createDetail(data, formData, updateData, hz_box_createData_list, hz_box_updateData_list)
                     layer.close(order_fllow_win);
                 }
             });
@@ -180,14 +175,14 @@ export class FllowTreeRender extends Component {
         console.log('确认执行操作')
     }
 
-    async createDetail(datas, quantitys_list, updateDate, hz_box_createData_list, hz_box_updateDate_list) {
+    async createDetail(datas, quantitys_list, updateData, hz_box_createData_list, hz_box_updateData_list) {
         let self = this
         await this.ormService.call('fast.blank.packing_list', 'create_blanK_packing_list', [[]], {
             datas: datas,
             quantitys_list: quantitys_list,
-            updateDate_list: updateDate,
+            updateData_list: updateData,
             hz_box_createDate_list: hz_box_createData_list,
-            hz_box_updateDate_list: hz_box_updateDate_list,
+            hz_box_updateData_list: hz_box_updateData_list,
         }).then(result => {
             console.log(result)
             if (result) {
@@ -197,11 +192,11 @@ export class FllowTreeRender extends Component {
                 }).then(next_result => {
                     console.log(next_result)
                     // 更新前端数据
-                    for (let i = 0; i < next_result[0].length; i++) {
-                        $(`.${datas.product_tmpl_code}-${next_result[0][i].size}`).html(next_result[0][i].quantity)
+                    for (let i = 0; i < next_result.data.length; i++) {
+                        $(`.${datas.product_tmpl_code}-${next_result.data[i].size}`).html(next_result.data[i].quantity)
                     }
                 })
-                self.initZPLPrint(datas, quantitys_list, updateDate, result.records_ids)
+                self.initZPLPrint(datas, quantitys_list, updateData, result.records_ids)
 
             } else {
                 layui.layer.msg('更新失败, 请联系管理员', {

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo</title>
+    <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
+    <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <link href="./packing_add_data_render_view.css" rel="stylesheet">
+    <style></style>
+</head>
+<body>
+<form id="formData">
+    <strong>
+        <div>
+            <span style="display: block; padding: 1% 0px 0px 0px; color: cornflowerblue;">
+                <span style="width: 4.5%; display: inline-block; text-align: right;">尺码</span>
+                <span>：</span>
+                <span>未完成数</span>
+                <span style="padding-left: 1.5%; color: cornflowerblue;">装箱明细</span>
+            </span>
+        </div>
+    </strong>
+</form>
+<br>
+<hr>
+<form id="hzformData">
+    <strong>
+        <div style="padding: 1% 0px">
+            <span style="color: cornflowerblue;">
+                <span style="display: inline-block; text-align: right;">尾箱混装</span>
+            </span>
+        </div>
+    </strong>
+    <!--    <label for="X">-->
+    <!--        <strong><strong><span>S</span><span>：</span><span>-3</span></strong></strong>-->
+    <!--    </label>-->
+    <!--    <span id="S_span" style="margin-right: 1%;">-->
+    <!--        <input type="text" class="layui-input" name="x"/>-->
+    <!--    </span>-->
+    <!--    <label for="2XL">-->
+    <!--        <strong><strong><span>2XL</span><span>：</span><span>3000</span></strong></strong>-->
+    <!--    </label>-->
+    <!--    <span id="2XL_span" style="margin-right: 1%;">-->
+    <!--        <input type="text" class="layui-input" name="x"/>-->
+    <!--    </span>-->
+</form>
+<br>
+
+<div id="hzBox">
+    <!--    <div class="hz_box">-->
+    <!--        <span>XS：</span><input class="XS" type="text" value="123">-->
+    <!--        <span>S：</span><input class="S" type="text" value="123">-->
+    <!--        <span>4XL：</span><input class="4XL" type="text" value="123">-->
+    <!--    </div>-->
+    <!--    <div class="hz_box">-->
+    <!--        <span>XS：</span><input class="XS" type="text" value="321">-->
+    <!--        <span>S：</span><input class="S" type="text" value="321">-->
+    <!--        <span>4XL：</span><input class="4XL" type="text" value="321">-->
+    <!--    </div>-->
+</div>
+
+<script>
+    function editInput(event) {
+        console.log('addInput1');
+        event.stopPropagation();
+        const button = event.target;
+        const input = button.previousElementSibling;
+
+        if (input.disabled) {
+            input.disabled = false;
+            button.textContent = '保 存';
+        } else {
+            input.disabled = true;
+            button.textContent = '修 改';
+        }
+    }
+
+    function addHzInput(inputId) {
+        console.log('addHzInput');
+        console.log('加尾箱');
+        input_data = $('#hzformData input')
+        var html = ''
+        for (var i = 0; i < input_data.length; i++) {
+            console.log(input_data[i])
+            if (i === 0) {
+                html += `<div class="hz_box">`
+            }
+            if (!input_data[i].value) {
+                continue
+            }
+            html += `<span>${input_data[i].name}：</span><input name=${input_data[i].name} type="text" value=${input_data[i].value}>`
+            if (i === (input_data.length - 1)) {
+                html += `</div>`
+            }
+            input_data[i].value = ''
+        }
+        $('#hzBox').append(html)
+    }
+
+    function addInput(inputId) {
+        console.log('addInput');
+        var lastInput = $('#' + inputId).parent().find('input').last();
+        var newInput = $('<input type="text" class="layui-input">').attr('name', inputId);
+        if (lastInput.length === 0) {
+            console.log(lastInput)
+            lastInput = $('#' + inputId + '_span');
+            newInput = $('<input type="text" class="layui-input">').attr('name', inputId);
+            lastInput.append(newInput);
+            return
+        }
+        lastInput.after(newInput);
+    }
+
+
+    $(document).ready(function () {
+        console.log('初始化装箱成功')
+        let url = new URL(window.location.href);
+        let searchParams = new URLSearchParams(url.search);
+        let incomplete_line = JSON.parse(searchParams.get('incomplete_line'));
+        let packed_list = JSON.parse(searchParams.get('packed_list'));
+        let packed_size = JSON.parse(searchParams.get('packed_size'));
+        let mixed_stowage_list = JSON.parse(searchParams.get('mixed_stowage_list'));
+
+        const new_size = [];
+        incomplete_line.forEach(item => {
+            const packedItem = packed_list.find(packed => packed.size === item.size_name);
+            const quantity = packedItem ? item.product_qty - packedItem.quantity : item.product_qty;
+            new_size.push({"size_name": item.size_name, "product_qty": quantity, 'save_data': []});
+        });
+        console.log(new_size);
+        // 处理显示未录入的数据
+        for (let i = 0; i < new_size.length; i++) {
+            for (let j = 0; j < packed_size.length; j++) {
+                if (new_size[i].size_name === packed_size[j].size) {
+                    // new_size[i].save_data.push(packed_size[j].quantity)
+                    new_size[i].save_data.push(packed_size[j])
+                }
+            }
+        }
+
+        let labels = ''
+        for (let i = 0; i < new_size.length; i++) {
+            let inputs = ''
+            var index = 0
+            // 处理显示已录入的数据
+            for (let j = 0; j < new_size[i].save_data.length; j++) {
+                if (new_size[i].save_data[index].synch_state === 'have_synch') {
+                    inputs += `<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>`
+                } else {
+                    // inputs += `<input type="text" class="layui-input" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}"/>`
+                    inputs += `
+<span style="position: relative;">
+<input type="text" class="layui-input" style="width: 6%;" id="${new_size[i].save_data[index].id}" name="${new_size[i].size_name}" value="${new_size[i].save_data[index].quantity}" disabled/>
+ <button type="button" class="btn_class" onclick="editInput(event)">修 改</button>
+</span>`
+                }
+                index += 1
+            }
+            labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span class="${new_size[i].size_name}_size_quty">${new_size[i].product_qty}</span></strong></label>
+            <span id="${new_size[i].size_name}_span">${inputs}</span>
+            <button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;padding: 0px;width: 40px;" onclick="addInput('${new_size[i].size_name}')"><i class="btn_icon layui-icon layui-icon-add-1"/></button>
+            <br>`;
+        }
+        $('#formData').append(labels)
+
+
+        // $('#formData').on('change', 'input', function (event) {
+        $('#formData').on('input', 'input', function (event) {
+            console.log(event.target.value)
+            const input = event.target.value;
+            if (!/^[0-9]*$/.test(input)) {
+                event.target.classList.add('invalid');
+            } else {
+                event.target.classList.remove('invalid');
+            }
+            // $('.' + event.target.name + '_size_quty')[0].innerHTML -= event.target.value;
+        });
+
+
+        // 尾箱混装展示数据
+        let hz_labels = ''
+        for (let i = 0; i < new_size.length; i++) {
+            if (new_size[i].product_qty > 0) {
+                hz_labels += `<label for="${new_size[i].size_name}"><strong><span>${new_size[i].size_name}</span><span>：</span><span>${new_size[i].product_qty}</span></strong></label>
+<span id="${new_size[i].size_name}_span" style="margin-right: 1%;"><input type="text" class="layui-input" name="${new_size[i].size_name}"/></span>`
+            }
+
+            if ((new_size.length - 1) == i) {
+                hz_labels += `<button type="button" class="layui-btn layui-bg-blue" style="margin-left: 0.5%;padding: 0px;width: 40px;" onClick="addHzInput('${new_size[i].size_name}')"><i class="btn_icon layui-icon layui-icon-add-1"/></button>`
+            }
+        }
+        $('#hzformData').append(hz_labels)
+
+        // 尾箱混装已有装箱的展示数据
+        var all_box_html = ``
+        for (let key in mixed_stowage_list) {
+            var box_html = `<div class="hz_box">`
+            mixed_stowage_list[key].forEach(record => {
+                if (record.synch_state === 'have_synch') {
+                    box_html += `<span>${record.size}：</span><input class=${record.size} type="text" value=${record.quantity} id=${record.id} disabled>`
+                } else {
+                    box_html += `<span>${record.size}：</span><input class=${record.size} type="text" value=${record.quantity} id=${record.id}>`
+                }
+            });
+            box_html += `</div>`
+            all_box_html += box_html
+        }
+        if (all_box_html) {
+            $('#hzBox').append(all_box_html)
+        }
+
+
+        // // 为每个添加按钮绑定点击事件
+        // $('button').click(function () {
+        //     // 获取与按钮对应的input的id
+        //     var inputId = $(this).prev('input').attr('id');
+        //     addInput(inputId);
+        // });
+    })
+    ;
+
+</script>
+</body>
+</html>

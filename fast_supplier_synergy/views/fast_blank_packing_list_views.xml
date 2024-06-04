@@ -14,8 +14,9 @@
                     <sheet>
                         <group col="3">
                             <group>
-                                <field name="po" readonly="1"/>
+<!--                                <field name="po" readonly="1"/>-->
                                 <field name="partner_name" readonly="1"/>
+                                <field name="shipping" request="1"/>
                             </group>
                             <group>
                                 <field name="tracking_number" readonly="1"/>
@@ -34,6 +35,7 @@
                                 <field name="packing_list_detail_line" widget="one2many_list">
                                     <tree editable="bottom" create="false" delete="false">
                                         <field name="sequence" string="#" readonly="1"/>
+                                        <field name="po" readonly="1"/>
                                         <field name="box_number" readonly="1"/>
 <!--                                        <field name="style_number" readonly="1"/>-->
 <!--                                        <field name="color" readonly="1"/>-->
@@ -59,7 +61,7 @@
             <field name="model">fast.blank.packing_list</field>
             <field name="arch" type="xml">
                 <tree string="Blank Packing List" js_class="blank_clp_button_list">
-                    <field name="po"/>
+<!--                    <field name="po"/>-->
                     <field name="partner_name"/>
                     <field name="tracking_number"/>
                     <field name="delivery_date"/>
@@ -76,7 +78,7 @@
             <field name="model">fast.blank.packing_list</field>
             <field name="arch" type="xml">
                 <search>
-                    <field name="po"/>
+<!--                    <field name="po"/>-->
                     <field name="tracking_number"/>
                     <field name="delivery_date"/>
                     <field name="total_quantity"/>

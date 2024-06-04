@@ -25,7 +25,7 @@ class FastSupplierOrderBlank(models.Model):
     order_quantity = fields.Integer('订单数量')
     completed_quantity = fields.Integer('已完成数量')
     unfinished_quantity = fields.Integer('待完成数量')
-    date_planned = fields.Char('要求交期')
+    # date_planned = fields.Char('要求交期')
     # date_expected = fields.Date('预计交期')
     state = fields.Selection([('draft', '待完成'), ('part', '部分完成'), ('done', '已完成'), ('cancel', '已取消')], string='状态', default='draft')
     partner_price_line = fields.One2many('fast.process_cost', 'blank_order_id', string='相关费用', index=True)
@@ -186,7 +186,9 @@ class FastSupplierOrderBlank(models.Model):
                     # 需求（订单数:已交付数:未交付数）
                     szie_value = {
                         'size_name': size.split('-')[-1],
+                        'order_quantity': now_detail_size_id.order_quantity + abs(int(now_detail_size_id.change_quantity)),
                         'change_quantity': now_detail_size_id.change_quantity,
+                        'change_quantity_after': now_detail_size_id.order_quantity,
                     }
                     ys_value['product_datas'].append(szie_value)
                 kh_value['product_template_datas'].append(ys_value)
@@ -207,9 +209,9 @@ class BlankOrderDetail(models.Model):
     _name = 'fast.blank_order_detail'
     _description = '订单明细'
 
-
     blank_order_id = fields.Many2one('fast.supplier.order.blank', string='所属订单', ondelete='cascade')
     packing_list_detail_quantity = fields.One2many('fast.blank.packing_list_detail', 'blank_order_detail_id', string='相关装箱单明细', index=True)
+    packing_detail_follow_ids = fields.One2many('fast.packing_detail_follow', 'blank_order_detail_id', string='相关装箱操作明细', index=True)
 
     name = fields.Char(string='款号', help='空白版款号')
     po_name = fields.Char(related='blank_order_id.name', string='订单号', store=True, help='po号')
@@ -231,7 +233,13 @@ class BlankOrderDetail(models.Model):
     order_type = fields.Char(related='blank_order_id.order_type', string='订单类型')
     style_name = fields.Char('款式名称')
     order_remark = fields.Char('订单备注')
+    materials_state = fields.Selection([('未发货', '未发货'), ('部分已发货', '部分已发货'), ('全部已发货', '全部已发货')], string='领料状态', compute='_compute_materials_state', store=True, help="根据申领物料来判断计算")
     order_state = fields.Char('订单状态', help='如： 已关闭，未关闭')
+
+    @api.depends('blank_order_id')
+    def _compute_materials_state(self):
+        for record in self:
+            record.materials_state = ''
 
     @api.depends('packing_list_detail_quantity.received_quantity', 'packing_list_detail_quantity.receive_state', 'packing_list_detail_quantity.difference_quantity')
     def _compute_completed_quantity(self):
@@ -360,7 +368,7 @@ class BlankOrderDetail(models.Model):
                 'date_expected': item[0].get('date_expected') if item[0].get('date_expected') and item[0].get('date_expected') != 'false' else '',  # 预计交期
                 'incomplete_line': [],  # 欠数明细
                 'blank_order_type': item[0].get('order_type', '') or '',  # 订单类型
-                'order_remark': item[0].get('order_remark', '') or '',  # 领料状态
+                'materials_state': item[0].get('materials_state', '') or '',  # 领料状态
             }
 
             order_line_total = 0
@@ -369,10 +377,12 @@ class BlankOrderDetail(models.Model):
             for line in item:
                 size_name = line['product_name'].split('-')[-1]
                 packing_list_detail = self.env['fast.blank.packing_list_detail'].search([('id', 'in', line['packing_list_detail_quantity'])])
+                synch_packing_list_detail = self.env['fast.blank.packing_list_detail'].search([('id', 'in', line['packing_list_detail_quantity']), ('synch_state', '=', 'have_synch')])
                 incomplete_line = {
                     'size_name': size_name,
                     'product_qty': str(line['order_quantity'] - line['completed_quantity']),
                     'have_packed_qty': sum(packing_list_detail.mapped('quantity')),     # 已装箱明细
+                    'have_synch_packed_qty': sum(synch_packing_list_detail.mapped('quantity')),     # 已同步的装箱明细
                 }
                 value['incomplete_line'].append(incomplete_line)
 
@@ -477,6 +487,7 @@ class BlankOrderDetail(models.Model):
                     'g_weight': line['g_weight'],
                     'body': line['body'],
                     'order_id':wizard_id.id,
+                    'is_apply':line['is_apply'],
                     'erp_id': line['erp_id'],
                 })
             action = self.env.ref('fast_supplier_synergy.fast_create_material_requirements_wizard_action_apply_material').sudo().read()[0]
@@ -490,10 +501,8 @@ class FastBlankOrderMaterialRequirements(models.Model):
     _description = '订单中心--物料需求'
     _order = 'outsource_order_blank_id'
 
- 
     # 关联主表
-    outsource_order_blank_id = fields.Many2one('fast.supplier.order.blank', string='所属空白版委外加工单',
-                                               ondelete='cascade')
+    outsource_order_blank_id = fields.Many2one('fast.supplier.order.blank', string='所属空白版委外加工单', ondelete='cascade')
     cutting_order_blank_id = fields.Many2one('fast.supplier.order.blank', string='所属裁床订单', ondelete='cascade')
 
     product_id = fields.Integer(string='erp主辅料id', help="用于区分我这边的主辅料记录")
@@ -511,6 +520,7 @@ class FastBlankOrderMaterialRequirements(models.Model):
     ship_qty = fields.Float(string='实发数', digits="Product Unit of Measure")
     return_qty = fields.Float(string='退货数', digits="Product Unit of Measure")
 
+    bom_price = fields.Char(string='bom价格')
     body = fields.Char(string='部位')
     product_spec_name = fields.Char(string='规格')
     product_spec_remark = fields.Text('规格备注')

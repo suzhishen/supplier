@@ -1,0 +1,38 @@
+div.o_both_tree_renderer {
+  max-height:88vh;
+  overflow: auto;
+  margin: auto;
+
+  .table-border th.blankTd::after {
+    content: "/";
+    color: red; /* 可以根据需要设置斜线的样式 */
+  }
+
+
+  .table-border {
+    width: 100%;
+    display: table;
+    thead {
+         position: sticky !important;
+         top:0;
+    }
+  }
+
+  .table-border th, td {
+    border: 0.5px solid #ccc9dd;
+    padding: 0 !important;
+  }
+
+  .o_both_tree_renderer table {
+    width: 100%
+  }
+
+  .table-border thead th {
+    font-size: 1.4rem;
+    font-weight: bold;
+
+  }
+    .table-border tbody td{
+      font-size: 1.3rem;
+    }
+}

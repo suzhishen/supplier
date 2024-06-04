@@ -24,9 +24,12 @@
         'views/fast_blank_bom_views.xml',
         'views/fast_supplier_order_blank_views.xml',
         'views/fast_outsource_order_blank_line_fllow_views.xml',
+        'views/packing_quantity_views.xml',
         'views/ir_actions_client_views.xml',
         'views/fast_blank_packing_list_views.xml',
+        'views/fast_packing_config_views.xml',
         'views/report_forms_views.xml',
+        'views/box_number_difference.xml',
         'views/menu_views.xml',
         'views/fast_create_material_requirements_wizard_views_apply_material.xml',
     ],
@@ -38,6 +41,10 @@
             'fast_supplier_synergy/static/src/js/fllow_tree/*.js',
             'fast_supplier_synergy/static/src/js/fllow_tree/*.xml',
             'fast_supplier_synergy/static/src/js/fllow_tree/*.scss',
+            # 订单跟进Tree
+            'fast_supplier_synergy/static/src/js/packing_tree/*.js',
+            'fast_supplier_synergy/static/src/js/packing_tree/*.xml',
+            'fast_supplier_synergy/static/src/js/packing_tree/*.scss',
             # 订单中心-订单明细
             'fast_supplier_synergy/static/src/js/outsourced_order_show_tree/*.js',
             'fast_supplier_synergy/static/src/js/outsourced_order_show_tree/*.xml',
@@ -52,10 +59,16 @@
             # 空白版装箱单 BUTTON
             'fast_supplier_synergy/static/src/js/bank_clp_button/*.js',
             'fast_supplier_synergy/static/src/js/bank_clp_button/*.xml',
+            # # 差异报表
+            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.js',
+            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.xml',
+            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.scss',
             # 差异报表
             'fast_supplier_synergy/static/src/js/report_forms/*.js',
             'fast_supplier_synergy/static/src/js/report_forms/*.xml',
             'fast_supplier_synergy/static/src/js/report_forms/*.scss',
+            # 差异报表
+            'fast_supplier_synergy/static/src/js/update_basic/*.js',
         ],
         'web.assets_common': [
             'fast_supplier_synergy/static/src/css/*.css',

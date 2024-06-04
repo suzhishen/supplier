@@ -5,7 +5,7 @@
             <field name="name">Blank Configuration Form</field>
             <field name="model">fast.blank.configuration</field>
             <field name="arch" type="xml">
-                <form edit="false" create="false" delete="false" string="Blank Configuration Form">
+                <form edit="false" create="false" delete="false" string="Blank Configuration Form" js_class="update_basic_form">
                     <header>
                     </header>
                     <sheet>

@@ -9,7 +9,7 @@ import { usePager } from "@web/search/pager_hook";
 import { useSetupView } from "@web/views/view_hook";
 
 
-export class ReportTreeController extends Component {
+export class PackingTreeController extends Component {
     setup() {
         this.ormService = useService("orm");
         this.actionService = useService("action");
@@ -65,10 +65,10 @@ export class ReportTreeController extends Component {
     // }
 }
 
-FllowTreeController.template = "fast_supplier_synergy.FllowTreeView";
+PackingTreeController.template = "fast_supplier_synergy.PackingTreeView";
 
-FllowTreeController.components = { Layout };
-FllowTreeController.props = {
+PackingTreeController.components = { Layout };
+PackingTreeController.props = {
     ...standardViewProps,
     Model: Function,
     Renderer: Function,

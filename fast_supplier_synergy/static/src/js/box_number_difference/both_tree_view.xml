@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="harvest_end.both_tree_view" owl="1">
+        <div class="asfaf" t-ref="root">
+            <Layout display="display">
+                <t t-set-slot="layout-buttons">
+                    <div class="o_cp_buttons" role="toolbar" aria-label="Control panel buttons" t-ref="buttons">
+                        <t t-call="{{ props.buttonTemplate }}"/>
+                    </div>
+                </t>
+                <t t-component="props.Renderer" list="model.root"/>
+            </Layout>
+        </div>
+    </t>
+    <t t-name="harvest_end.both_tree_renderer" owl="1">
+    <div class="o_both_tree_renderer">
+       <tabel class="table table-border" table="table-row">
+        <thead>
+          <tr class="text-center align-middle">
+           <th rowspan="2" style="background:#e9ecef">#</th>
+              <th rowspan="2" style="background:#e9ecef">箱号</th>
+              <th rowspan="2" style="background:#e9ecef">订单号</th>
+              <th rowspan="2" style="background:#e9ecef">款号</th>
+              <th rowspan="2" style="background:#e9ecef">颜色</th>
+              <t t-foreach="sizeList.s" t-as="size" t-key="size_index">
+                 <th style="background:#e9ecef" width="5%"><span t-esc="size"/></th>
+              </t>
+              <t t-foreach="sizeS" t-as="SN" t-key="SN_index">
+                  <th style="background:#e9ecef" width="5%"></th>
+              </t>
+          </tr>
+            <tr class="text-center align-middle">
+                <t t-foreach="sizeList.t" t-as="size" t-key="size_index">
+                  <th style="background:#e9ecef" width="5%"><span t-esc="size"/></th>
+              </t>
+                <t t-foreach="sizeT" t-as="SN" t-key="SN_index">
+                  <th style="background:#e9ecef" width="5%" class="blankTd"/>
+              </t>
+
+            </tr>
+          </thead>
+           <tbody>
+
+            <t t-foreach="list.records" t-as="line" t-key="line_index">
+                <t t-esc="list"/>
+<!--                <tr class="text-center align-middle">-->
+<!--                    <t t-set="index" t-value="sizeList.t.indexOf(line._values.size_name)"/>-->
+<!--                    <td><span t-esc="line_index+1"/></td>-->
+<!--                    <td><sapn t-esc="line._values.box_number"/></td>-->
+<!--                    <td><sapn t-esc="line._values.po[1]"/></td>-->
+<!--                    <td><sapn t-esc="line._values.product_configuration_id[1]"/></td>-->
+<!--                    <td><sapn t-esc="line._values.product_tmpl_id[1]"/></td>-->
+<!--                    <t t-if="sizeList.t.includes(line._values.size_name)">-->
+<!--                         <t t-foreach="sizeList.t" t-as="size" t-key="size_index">-->
+<!--                            <t t-if="index==size_index">-->
+<!--                                <td><span t-esc="line._values.product_qty"/>-->
+<!--                                    <t t-if="line._values.product_qty != line._values.practical_qty">-->
+<!--                                    :<span t-esc="line._values.practical_qty" style="color:red"/>-->
+<!--                                </t>-->
+<!--                                </td>-->
+<!--                            </t>-->
+<!--                             <t t-else="">-->
+<!--                                 <td></td>-->
+<!--                             </t>-->
+<!--                        </t>-->
+<!--                        <t t-foreach="sizeT" t-as="SN" t-key="SN_index">-->
+<!--                  <td/>-->
+<!--              </t>-->
+<!--                    </t>-->
+<!--                    <t t-else="">-->
+<!--                               <t t-foreach="sizeList.s" t-as="size" t-key="size_index">-->
+<!--                          <t t-if="index==size_index">-->
+<!--                              <td><span t-esc="line._values.product_qty"/>-->
+<!--                                  <t t-if="line._values.product_qty != line._values.practical_qty">-->
+<!--                                    :<span t-esc="line._values.practical_qty" style="color:red"/>-->
+<!--                                </t>-->
+<!--                              </td>-->
+<!--                          </t>-->
+<!--                                   <t t-else="">-->
+<!--                                       <td></td>-->
+<!--                                   </t>-->
+<!--                            </t>-->
+<!--                        <t t-foreach="sizeS" t-as="SN" t-key="SN_index">-->
+<!--                  <td></td>-->
+<!--              </t>-->
+<!--                        </t>-->
+
+<!--                </tr>-->
+            </t>
+
+  </tbody>
+            </tabel>
+        </div>
+    </t>
+    <t t-name="harvest_end.both_tree_view.Buttons" owl="1">
+        <div class="o_list_buttons d-flex" role="toolbar" aria-label="Main actions">
+            <button title="下载Excel" t-on-click="downloadExcel">
+                <i class="fa fa-download btn-link"/>
+            </button>
+        </div>
+        <style>
+            button {
+                border:0;
+                background:none
+            }
+        </style>
+    </t>
+
+</templates>

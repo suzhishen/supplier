@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="fast_supplier_synergy.PackingTreeRenderView" owl="1">
+        <t t-if="props.model.state.order_datas and props.model.state.order_datas.length > 0">
+            <div class="packing_tree_render_table">
+                <table cellspacing="0" border="0" cellpadding="0">
+                    <thead>
+                       <tr>
+                           <th class="seq">#</th>
+                           <th class="date">下单日期</th>
+                           <th class="partner">工厂</th>
+                           <th class="po">PO#</th>
+                           <th class="style">款号</th>
+                           <th class="style-color">款色</th>
+                           <th class="boxed-size">欠数明细<span style="color: green"> / 已装箱数</span></th>
+                           <th class="zx_btn">装箱</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="props.model.state.order_datas" t-as="data" t-key="data_index">
+                            <td class="seq"><span t-esc="data_index+1"/></td>
+                            <td class="date"><span t-esc="data.create_date"/></td>
+                            <td class="partner"><span t-esc="data.partner_name"/></td>
+                            <td class="po"><span t-esc="data.po"/></td>
+                            <td class="style"><span t-esc="data.product_configuration_code"/></td>
+                            <td class="style-color"><span t-esc="data.product_tmpl_code"/></td>
+                            <!-- 欠数明细 -->
+                            <td class="boxed-size">
+                                <div class="boxed-size-parent">
+                                    <div class="boxed-size-child" t-foreach="data.incomplete_line" t-as="line"
+                                         t-key="line_index">
+                                        <span class="boxed-size-name" t-esc="line.size_name"/>
+                                        <span t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
+                                              t-esc="line.product_qty"/>
+                                        <span style="color: green"> / </span>
+                                        <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"
+                                              t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
+                                              t-esc="line.have_packed_qty"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- 装箱按钮 -->
+                            <td class="zx_btn">
+                                <button type="button" class="layui-btn layui-bg-blue" id="zx-button" t-on-click="(event)=>this.editStyleInfo(event, data)">装箱</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="text-center">没有数据！</div>
+        </t>
+    </t>
+</templates>
