@@ -26,13 +26,13 @@
                             <field name="main_order_line">
                                 <tree create="0" delete="0" editable="bottom">
                                     <field name="is_apply" readonly="True"/>
-                                    <field name="select"/>
+                                    <field name="select" attrs="{'readonly':[('is_apply','=',True)]}"/>
                                     <field name="product_default_code" readonly="True"/>
                                     <field name="product_default_name" readonly="True"/>
                                     <field name="color_cn_name" readonly="True"/>
                                     <field name="order_qty" readonly="True"/>
                                     <field name="apply_product_qty" readonly="True"/>
-                                    <field name="reality_product_qty" attrs="{'readonly':[('is_apply','=','True')]}" />
+                                    <field name="reality_product_qty" attrs="{'readonly':['|',('is_apply','=',True),('select','!=',True)]}" />
                                     <field name="bom_need_qty" readonly="True"/>
                                     <field name="bom_loss_qty" readonly="True"/>
                                     <field name="bom_product_qty" readonly="True"/>
@@ -106,7 +106,7 @@
                                     <field name="product_spec_remark" readonly="True"/>
                                     <field name="order_qty" readonly="True"/>
                                     <field name="apply_product_qty" readonly="True"/>
-                                    <field name="reality_product_qty" attrs="{'readonly':[('is_apply','=',True)]}"/>
+                                    <field name="reality_product_qty" attrs="{'readonly':['|',('is_apply','=',True),('select','!=',True)]}" />
                                     <field name="remark" readonly="True"/>
                                     <field name="bom_need_qty" readonly="True"/>
                                     <field name="bom_loss_qty" readonly="True"/>
@@ -117,7 +117,6 @@
                                     <field name="body"/>
 <!--                                    <field name="origin_product_ids"/>-->
                                     <field name="uom_po_id" />
-                                    <field name="assist_uom_id" />
                                 </tree>
                                 <form>
                                     <sheet>
@@ -149,7 +148,7 @@
                     </notebook>
                 </sheet>`
                 <footer>
-                     <button name="btn_save_by_apply_material" type="object" string="确认需求并推送至待申领物料任务表"
+                     <button name="btn_save_by_apply_material" type="object" string="推送物料需求到乐达"
                             class="btn-warning" data-hotkey="q" confirm="确认继续操作吗？"/>
                     <button special="cancel" data-hotkey="z" string="返回"/>
                 </footer>

@@ -55,7 +55,14 @@
                             </td>
                             <!-- 申领物料 -->
                              <th class="apply_btn">
-                                <button class="layui-btn" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">申领物料</button>
+                                <button t-att-class="data.get_materials_type ? 'layui-btn layui-btn-warm' : 'layui-btn layui-btn-normal'" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">
+                                    <t t-if="data.get_materials_type">
+                                        更新物料
+                                    </t>
+                                    <t t-else="">
+                                        申领物料
+                                    </t>
+                                </button>
                              </th>
                             <!-- 领料状态 -->
                             <td class="material-state">

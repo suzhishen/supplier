@@ -54,6 +54,9 @@
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="bom_price"/>
 <!--                                        <field name="body"/>-->
+                                        <field name="price"/>
+                                        <field name="uom_po_name"  readonly="1"/>
+                                        <field name="total_price" sum="total"/>
                                         <field name="assist_uom_name" invisible="1"/>
                                     </tree>
                                 </field>
@@ -74,6 +77,9 @@
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="bom_price"/>
 <!--                                        <field name="body"/>-->
+                                        <field name="price"/>
+                                        <field name="uom_po_name"  readonly="1"/>
+                                        <field name="total_price" sum="total"/>
                                         <field name="assist_uom_name" invisible="1"/>
                                     </tree>
                                 </field>
