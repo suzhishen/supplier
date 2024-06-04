@@ -42,7 +42,10 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
         elif not order_line:
             raise UserError('操作无法完成：请选择需要申领的物料！')
         values = []
-        order_line_data = [] 
+        order_line_data = []
+        
+        for product_tmpl_name in order_line:
+                self.env['fast.blank_order_detail'].search([('product_color_name','in',product_tmpl_name.erp_id['product_tmpl_default_code'])]).is_material_requirements_confirmed = True
         for product_id,product_value in groupby(order_line,lambda x:x.product_id):
             outsource_order_blank_line_ids = []
             origin_product_ids = []
@@ -82,7 +85,28 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
         if response.status_code == 200:
             data = json.loads(response.text)
             if data['result']['type'] == 'ok':
-                order_line
+                material_requirements = []
+                outsource_order_blank_id = self.env['fast.supplier.order.blank'].search([('name','=',self.erp_id['origin'])])
+                for line in self.order_line:
+                    if line.select == True:
+                        material_requirements.append({
+                            'outsource_order_blank_id':outsource_order_blank_id.id,
+                            'product_default_code':line.product_default_code,
+                            'product_default_name':line.product_default_name,
+                            'color_value_name':line.color_attr_id,
+                            'color_cn_name':line.color_cn_name,
+                            'conf_type':line.conf_type,
+                            'product_qty':line.apply_product_qty,
+                            'apply_qty':line.reality_product_qty,
+                            "uom_po_name":line.uom_po_id,
+                            "price":line.bom_price,
+                            "uom_po_name":line.uom_po_id,
+                            'ship_qty':0,
+                            'body':line.body,
+                            'categ_name':'categ_name',
+                        })
+                self.env['fast.blank.order.material.requirements'].create(material_requirements)
+            
 
 
 
@@ -133,8 +157,9 @@ class FastCreateMaterialRequirementsWizardLine(models.TransientModel):
     assist_product_qty = fields.Float('细码业务需求数', digits=DIGITS, readonly=1, store=True)
     product_qty = fields.Float('采购需求数', digits=DIGITS, compute='_compute_product_qty', store=True)
     apply_product_qty = fields.Float('BOM需求数', digits=DIGITS, compute='_compute_apply_product_qty', store=True)
-    reality_product_qty = fields.Float('实际需求数', digits=DIGITS, help='确认需求时填写的数量')
-
+    reality_product_qty = fields.Float('物料申领数', digits=DIGITS, help='确认需求时填写的数量')
+    quantity_issued = fields.Float(string='已发料数')
+    quantity_unissued = fields.Float(string='未发料数')    
     # 默认供应商信息
     supplier_quotation_line_id = fields.Char( '供应商报价明细行ID')
     uom_conversio_char = fields.Char('单位转换系数'
@@ -150,5 +175,5 @@ class FastCreateMaterialRequirementsWizardLine(models.TransientModel):
     # 其它信息
     select = fields.Boolean('选择', default=False)
     remark = fields.Text('备注')
-
+    bom_price = fields.Float(string='BOM价格')
     erp_id = fields.Json(string='存放ERP记录ID')

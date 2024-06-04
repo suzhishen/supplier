@@ -232,6 +232,8 @@ class BlankOrderDetail(models.Model):
     style_name = fields.Char('款式名称')
     order_remark = fields.Char('订单备注')
     order_state = fields.Char('订单状态', help='如： 已关闭，未关闭')
+    is_material_requirements_confirmed = fields.Boolean(string='是否已申领')
+
 
     @api.depends('packing_list_detail_quantity.received_quantity', 'packing_list_detail_quantity.receive_state', 'packing_list_detail_quantity.difference_quantity')
     def _compute_completed_quantity(self):
@@ -361,6 +363,7 @@ class BlankOrderDetail(models.Model):
                 'incomplete_line': [],  # 欠数明细
                 'blank_order_type': item[0].get('order_type', '') or '',  # 订单类型
                 'order_remark': item[0].get('order_remark', '') or '',  # 领料状态
+                'get_materials_type':all(self.env['fast.blank_order_detail'].search([('product_color_name','=',item[0]['product_color_name'])]).mapped('is_material_requirements_confirmed'))
             }
 
             order_line_total = 0
@@ -456,7 +459,8 @@ class BlankOrderDetail(models.Model):
                 # 'outsource_order_blank_id': self.id,
                 # 'outsource_order_blank_line_ids': [(6, 0, product_tmpl_lines.ids)],
                 'default_code': kwargs['product_tmpl_code'],
-                'erp_id':result['data']['erp_id']
+                'erp_id':result['data']['erp_id'],
+                'outsource_order_blank_id':result['data']['erp_id']['outsource_order_blank_id'],
             })
             for line in result['data']['order_line']:
                 self.env['fast.create.material.requirements.wizard.line'].create({
@@ -468,15 +472,19 @@ class BlankOrderDetail(models.Model):
                     'product_spec_remark':  line['product_spec_remark'],
                     'conf_type':line['conf_type'],
                     'os_assist_product_qty': line['os_assist_product_qty'],
+                    'reality_product_qty':line['apply_product_qty'],
                     'assist_product_qty': line['assist_product_qty'],
                     'bom_need_qty': line['bom_need_qty'],
                     'bom_loss_qty': line['bom_loss_qty'],
                     'bom_product_qty': line['bom_product_qty'],
                     'apply_product_qty': line['apply_product_qty'],
+                      'bom_price': line['bom_price'],
+                      "uom_po_id":line['uom_po_id'],
                     'f_width': line['f_width'],
                     'g_weight': line['g_weight'],
                     'body': line['body'],
                     'order_id':wizard_id.id,
+                    'is_apply':line['is_apply'],
                     'erp_id': line['erp_id'],
                 })
             action = self.env.ref('fast_supplier_synergy.fast_create_material_requirements_wizard_action_apply_material').sudo().read()[0]
@@ -511,6 +519,9 @@ class FastBlankOrderMaterialRequirements(models.Model):
     ship_qty = fields.Float(string='实发数', digits="Product Unit of Measure")
     return_qty = fields.Float(string='退货数', digits="Product Unit of Measure")
 
+    price = fields.Float(string='单价')
+    total_price = fields.Float(string='总价',compute="get_total_price")
+    uom_id = fields.Char(string='单位')
     body = fields.Char(string='部位')
     product_spec_name = fields.Char(string='规格')
     product_spec_remark = fields.Text('规格备注')
@@ -518,7 +529,9 @@ class FastBlankOrderMaterialRequirements(models.Model):
     assist_uom_name = fields.Char(string='计量单位')
     uom_po_name = fields.Char(string='采购单位')
 
-
+    def get_total_price(self):
+        for item in self:
+            item.total_price = item.price * item.apply_qty
 
     # product_default_code = fields.Char(string='编码')
     # product_default_name = fields.Char(string='名称')

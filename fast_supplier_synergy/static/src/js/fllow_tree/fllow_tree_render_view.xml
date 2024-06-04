@@ -12,10 +12,6 @@
                            <th class="po">PO#</th>
                            <th class="style">款号</th>
                            <th class="style-color">款色</th>
-<!--                           <th class="size">欠数明细</th>-->
-                           <th class="boxed-size">欠数明细<span style="color: green"> / 已装箱数</span></th>
-<!--                           <th class="boxed-size">已装箱明细</th>-->
-                           <th class="zx_btn">装箱</th>
                            <th class="apply_btn">申领物料</th>
                            <th class="material-state">领料状态</th>
                            <th class="qty">总需求数</th>
@@ -36,40 +32,21 @@
                             <td class="po"><span t-esc="data.po"/></td>
                             <td class="style"><span t-esc="data.product_configuration_code"/></td>
                             <td class="style-color"><span t-esc="data.product_tmpl_code"/></td>
-                            <!-- 欠数明细 -->
-                            <td class="boxed-size">
-                                <div class="boxed-size-parent">
-                                    <div class="boxed-size-child" t-foreach="data.incomplete_line" t-as="line"
-                                         t-key="line_index">
-                                        <span class="boxed-size-name" t-esc="line.size_name"/>
-                                        <span t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
-                                              t-esc="line.product_qty"/>
-                                        <span style="color: green"> / </span>
-                                        <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"
-                                              t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
-                                              t-esc="line.have_packed_qty"/>
-                                    </div>
-<!--                                    <span class="style-color-btn">-->
-<!--                                        <div class="layui-btn-container">-->
-<!--                                            <button class="btn btn-link material-state-edit-btn" title="编辑需求"-->
-<!--                                                    type="button" t-on-click="()=>this.editStyleInfo(data)">-->
-<!--                                                <i class="fa fa-edit"/>-->
-<!--                                            </button>-->
-<!--                                        </div>-->
-<!--                                    </span>-->
-                                </div>
-                            </td>
-                            <td class="zx_btn">
-                                <button type="button" class="layui-btn layui-bg-blue" t-on-click="()=>this.editStyleInfo(data)">装箱</button>
-                            </td>
                             <!-- 申领物料 -->
                              <th class="apply_btn">
-                                <button class="layui-btn" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">申领物料</button>
+                                <button t-att-class="data.get_materials_type ? 'layui-btn layui-btn-warm' : 'layui-btn layui-btn-normal'" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">
+                                    <t t-if="data.get_materials_type">
+                                        更新物料
+                                    </t>
+                                    <t t-else="">
+                                        申领物料
+                                    </t>
+                                </button>
                              </th>
                             <!-- 领料状态 -->
                             <td class="material-state">
                                 <div class="material-state-parent">
-                                    <span class="material-state-child" t-esc="'领料状态'"/>
+                                    <span class="material-state-child" t-esc="data.order_remark"/>
                                     <span class="material-state-btn" t-if="data.is_apply_material">
                                         <button class="btn btn-link material-state-edit-btn" title="申领详情"
                                                 t-on-click="()=>this.viewStyleMaterialDetailInfo(data)">
