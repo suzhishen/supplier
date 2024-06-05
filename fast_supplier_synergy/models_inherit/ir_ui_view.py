@@ -8,7 +8,8 @@ class IrUiView(models.Model):
     type = fields.Selection(selection_add=[
         ('fllow_tree', 'FllowTruee'),
         ('packing_tree', 'PackingTree'),
-        ('both_tree', 'both_tree'),
+        ('report_tree', 'ReportTree'),
+        ('consolidated_tree','consolidatedTree')
     ])
 
 
@@ -18,10 +19,12 @@ class ActWindowView(models.Model):
     view_mode = fields.Selection(selection_add=[
         ('fllow_tree', 'FllowTruee'),
         ('packing_tree', 'PackingTree'),
-        ('both_tree', 'both_tree'),
+        ('report_tree', 'report_tree'),
+        ('consolidated_tree','consolidatedTree')
     ], ondelete={
         'fllow_tree': 'cascade',
         'packing_tree': 'cascade',
-        'both_tree': 'cascade',
+        'report_tree': 'cascade',
+        'consolidated_tree':'cascade'
     })
 

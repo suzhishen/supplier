@@ -12,7 +12,8 @@
                            <th class="po">PO#</th>
                            <th class="style">款号</th>
                            <th class="style-color">款色</th>
-                           <th class="boxed-size">欠数明细<span style="color: green"> / 已装箱数</span></th>
+<!--                           <th class="boxed-size">欠数明细<span style="color: green"> / 已装箱数</span></th>-->
+                           <th class="boxed-size">订单数<span style="color: green"> / 已装箱数</span><span style="color: red"> / 未装箱数</span></th>
                            <th class="zx_btn">装箱</th>
                        </tr>
                     </thead>
@@ -24,7 +25,22 @@
                             <td class="po"><span t-esc="data.po"/></td>
                             <td class="style"><span t-esc="data.product_configuration_code"/></td>
                             <td class="style-color"><span t-esc="data.product_tmpl_code"/></td>
-                            <!-- 欠数明细 -->
+<!--                            &lt;!&ndash; 欠数明细 &ndash;&gt;-->
+<!--                            <td class="boxed-size">-->
+<!--                                <div class="boxed-size-parent">-->
+<!--                                    <div class="boxed-size-child" t-foreach="data.incomplete_line" t-as="line"-->
+<!--                                         t-key="line_index">-->
+<!--                                        <span class="boxed-size-name" t-esc="line.size_name"/>-->
+<!--                                        <span t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"-->
+<!--                                              t-esc="line.product_qty"/>-->
+<!--                                        <span style="color: green"> / </span>-->
+<!--                                        <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"-->
+<!--                                              t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"-->
+<!--                                              t-esc="line.have_packed_qty"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </td>-->
+                            <!-- 订单数/已装箱数/未装箱数 -->
                             <td class="boxed-size">
                                 <div class="boxed-size-parent">
                                     <div class="boxed-size-child" t-foreach="data.incomplete_line" t-as="line"
@@ -36,6 +52,11 @@
                                         <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"
                                               t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
                                               t-esc="line.have_packed_qty"/>
+                                        <t t-if="line.product_qty - line.have_packed_qty > 0">
+                                            <span style="color: green"> / </span>
+                                            <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: red"
+                                                  t-esc="line.product_qty - line.have_packed_qty"/>
+                                        </t>
                                     </div>
                                 </div>
                             </td>

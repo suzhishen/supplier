@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="report_difference_tree">
+            <field name="name">收货差异表</field>
+            <field name="model">fast.blank.packing_list_detail</field>
+            <field name="arch" type="xml">
+                <report_tree>
+                    <field name="id" type="row"/>
+                </report_tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="report_difference_search">
+            <field name="name">收货差异表</field>
+            <field name="model">fast.blank.packing_list_detail</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="box_number"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="report_difference_action" model="ir.actions.act_window">
+            <field name="name">收货差异表</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fast.blank.packing_list_detail</field>
+            <field name="view_mode">report_tree</field>
+        </record>
+
+
+    </data>
+</odoo>

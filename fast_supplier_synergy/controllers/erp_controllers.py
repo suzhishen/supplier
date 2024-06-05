@@ -415,6 +415,25 @@ class ErpController(http.Controller):
         """ 供应商协同端 订单同步 加工费用 """
         json_data = json.loads(request.httprequest.data)
         print(json_data)
+        for item in json_data['data']:
+            order_record = request.env['fast.supplier.order.blank'].search([('name', '=', item['po'])])
+            order_record.partner_price_line.unlink()
+            partner_price = [(0,0,{
+                'name': item['product_configuration_id'] or '',
+                'process_price': item['process_cost'] or 0,
+                'management_price': item['price'] or 0,
+                'other_price': item['other_price'] or 0,
+                'price': item['price'] or 0,
+                'bom_price': item['bom_price'] or 0,
+                'total_price': item['total_price'] or 0,
+                'remark': item['remark'],
+            })]
+            order_record.partner_price_line = partner_price
+        return {
+            'code': 200,
+            'message': '更新成功',
+        }
+
 
 
 

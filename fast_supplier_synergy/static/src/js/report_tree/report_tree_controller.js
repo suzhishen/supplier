@@ -5,7 +5,8 @@ import {Layout} from "@web/search/layout";
 import {useModel} from "@web/views/model";
 import {usePager} from "@web/search/pager_hook";
 import {useService} from "@web/core/utils/hooks";
-export class both_tree_controller extends Component {
+
+export class report_tree_controller extends Component {
 
     setup() {
         const fields = this.props.fields;
@@ -14,7 +15,7 @@ export class both_tree_controller extends Component {
         this.model = useModel(this.props.Model, {
             resModel: this.props.resModel,
             fields,
-            viewMode: "both_tree",
+            viewMode: "report_tree",
         });
 
 
@@ -40,28 +41,29 @@ export class both_tree_controller extends Component {
     }
 
     async onClickCreate() {
- await this.props.createRecord();
+        await this.props.createRecord();
     }
-    async downloadExcel(){
+
+    async downloadExcel() {
         var res_ids = []
-        this.model.root.records.forEach((record)=>{
+        this.model.root.records.forEach((record) => {
             res_ids.push(record.resId)
         })
-        const action = await this.orm.call(this.props.resModel,'btn_download_data_excel',[[],res_ids],{})
-        this.model.action.doAction(action)
+        const action = await this.orm.call(this.props.resModel, 'btn_download_data_excel', [[], res_ids], {})
+        this.action.doAction(action)
     }
+
     get display() {
         const {controlPanel} = this.props.display;
         return {
             ...this.props.display,
             controlPanel: {
                 ...controlPanel,
-                showActiveItems:false
+                showActiveItems: false
             },
         };
     }
-
 }
 
-both_tree_controller.template = `harvest_end.both_tree_view`;
-both_tree_controller.components = {Layout};
+report_tree_controller.template = `fast_supplier_synergy.report_tree_view`;
+report_tree_controller.components = {Layout};

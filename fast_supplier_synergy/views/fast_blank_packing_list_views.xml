@@ -133,13 +133,5 @@
             </field>
         </record>
 
-        <record id="fast_blank_packing_list_detail_action_view" model="ir.actions.act_window">
-            <field name="name">差异报表</field>
-            <field name="res_model">fast.blank.packing_list_detail</field>
-            <field name="view_mode">pivot</field>
-            <field name="search_view_id" ref="fast_supplier_synergy.fast_blank_packing_list_detail_search_view"/>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'pivot', 'view_id': ref('fast_supplier_synergy.fast_blank_packing_list_detail_pivotl_view')})]"/>
-        </record>
     </data>
 </odoo>

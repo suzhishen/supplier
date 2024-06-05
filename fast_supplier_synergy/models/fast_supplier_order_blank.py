@@ -535,7 +535,7 @@ class FastBlankOrderMaterialRequirements(models.Model):
     product_spec_name = fields.Char(string='规格')
     product_spec_remark = fields.Text('规格备注')
 
-    assist_uom_name = fields.Char(string='计量单位')
+    assist_uom_name = fields.Char(string='单位')
     uom_po_name = fields.Char(string='采购单位')
 
     def get_total_price(self):

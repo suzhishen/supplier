@@ -42,7 +42,6 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
         elif not order_line:
             raise UserError('操作无法完成：请选择需要申领的物料！')
         values = []
-        order_line_data = []
         
         for product_tmpl_name in order_line:
                 self.env['fast.blank_order_detail'].search([('product_color_name','in',product_tmpl_name.erp_id['product_tmpl_default_code'])]).is_material_requirements_confirmed = True
@@ -51,6 +50,7 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
             origin_product_ids = []
             erp_product = None
             reality_product_qty = 0
+            order_line_data = []
             for line in product_value:
                 order_line_data.append({
                             "order_qty": line.order_qty,

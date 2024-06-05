@@ -18,10 +18,9 @@
 
         <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40"/>
         <menuitem id="blank_packing_list_menu_line_list" name="空白版装箱单" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_action_view" sequence="10"/>
-<!--        <menuitem id="blank_packing_list_detail_menu_line" name="差异报表" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_detail_action_view" sequence="20"/>-->
-<!--        <menuitem name="差异报表" id="box_number_difference_action_window1" parent="blank_packing_list_menu_line" action="box_number_difference_action_window" sequence="30"/>-->
 
-        <menuitem name="差异报表" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="40"/>
+        <menuitem id="report_difference_menu" parent="blank_packing_list_menu_line" name="收货差异表" action="report_difference_action"/>
+<!--        <menuitem name="差异报表1" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="40"/>-->
 
 <!--        <menuitem id="financial_management_menu_line" name="财务管理" parent="supplier_synergy_menu" sequence="40"/>-->
 <!--        <menuitem id="financial_management_menu_line_list" name="财务信息" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="10"/>-->

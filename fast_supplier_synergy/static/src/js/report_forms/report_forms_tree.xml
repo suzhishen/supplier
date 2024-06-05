@@ -5,7 +5,7 @@
         <body id="report_table_body">
             <!--            <table class="layui-table" id="report_table" lay-data="{url:'/api/packing_list_difference', page:true}">-->
             <table class="layui-table" id="report_table">
-                <thead style="border-bottom: 2px solid #8f8f8f;">
+                <thead>
                     <tr>
                         <th lay-data="{field:'box_number', width:80, sort: true}" rowspan="3">箱号</th>
                         <th lay-data="{field:'order_number', width:80}" rowspan="3">订单号</th>

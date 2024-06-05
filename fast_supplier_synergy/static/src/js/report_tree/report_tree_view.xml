@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="fast_supplier_synergy.report_tree_view" owl="1">
+        <div class="asfaf" t-ref="root">
+            <Layout display="display">
+                <t t-set-slot="layout-buttons">
+                    <div class="o_cp_buttons" role="toolbar" aria-label="Control panel buttons" t-ref="buttons">
+                        <t t-call="{{ props.buttonTemplate }}"/>
+                    </div>
+                </t>
+                <t t-component="props.Renderer" list="model.root"/>
+            </Layout>
+        </div>
+    </t>
+    <t t-name="fast_supplier_synergy.report_tree_renderer" owl="1">
+        <div class="o_both_tree_renderer">
+            <tabel class="table table-border" table="table-row">
+                <thead>
+                    <tr class="text-center align-middle">
+                        <th width="2%" style="background:#e9ecef">#</th>
+
+                        <th width="6%" style="background:#e9ecef">订单号</th>
+                        <th width="6%" style="background:#e9ecef">款号</th>
+                        <th width="4%" style="background:#e9ecef">颜色</th>
+                        <th width="6%" style="background:#e9ecef">箱号</th>
+                        <th style="background:#e9ecef" width="9%">装箱总数</th>
+<!--                        <th style="background:#e9ecef" width="14%">-->
+<!--                            <span>装箱总数 : </span>-->
+<!--                            <span style="color:#9a6b01">实收总数 : </span>-->
+<!--                            <span style="color:#d23f3a">差异总数</span>-->
+<!--                        </th>-->
+                        <th style="background:#e9ecef">
+                            <span>尺码 : 装箱件数 : </span>
+                            <span style="color:#9a6b01">实收件数 : </span>
+                            <span style="color:#d23f3a">差异件数</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="difference_data" t-as="item" t-key="item_index">
+                        <tr>
+                            <td class="text-center align-middle"><span t-esc="item_index + 1"/></td>
+                            <td class="text-center align-middle"><sapn t-esc="item.po"/></td>
+                            <td class="text-center align-middle"><sapn t-esc="item.style_number"/></td>
+                            <td class="text-center align-middle"><sapn t-esc="item.color"/></td>
+                            <td class="text-center align-middle"><sapn t-esc="item.box_number"/></td>
+                            <td class="text-center align-middle">
+                                <span t-esc="item.quantity_sum"/>
+                                <span> : </span>
+                                <span t-esc="item.received_quantity_sum" style="color:#9a6b01"/>
+                                <span> : </span>
+                                <span t-esc="item.difference_quantity_sum" style="color:#d23f3a"/>
+                            </td>
+                            <td>
+                                <t t-foreach="item.hz_datas" t-as="hz_datas" t-key="hz_datas_index">
+<!--                                    <div style="display: inline-block;padding-left: 5px;width: calc(100% / 8) !important">-->
+                                    <div style="display: inline-block;padding-left: 5px; !important" t-att-style="'display: inline-block;padding-left: 5px;width: calc(100% / ' + item.index + ') !important'">
+<!--                                        <span t-esc="item.index" style="font-weight: bold"/>-->
+                                        <span t-esc="hz_datas.size" style="font-weight: bold"/>
+                                        <span>：</span>
+                                        <span t-esc="hz_datas.quantity"/>
+                                        <span>：</span>
+                                        <span t-esc="hz_datas.received_quantity" style="color:#9a6b01"/>
+                                        <span>：</span>
+                                        <span t-esc="hz_datas.difference_quantity" style="color:#d23f3a"/>
+                                    </div>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </tabel>
+        </div>
+    </t>
+
+    <t t-name="fast_supplier_synergy.report_tree_view.Buttons" owl="1">
+        <div class="o_list_buttons d-flex" role="toolbar" aria-label="Main actions">
+            <button title="下载Excel" t-on-click="downloadExcel">
+                <i class="fa fa-download btn-link"/>
+            </button>
+        </div>
+        <style>
+            button {
+                border:0;
+                background:none
+            }
+        </style>
+    </t>
+
+</templates>

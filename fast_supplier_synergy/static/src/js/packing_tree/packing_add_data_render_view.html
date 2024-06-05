@@ -285,7 +285,7 @@
         $(`.size_quty_${size_name}`)[0].innerText = product_quty
         if ($(`.size_quty_${size_name}`)[1] !== undefined) {
             $(`.size_quty_${size_name}`)[1].innerText = product_quty
-            if (!product_quty) {
+            if (product_quty <= 0) {
                 $(`#hz_span_${size_name}`).hide()
             } else {
                 $(`#hz_span_${size_name}`).show()
@@ -455,10 +455,11 @@
             var now_number = parseInt(event.target.value)
             // 检查输入的值是否大于等于百分比
             if (now_number > (parseInt(now_number_value) + max_nuber)) {
-                // 如果输入的值大于等于百分比，则恢复为先前的值
-                event.target.value = event.target.dataset.previousValue || '';
+                event.target.classList.add('invalid');
+                layui.layer.tips('检测到装箱差异过大，请检查输入的数量是否有误', event.target, {tips: 1});
             } else {
-                // 保存输入框的值为先前的值
+                // 保存输入框的值
+                event.target.classList.remove('invalid');
                 event.target.dataset.previousValue = event.target.value;
             }
         });

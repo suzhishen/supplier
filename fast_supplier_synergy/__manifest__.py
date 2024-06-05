@@ -29,7 +29,7 @@
         'views/fast_blank_packing_list_views.xml',
         'views/fast_packing_config_views.xml',
         'views/report_forms_views.xml',
-        'views/box_number_difference.xml',
+        'views/report_view.xml',
         'views/menu_views.xml',
         'views/fast_create_material_requirements_wizard_views_apply_material.xml',
     ],
@@ -60,14 +60,14 @@
             'fast_supplier_synergy/static/src/js/bank_clp_button/*.js',
             'fast_supplier_synergy/static/src/js/bank_clp_button/*.xml',
             # # 差异报表
-            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.js',
-            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.xml',
-            # 'fast_supplier_synergy/static/src/js/box_number_difference/*.scss',
-            # 差异报表
+            'fast_supplier_synergy/static/src/js/report_tree/*.js',
+            'fast_supplier_synergy/static/src/js/report_tree/*.xml',
+            'fast_supplier_synergy/static/src/js/report_tree/*.scss',
+            # 差异报表1
             'fast_supplier_synergy/static/src/js/report_forms/*.js',
             'fast_supplier_synergy/static/src/js/report_forms/*.xml',
             'fast_supplier_synergy/static/src/js/report_forms/*.scss',
-            # 差异报表
+            # 进入form时更新基础数据
             'fast_supplier_synergy/static/src/js/update_basic/*.js',
         ],
         'web.assets_common': [

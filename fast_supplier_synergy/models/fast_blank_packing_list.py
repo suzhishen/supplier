@@ -125,7 +125,8 @@ class FastBlankPackingList(models.Model):
             hz_box_createDate_list = kwargs.get('hz_box_createDate_list', []) or []
             hz_box_updateData_list = kwargs.get('hz_box_updateData_list', []) or []
 
-            packing_list_record = self.env['fast.blank.packing_list'].search([('synch_state', '=', 'not_synch'), ('partner_name', '=', partner_name)])
+            packing_list_record = self.env['fast.blank.packing_list'].search(
+                [('synch_state', '=', 'not_synch'), ('partner_name', '=', partner_name)])
             if not packing_list_record:
                 packing_list_record = packing_list_record.create({'partner_name': datas.get('partner_name')})
 
@@ -155,7 +156,8 @@ class FastBlankPackingList(models.Model):
             # 添加装箱操作跟进明细
             for k, v in quantitys_list.items():
                 product_name = product_color_code + '-' + k
-                order_detail_id = self.env['fast.blank_order_detail'].search([('po_name', '=', po_name), ('product_name', '=', product_name)])
+                order_detail_id = self.env['fast.blank_order_detail'].search(
+                    [('po_name', '=', po_name), ('product_name', '=', product_name)])
                 if not order_detail_id:
                     raise ValidationError(f'未找到 {product_color_code} 请联系管理员！')
                 for v_item in v:
@@ -172,9 +174,9 @@ class FastBlankPackingList(models.Model):
 
                 print(order_detail_id)
 
-
             # 创建混装数据
-            packing_detail_follow_record = self.env['fast.packing_detail_follow'].search([('mixed_stowage_sequence', '>', 0)])
+            packing_detail_follow_record = self.env['fast.packing_detail_follow'].search(
+                [('mixed_stowage_sequence', '>', 0)])
             mixed_stowage_sequence = packing_detail_follow_record.mapped('mixed_stowage_sequence')
             if not packing_detail_follow_record:
                 mixed_stowage_sequence = [0]
@@ -183,7 +185,8 @@ class FastBlankPackingList(models.Model):
                 sequence += index
                 for k, v in box.items():
                     product_name = product_color_code + '-' + k
-                    order_detail_id = self.env['fast.blank_order_detail'].search([('po_name', '=', po_name), ('product_name', '=', product_name)])
+                    order_detail_id = self.env['fast.blank_order_detail'].search(
+                        [('po_name', '=', po_name), ('product_name', '=', product_name)])
                     if not order_detail_id:
                         raise ValidationError(f'未找到 {product_color_code} 请联系管理员！')
 
@@ -207,13 +210,15 @@ class FastBlankPackingList(models.Model):
                     # 创建装箱单
                     self.create_packing_list(res, values)
 
-
-
             packing_list_record.packing_list_detail_line = values
+            # number_data = []
+            # for i in value:
+            #     self.env['leda.box.number.difference'].search([('box_number','=',i['box_num'])])
             if not packing_list_record.packing_list_detail_line:
                 packing_list_record.unlink()
 
-            packing_detail_follow_record = self.env['fast.packing_detail_follow'].search([('mixed_stowage_sequence', '>', 0)])
+            packing_detail_follow_record = self.env['fast.packing_detail_follow'].search(
+                [('mixed_stowage_sequence', '>', 0)])
             mixed_stowage_sequence = packing_detail_follow_record.mapped('mixed_stowage_sequence')
             if not packing_detail_follow_record:
                 mixed_stowage_sequence = [0]
@@ -415,7 +420,16 @@ class FastBlankPackingList(models.Model):
         for order in self:
             upc_tp = self.env['zebra.upc.template'].search([('code', '=', 'Product_Blank_CLP_LABEL')], limit=1)
             print_data += upc_tp.header_content
-            for box_number, rows in groupby(order.packing_list_detail_line, key=lambda x: x.box_number):
+
+            # 过滤相同的箱号
+            box_number_list = []
+            record_list = []
+            for record in order.packing_list_detail_line:
+                if record.box_number not in box_number_list:
+                    box_number_list.append(record.box_number)
+                    record_list.append(record)
+
+            for box_number, rows in groupby(record_list, key=lambda x: x.box_number):
                 html = """   """
                 y = 611
                 for line in rows:
@@ -428,7 +442,7 @@ class FastBlankPackingList(models.Model):
                     html += '\n'
                     print_data += upc_tp.content.format(box_number=box_number,
                                                         partner_name=order.partner_name or '',
-                                                        po=order.po,
+                                                        po=line.po,
                                                         date=order.delivery_date and order.delivery_date.strftime(
                                                             '%Y/%m/%d') or line.create_date.strftime('%Y/%m/%d'),
                                                         html=html
@@ -444,7 +458,8 @@ class FastBlankPackingListDetail(models.Model):
     erp_id = fields.Integer('erp_id')
     packing_list_id = fields.Many2one('fast.blank.packing_list', string='所属装箱单', ondelete='cascade')
     blank_order_detail_id = fields.Many2one('fast.blank_order_detail', string='所属订单明细', ondelete='cascade')
-    packing_detail_follow_id = fields.Many2one('fast.packing_detail_follow', string='所属装箱明细跟进', ondelete='cascade')
+    packing_detail_follow_id = fields.Many2one('fast.packing_detail_follow', string='所属装箱明细跟进',
+                                               ondelete='cascade')
     # po = fields.Char(string='PO#', related='packing_list_id.po', store=True)
     po = fields.Char(string='PO#')
     box_number = fields.Char(string='C/T NO箱号', default='New')
@@ -561,7 +576,7 @@ class FastBlankPackingListDetail(models.Model):
             html += '\n'
             print_data += upc_tp.content.format(box_number=order.box_number,
                                                 partner_name=order.processing_plant or '',
-                                                po=order.packing_list_id.po,
+                                                po=order.po,
                                                 date=order.packing_list_id.delivery_date and order.packing_list_id.delivery_date.strftime(
                                                     '%Y/%m/%d') or order.create_date.strftime('%Y/%m/%d'),
                                                 html=html
@@ -590,10 +605,12 @@ class FastBlankPackingListDetail(models.Model):
             })
         data = sorted(data, key=lambda x: BlankSize.index(x['size'].lower()))
         records_detail = self.search(
-            [('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage_sequence', '=', False)], order='id asc')
+            [('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage_sequence', '=', False)],
+            order='id asc')
         # 混装数据展示返回 html 页面
         mixed_stowage_records_detail = self.search(
-            [('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage_sequence', '>', 0), ('synch_state', '=', 'not_synch')], order='id asc')
+            [('product_color_name', '=', kwargs.get('product_code')), ('mixed_stowage_sequence', '>', 0),
+             ('synch_state', '=', 'not_synch')], order='id asc')
         mixed_stowage_records_json = mixed_stowage_records_detail.jsonify(
             ['id', 'size', 'quantity', 'synch_state', 'mixed_stowage_sequence', ('packing_detail_follow_id', ['id'])])
         mixed_stowage_sequence_value = {}
@@ -603,9 +620,11 @@ class FastBlankPackingListDetail(models.Model):
             mixed_stowage_sequence_value[item['mixed_stowage_sequence']].append(item)
         existing_data = records_detail.jsonify(['id', 'size', 'quantity', 'synch_state'])
         # 装箱操作返回非混装数据到 html 页面
-        domain = [('po', '=', po), ('product_color_name', '=', product_code), ('mixed_stowage_sequence', '=', False), ('synch', '=', False)]
+        domain = [('po', '=', po), ('product_color_name', '=', product_code), ('mixed_stowage_sequence', '=', False),
+                  ('synch', '=', False)]
         packing_detail_follow_res = self.env['fast.packing_detail_follow'].search(domain, order='id asc')
-        packing_detail_follow_val = packing_detail_follow_res.jsonify(['id', 'size', 'packing_quantity', 'number_units'])
+        packing_detail_follow_val = packing_detail_follow_res.jsonify(
+            ['id', 'size', 'packing_quantity', 'number_units'])
         # 超出占比配置
         packing_follow_config = self.env['fast.packing_follow.config'].sudo().search([], order='id asc')
         packing_follow_config_val = packing_follow_config.jsonify(['id', 'number', 'percentage'])
@@ -624,10 +643,9 @@ class FastBlankPackingListDetail(models.Model):
         response = requests.get(url=f'{Dev_url}/leda/fast_size_group', params={})
         print(response.json())
         return response.json()
+        # return {"code":"2000","msg":"成功","data":{"t":["XXS","XS","S","M","L","XL","2XL","3XL","4XL","5XL","6XL"],"s":["2T","3T","4T","4","5","6","7","8","8/10","10/12","12/14","14/16","16","18/20"]}}
 
-    @api.model
-    def packing_list_difference(self):
-        """ 调用接口，获取 erp 码数 """
+    def get_records_format_data(self):
         record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')],
                                                                           order='id asc')
         data = record.jsonify(
@@ -671,7 +689,77 @@ class FastBlankPackingListDetail(models.Model):
             new_data_val.update({'str': str})
             str = ''
             new_data.append(new_data_val)
+        return json.dumps({
+            "code": 200,
+            "msg": "请求成功",
+            'data': new_data
+        })
 
+        # data = []
+        # for record in self:
+        #     box_line = []
+        #     for line in record.detail_line:
+        #         box_line.append({
+        #             'id': line,
+        #             'product_id': line.product_id,
+        #             'size_name': line.size_name,
+        #             'product_qty': line.product_qty,
+        #             'practical_qty': line.practical_qty,
+        #         })
+        #     blank_size = ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', 'os', '2t', '3t', '4t',
+        #                   '4', '5', '6', '7', '8', '8/10', '10/12', '12/14', '14/16', '16', '18/20']
+        #     box_line = sorted(box_line, key=lambda k: blank_size.index(k['size_name'].lower()), reverse=False)
+        #     data.append({
+        #         'box_number': record.box_number,
+        #         'total_packing_qty': record.total_packing_qty,
+        #         'total_product_qty': record.total_product_qty,
+        #         'total_diff_qty': record.total_diff_qty,
+        #         'po': record.po,
+        #         'product_tmpl_id': record.product_tmpl_id,
+        #         'product_configuration_id': record.product_configuration_id,
+        #         'box_line': box_line
+        #     })
+        # return data
+
+    @api.model
+    def packing_list_difference(self):
+        record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')],
+                                                                          order='id asc')
+        data = record.jsonify(
+            ['id', 'box_number', 'po', 'style_number', 'color', 'size', 'quantity', 'received_quantity',
+             'difference_quantity'])
+        value = {}
+        for item in data:
+            value.update({item['box_number']: []})
+        for item in data:
+            value[item['box_number']].append(item)
+        new_data = []
+        for val in value.values():
+            new_data_val = {}
+            for index, item in enumerate(val):
+                if index == 0:
+                    new_data_val.update({
+                        'po': item['po'],  # 订单号
+                        'style_number': item['style_number'],  # 款号
+                        'color': item['color'],  # 颜色
+                        'box_number': item['box_number'],  # 箱号
+                        'hz_datas': [],  # 尺码 / 装箱件数 / 实收件数 / 差异件数
+                        'index': 0,
+                        'quantity_sum': 0,
+                        'received_quantity_sum': 0,
+                        'difference_quantity_sum': 0
+                    })
+                new_data_val['hz_datas'].append({
+                    'size': item['size'],
+                    'quantity': item['quantity'],
+                    'received_quantity': item['received_quantity'],
+                    'difference_quantity': item['difference_quantity'],
+                })
+                new_data_val['index'] = index + 1
+                new_data_val['quantity_sum'] += int(item['quantity'])
+                new_data_val['received_quantity_sum'] += int(item['received_quantity'])
+                new_data_val['difference_quantity_sum'] += int(item['difference_quantity'])
+            new_data.append(new_data_val)
         return json.dumps({
             "code": 200,
             "msg": "请求成功",
@@ -706,4 +794,3 @@ class FastPackingDetailFollow(models.Model):
                 record.synch = True
             else:
                 record.synch = False
-
