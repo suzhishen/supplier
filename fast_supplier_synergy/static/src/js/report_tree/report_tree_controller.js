@@ -11,6 +11,7 @@ export class report_tree_controller extends Component {
     setup() {
         const fields = this.props.fields;
         this.showActiveItems = false
+        this.actionService = useService("action");
         this.orm = useService("orm");
         this.model = useModel(this.props.Model, {
             resModel: this.props.resModel,
@@ -49,8 +50,8 @@ export class report_tree_controller extends Component {
         this.model.root.records.forEach((record) => {
             res_ids.push(record.resId)
         })
-        const action = await this.orm.call(this.props.resModel, 'btn_download_data_excel', [[], res_ids], {})
-        this.action.doAction(action)
+        const action = await this.orm.call(this.props.resModel, 'btn_download_data_excel', [[]], {})
+        this.actionService.doAction(action)
     }
 
     get display() {

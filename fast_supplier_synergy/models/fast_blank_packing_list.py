@@ -740,11 +740,9 @@ class FastBlankPackingListDetail(models.Model):
 
     @api.model
     def packing_list_difference(self):
-        record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')],
-                                                                          order='id asc')
+        record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')], order='id asc')
         data = record.jsonify(
-            ['id', 'box_number', 'po', 'style_number', 'color', 'size', 'quantity', 'received_quantity',
-             'difference_quantity'])
+            ['id', 'box_number', 'po', 'style_number', 'color', 'size', 'quantity', 'received_quantity', 'difference_quantity'])
         value = {}
         for item in data:
             value.update({item['box_number']: []})
@@ -782,6 +780,68 @@ class FastBlankPackingListDetail(models.Model):
             "msg": "请求成功",
             'data': new_data
         })
+
+    def btn_download_data_excel(self):
+        print('下载收货差异 excel')
+        try:
+            record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')], order='id asc')
+            size = list(set(record.mapped('size')))
+            erp_all_size = self.get_rep_size_list()
+            size_list = []
+            if erp_all_size['code'] == '200' and erp_all_size['msg'] == '成功':
+                all_size_list = erp_all_size['data']['t'] + erp_all_size['data']['s']
+                size_list = sorted(size, key=lambda x: all_size_list.index(x))
+            headers = ['#', '订单号', '款号', '款色', '箱号', '装箱总数'] + size_list
+            row_datas = []
+            seq = 1
+            data = record.jsonify( ['id', 'box_number', 'po', 'style_number', 'color', 'size', 'quantity', 'received_quantity', 'difference_quantity'])
+            value = {}
+            for item in data:
+                value.update({item['box_number']: []})
+            for item in data:
+                value[item['box_number']].append(item)
+            for val in value.values():
+                new_data_val = {}
+                for index, item in enumerate(val):
+                    if index == 0:
+                        new_data_val.update({
+                            'po': item['po'],  # 订单号
+                            'style_number': item['style_number'],  # 款号
+                            'color': item['color'],  # 颜色
+                            'box_number': item['box_number'],  # 箱号
+                            'hz_datas': [],  # 尺码 / 装箱件数 / 实收件数 / 差异件数
+                            'index': 0,
+                            'quantity_sum': 0,
+                            'received_quantity_sum': 0,
+                            'difference_quantity_sum': 0
+                        })
+                    new_data_val['hz_datas'].append({
+                        'size': item['size'],
+                        'quantity': item['quantity'],
+                        'received_quantity': item['received_quantity'],
+                        'difference_quantity': item['difference_quantity'],
+                    })
+                    new_data_val['index'] = index + 1
+                    new_data_val['quantity_sum'] += int(item['quantity'])
+                    new_data_val['received_quantity_sum'] += int(item['received_quantity'])
+                    new_data_val['difference_quantity_sum'] += int(item['difference_quantity'])
+
+                size_datas = []
+                for now_size in size_list:
+                    order_qty = [f"{x['quantity']} / {x['received_quantity']} / {x['difference_quantity']}" for x in new_data_val['hz_datas'] if x['size'] == now_size]
+                    order_qty = '' if not order_qty else order_qty[0]
+                    size_datas.append(order_qty)
+                all_size_number = [f"{new_data_val['quantity_sum']} / {new_data_val['received_quantity_sum']} / {new_data_val['difference_quantity_sum']}"]
+
+                line_data = [seq, new_data_val['po'], new_data_val['style_number'], new_data_val['color'], new_data_val['box_number']]
+                line_data += all_size_number + size_datas
+                row_datas.append(line_data)
+                seq += 1
+            return self.env['fast.data.product.template.download'].__get_or_create_work_book_xlsx_datas__(
+                '空白版订单跟进.xlsx', headers, row_datas)
+        except Exception as error:
+            raise UserError(error)
+
 
 
 class FastPackingDetailFollow(models.Model):
