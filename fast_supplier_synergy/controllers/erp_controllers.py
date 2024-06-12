@@ -726,7 +726,7 @@ class ErpController(http.Controller):
             message = f'同步失败 {e}'
             code = 400
         return {
-            'code': 200,
+            'code': code,
             'msg': message
         }
 

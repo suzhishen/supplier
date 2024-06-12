@@ -33,8 +33,9 @@
         'views/fast_blank_packing_list_views.xml',
         'views/fast_packing_config_views.xml',
         'views/fast_config_dev_views.xml',
-        'views/report_forms_views.xml',
+        # 'views/report_forms_views.xml',
         'views/report_view.xml',
+        'views/collect_report_view.xml',
         # 订单跟进（主辅料查看详情）
         'wizard/fast_supplier_order_blank_wizard/fast_supplier_order_blank_wizard_view.xml',
         'views/menu_views.xml',
@@ -70,10 +71,14 @@
             'fast_supplier_synergy/static/src/js/report_tree/*.js',
             'fast_supplier_synergy/static/src/js/report_tree/*.xml',
             'fast_supplier_synergy/static/src/js/report_tree/*.scss',
-            # 差异报表1
-            'fast_supplier_synergy/static/src/js/report_forms/*.js',
-            'fast_supplier_synergy/static/src/js/report_forms/*.xml',
-            'fast_supplier_synergy/static/src/js/report_forms/*.scss',
+            # # 差异报表汇总
+            'fast_supplier_synergy/static/src/js/collect_report_tree/*.js',
+            'fast_supplier_synergy/static/src/js/collect_report_tree/*.xml',
+            'fast_supplier_synergy/static/src/js/collect_report_tree/*.scss',
+            # # 差异报表layui
+            # 'fast_supplier_synergy/static/src/js/report_forms/*.js',
+            # 'fast_supplier_synergy/static/src/js/report_forms/*.xml',
+            # 'fast_supplier_synergy/static/src/js/report_forms/*.scss',
             # # 进入form时更新基础数据
             # 'fast_supplier_synergy/static/src/js/update_basic/*.js',
         ],

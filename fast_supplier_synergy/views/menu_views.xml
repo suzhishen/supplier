@@ -19,7 +19,8 @@
         <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40" groups="supplier_users.kbbzxd_group_category"/>
         <menuitem id="blank_packing_list_menu_line_list" name="空白版装箱单" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_action_view" sequence="10"/>
 `
-        <menuitem id="report_difference_menu" parent="blank_packing_list_menu_line" name="收货差异表" action="report_difference_action"  groups="supplier_users.cybb_group_category"/>
+        <menuitem id="report_difference_menu" parent="blank_packing_list_menu_line" name="收货差异表" action="report_difference_action"  groups="supplier_users.cybb_group_category" sequence="20"/>
+        <menuitem id="collect_report_difference_action_menu" name="汇总差异报表" parent="blank_packing_list_menu_line" action="collect_report_difference_action"  groups="supplier_users.cybb_group_category" sequence="30"/>
 
         <menuitem id="fast_config_menu_line" name="配置" parent="supplier_synergy_menu" sequence="40" groups="supplier_users.pz_group_category"/>
         <menuitem id="fast_packing_config_menu_line_list" name="配置装箱超出占比" parent="fast_config_menu_line" action="fast_packing_follow_config_action_view" sequence="10"/>

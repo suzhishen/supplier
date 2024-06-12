@@ -1,0 +1,74 @@
+.report-table-container {
+  //height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px;
+}
+
+.report-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  height: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+.report-table-container thead, .report-table-container tbody {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+.report-table-container thead {
+  position: sticky;
+  top: 0;
+}
+
+.report-table-container th, .report-table-container td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-table-container th {
+  background-color: #343a40;
+  color: #ffffff;
+}
+
+.report-table-container tbody {
+  display: block;
+  overflow-y: auto;
+  height: calc(92vh - 60px); /* Adjust for padding, header height, and other elements */
+}
+
+.report-table-container tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.report-table-container tbody tr:nth-child(odd) {
+  background-color: #f8f9fa;
+}
+
+.report-table-container tbody tr:nth-child(even) {
+  background-color: #e9ecef;
+}
+
+.report-table-container td.report-total_packing_qty {
+  color: #b3b3b3;
+}
+
+.report-table-container td.report-total_product_qty {
+  color: #28a745;
+}
+
+.report-table-container td.report-total_diff_qty {
+  color: #dc3545;
+}

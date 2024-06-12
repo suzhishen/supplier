@@ -738,6 +738,7 @@ class FastBlankPackingListDetail(models.Model):
         #     })
         # return data
 
+    # 收货差异报表
     @api.model
     def packing_list_difference(self):
         record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')], order='id asc')
@@ -781,8 +782,8 @@ class FastBlankPackingListDetail(models.Model):
             'data': new_data
         })
 
+    # 收货差异报表下载excel
     def btn_download_data_excel(self):
-        print('下载收货差异 excel')
         try:
             record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')], order='id asc')
             size = list(set(record.mapped('size')))
@@ -842,6 +843,42 @@ class FastBlankPackingListDetail(models.Model):
         except Exception as error:
             raise UserError(error)
 
+    # 收货差异报表汇总
+    @api.model
+    def collect_packing_list_difference(self):
+        try:
+            sql="""
+                SELECT
+                    A.po,
+                    A.product_color_name,
+                    A.size,
+                    SUM ( A.quantity ) as quantity,
+                    SUM ( A.received_quantity )  as received_qty
+                FROM
+                    fast_blank_packing_list_detail A
+                WHERE
+                    1=1
+                    AND A.receive_state = 'have_receive'
+                GROUP BY
+                    A.po,
+                    A.product_color_name,
+                    A.size
+                    """
+            self._cr.execute(sql)
+            result = self._cr.fetchall()
+            lines = []
+            for item in result:
+                lines.append({
+                    'po': item[0],
+                    'product_name': item[1],
+                    'size_name': item[2],
+                    'total_packing_qty': item[3],
+                    'total_product_qty': item[4],
+                    'total_diff_qty': item[3] - item[4],
+                })
+            return {'lines': lines}
+        except Exception as e:(
+            _logger.warning(e))
 
 
 class FastPackingDetailFollow(models.Model):

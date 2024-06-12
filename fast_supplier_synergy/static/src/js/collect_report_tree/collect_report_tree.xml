@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="fast_supplier_synergy.ReportTest" owl="1">
+        <div class="report-table-container">
+            <h1>汇总差异数: 订单号 + 款色 + 尺码</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PO号</th>
+                        <th>款色</th>
+                        <th>尺码</th>
+                        <th>装箱数</th>
+                        <th>实收数</th>
+                        <th>差异数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.lineDatas" t-as="line" t-key="line_index">
+                        <tr>
+                            <td><t t-esc="line['po']"/></td>
+                            <td><t t-esc="line['product_name']"/></td>
+                            <td><t t-esc="line['size_name']"/></td>
+                            <td class="report-total_packing_qty"><t t-esc="line['total_packing_qty']"/></td>
+                            <td class="report-total_product_qty"><t t-esc="line['total_product_qty']"/></td>
+                            <td class="report-total_diff_qty"><t t-esc="line['total_diff_qty']"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>
