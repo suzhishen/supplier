@@ -15,7 +15,7 @@
                         <group col="3">
                             <group>
 <!--                                <field name="po" readonly="1"/>-->
-                                <field name="partner_name" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
                                 <field name="shipping" request="1"/>
                             </group>
                             <group>
@@ -62,7 +62,7 @@
             <field name="arch" type="xml">
                 <tree string="Blank Packing List" js_class="blank_clp_button_list">
 <!--                    <field name="po"/>-->
-                    <field name="partner_name"/>
+                    <field name="company_id"/>
                     <field name="tracking_number"/>
                     <field name="delivery_date"/>
                     <field name="total_quantity"/>

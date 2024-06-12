@@ -46,15 +46,15 @@
                                     <div class="boxed-size-child" t-foreach="data.incomplete_line" t-as="line"
                                          t-key="line_index">
                                         <span class="boxed-size-name" t-esc="line.size_name"/>
-                                        <span t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
+                                        <span t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}" t-att-class="'All' + '-' + data.po + '-' + data.product_tmpl_code + '-' + line.size_name"
                                               t-esc="line.product_qty"/>
                                         <span style="color: green"> / </span>
-                                        <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"
+                                        <span t-att-class="data.po + '-' + data.product_tmpl_code + '-' + line.size_name" style="color: green"
                                               t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
                                               t-esc="line.have_packed_qty"/>
                                         <t t-if="line.product_qty - line.have_packed_qty > 0">
-                                            <span style="color: green"> / </span>
-                                            <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: red"
+                                            <span style="color: green" t-att-class="'NotFh' + '-' + data.po + '-' + data.product_tmpl_code + '-' + line.size_name"> / </span>
+                                            <span style="color: red" t-att-class="'Not' + '-' + data.po + '-' + data.product_tmpl_code + '-' + line.size_name"
                                                   t-esc="line.product_qty - line.have_packed_qty"/>
                                         </t>
                                     </div>

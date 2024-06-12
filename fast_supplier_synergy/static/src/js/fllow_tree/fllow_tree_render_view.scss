@@ -209,6 +209,11 @@
     }
   }
 
+  .change-date {
+    width: 8vw;
+    text-align: center;
+  }
+
   .zx_btn {
     width: 4vw !important;
 
@@ -236,18 +241,36 @@
     width: 5vw !important;
   }
 
-  .material-state {
-    width: 6vw !important;
+  .main-material-state {
+    width: 7vw !important;
 
-    .material-state-parent {
+    .main-material-state-parent {
       display: flex;
 
-      .material-state-child {
+      .main-material-state-child {
         align-self: center;
         flex: 4;
       }
 
-      .material-state-btn {
+      .main-material-state-btn {
+        align-self: center;
+        flex: 1;
+      }
+    }
+  }
+
+  .sub-material-state {
+    width: 7vw !important;
+
+    .sub-material-state-parent {
+      display: flex;
+
+      .sub-material-state-child {
+        align-self: center;
+        flex: 4;
+      }
+
+      .sub-material-state-btn {
         align-self: center;
         flex: 1;
       }

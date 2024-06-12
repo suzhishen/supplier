@@ -15,7 +15,8 @@ export const report_tree_view = {
     Renderer: report_tree_renderer,
     ArchParser: XMLParser,
     Model: RelationalModel,
-    searchMenuTypes: ["filter"],
+    searchMenuTypes: [],
+    // searchMenuTypes: ["filter"],
     multiRecord: true,
     buttonTemplate: 'fast_supplier_synergy.report_tree_view.Buttons',
 

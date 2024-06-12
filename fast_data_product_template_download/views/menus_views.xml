@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="模板下载" id="fast_data_product_template_download_root" sequence="9999"
+              web_icon="fast_data_product_template_download,static/description/icon.png"/>
+
+    <menuitem id="menu_fast_data_product_template_download_sever" name="数据模板下载"
+              action="fast_data_product_template_download_sever"
+              parent="fast_data_product_template_download_root"
+              sequence="10"/>
+</odoo>

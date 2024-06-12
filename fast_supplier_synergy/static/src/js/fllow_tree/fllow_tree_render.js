@@ -236,8 +236,16 @@ export class FllowTreeRender extends Component {
         this.actionService.doAction(result);
     }
 
-    async viewStyleMaterialDetailInfo(data) {
-        let result = await this.ormService.call(this.props.resModel, 'btn_view_outsource_blank_order_line_material_detail', [[]], {
+    async viewMainMaterialDetailInfo(data) {
+        console.log(data)
+        let result = await this.ormService.call(this.props.resModel, 'btn_view_order_line_main_material_detail', [[]], {
+            po: data.po
+        })
+        this.actionService.doAction(result);
+    }
+
+    async viewSubMaterialDetailInfo(data) {
+        let result = await this.ormService.call(this.props.resModel, 'btn_view_order_line_sub_material_detail', [[]], {
             line_ids: data.line_ids
         })
         this.actionService.doAction(result);

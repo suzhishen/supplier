@@ -1,0 +1,316 @@
+// Normal views
+.o_content,
+.modal-content {
+  max-width: 100%;
+
+  .o_form_readonly, .o_form_editable {
+    .o_form_sheet {
+      max-width: calc(100% - 32px) !important;
+      overflow-x: auto;
+    }
+
+    .o_row:not(.o_row_readonly) {
+      &, & > div {
+        display: flex;
+      }
+    }
+
+    //.o_cell .o_form_label:not(.o_status):not(.o_calendar_invitation) {
+    //  min-height: 23px;
+    //  @include media-breakpoint-up(md) {
+    //    margin-bottom: 10px;
+    //  }
+    //}
+    //
+    //.o_horizontal_separator {
+    //  font-size: 14px;
+    //}
+    //
+    //// Some UX improvements for form in edit mode
+    //@include media-breakpoint-down(sm) {
+    //  .nav-item {
+    //    border-bottom: 1px solid #dee2e6;
+    //  }
+    //  .nav-tabs {
+    //    border-bottom: none;
+    //  }
+    //  &.o_form_readonly .o_field_widget {
+    //    &:not(.o_stat_info):not(.o_readonly_modifier):not(.oe_form_field_html):not(.o_field_image) {
+    //      min-height: 35px;
+    //    }
+    //
+    //    .o_x2m_control_panel {
+    //      margin-bottom: 10px;
+    //    }
+    //
+    //    &.o_field_float_percentage,
+    //    &.o_field_monetary,
+    //    &.o_field_many2many_selection,
+    //    .o_field_many2one_selection {
+    //      align-items: center;
+    //    }
+    //
+    //    .o_field_many2one_selection .o_input_dropdown,
+    //    &.o_datepicker,
+    //    &.o_partner_autocomplete_info {
+    //      input {
+    //        min-height: 35px;
+    //      }
+    //    }
+    //
+    //    .o_external_button {
+    //      margin-left: 10px;
+    //    }
+    //
+    //    .o_dropdown_button,
+    //    .o_datepicker_button {
+    //      top: 8px;
+    //      right: 6px;
+    //      bottom: auto;
+    //    }
+    //
+    //    .o_field_many2many_selection .o_dropdown_button {
+    //      top: 0 !important;
+    //    }
+    //  }
+    //}
+    //
+    //// Sticky statusbar
+    //
+    //.o_form_statusbar {
+    //  position: sticky !important;
+    //  top: 0;
+    //  z-index: 2;
+    //}
+    //
+    //// Support for long title (with ellipsis)
+    //.oe_title {
+    //  .o_field_widget:not(.oe_inline) {
+    //    display: block;
+    //
+    //    span:not(.o_field_translate) {
+    //      display: block;
+    //      max-width: 100%;
+    //      text-overflow: ellipsis;
+    //      white-space: nowrap;
+    //      overflow: hidden;
+    //      width: initial;
+    //
+    //      &:active {
+    //        white-space: normal;
+    //      }
+    //    }
+    //  }
+    //}
+    //
+    //@include media-breakpoint-down(sm) {
+    //  min-width: auto;
+    //
+    //  // More buttons border
+    //  .oe_button_box {
+    //    .o_dropdown_more {
+    //      button:last-child {
+    //        border-right: 1px solid $gray-400 !important;
+    //      }
+    //    }
+    //  }
+    //
+    //  .oe_button_box + .oe_title,
+    //  .oe_button_box + .oe_avatar + .oe_title {
+    //    width: 100%;
+    //  }
+    //
+    //  // Avoid overflow on modals
+    //  .o_form_sheet {
+    //    min-width: auto;
+    //  }
+    //
+    //  // Render website inputs properly in phones
+    //  .o_group .o_field_widget.o_text_overflow {
+    //    // Overrides another !important
+    //    width: auto !important;
+    //  }
+    //
+    //  // Full width in form sheets
+    //  .o_form_sheet,
+    //  .o_FormRenderer_chatterContainer {
+    //    min-width: auto;
+    //    max-width: 98% !important;
+    //  }
+    //
+    //  // Settings pages
+    //  .app_settings_block {
+    //    .row {
+    //      margin: 0;
+    //    }
+    //  }
+    //
+    //  .o_FormRenderer_chatterContainer {
+    //    padding-top: initial;
+    //
+    //    // Display send button on small screens
+    //    .o_Chatter_composer {
+    //      &.o-has-current-partner-avatar {
+    //        grid-template-columns: 0px 1fr;
+    //        padding: 1rem 1rem 1.5rem 1rem !important;
+    //      }
+    //
+    //      .o_Composer_sidebarMain {
+    //        display: none;
+    //      }
+    //    }
+    //  }
+    //}
+    .o_form_nosheet {
+      padding-top: 0px !important;
+    }
+  }
+
+
+}
+
+.o_horizontal_separator.mt-4.mb-3.text-uppercase.fw-bolder.small {
+  position: relative;
+  font-size: 14px;
+}
+
+.o_group {
+  .o_horizontal_separator.mt-4.mb-3.text-uppercase.fw-bolder.small::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 12px;
+    background-color: var(--primary);
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+  }
+}
+
+.g-col-sm-2 {
+  .o_horizontal_separator.mt-4.mb-3.text-uppercase.fw-bolder.small::before {
+    content: "";
+    display: block;
+    width: 10px;
+    height: 12px;
+    background-color: var(--primary);
+    position: absolute;
+    bottom: 4px;
+    left: -12px;
+  }
+}
+
+.o_notebook .nav-link.active {
+  //background: var(--primary);
+  //font-weight: bold;
+  //color: white;
+  //border-radius: 6px;
+
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media (min-width: 992px) {
+  .o_form_view .o_notebook {
+    --notebook-margin-x: -20px;
+    --notebook-padding-x: 0px !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .o_FormRenderer_chatterContainer:not(.o-aside):not(.o-full-width) .o_ChatterContainer {
+    max-width: 100%;
+  }
+}
+
+div.cus-button-layout-5 {
+  button {
+    margin-left: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+//.o_form_view .o_notebook > .tab-content > .tab-pane {
+//    padding: 6px 0 !important;
+//}
+
+.o_notification_manager {
+  width: 700px !important;
+  //font-size: 35px !important;
+  @include o-position-absolute(50%, 500px, 500px, 550px);
+}
+
+//.modal-content {
+//  margin: 0 auto !important;
+//  display: flex !important;
+//  position: absolute !important;
+//  left: 50% !important;
+//  top: 50% !important;
+//  transform: translate(-50%, -50%) !important;
+//}
+
+.mk_apps_sidebar_panel {
+  z-index: 999;
+}
+
+.o_content .o_form_sheet_bg > .statusbar-wrapper {
+  position: fixed !important;
+  width: 100%;
+  z-index: 2;
+  left: 0;
+}
+
+@include media-breakpoint-up(lg) {
+  .mk_sidebar_type_large {
+    .o_content .o_form_sheet_bg > .statusbar-wrapper {
+      padding-left: $mk-sidebar-large-width;
+    }
+  }
+  .mk_sidebar_type_small {
+    .o_content .o_form_sheet_bg > .statusbar-wrapper {
+      padding-left: $mk-sidebar-small-width;
+    }
+
+  }
+}
+
+@include media-breakpoint-only(md) {
+  .mk_sidebar_type_large, .mk_sidebar_type_small {
+    .o_content .o_form_sheet_bg > .statusbar-wrapper {
+      padding-left: $mk-sidebar-small-width;
+    }
+  }
+}
+
+.border-bottom-cus {
+  border-bottom: 1px solid $border-color;
+}
+
+.o_form_editable {
+  .border-bottom-cus {
+    border-bottom: 0 !important;
+  }
+}
+
+.o_form_saved {
+  .border-bottom-cus {
+    border-bottom: 1px solid $border-color !important;
+  }
+}
+
+.o_list_renderer .o_list_table thead .o_list_number_th {
+  text-align: start !important;
+
+  .flex-row-reverse {
+    flex-direction: row !important;
+  }
+}
+
+.o_list_renderer .o_list_table tbody > tr > td.o_list_number:not(.o_list_record_selector) {
+  text-align: start !important;
+}
+
+.o_list_renderer .o_list_table tfoot .o_list_number {
+  text-align: start !important;
+}

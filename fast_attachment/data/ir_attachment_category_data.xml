@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_attachment_category_all" model="ir.attachment.category">
+            <field name="name">全部</field>
+            <field name="is_expand" eval="True"/>
+        </record>
+
+        <record id="ir_attachment_category_process_sheet" model="ir.attachment.category">
+            <field name="name">工艺单</field>
+            <field name="parent_id" ref="fast_attachment.ir_attachment_category_all"/>
+        </record>
+
+        <record id="ir_attachment_category_frame_diagram" model="ir.attachment.category">
+            <field name="name">纸样</field>
+            <field name="parent_id" ref="fast_attachment.ir_attachment_category_all"/>
+        </record>
+
+        <record id="ir_attachment_category_size_table" model="ir.attachment.category">
+            <field name="name">尺寸表</field>
+            <field name="parent_id" ref="fast_attachment.ir_attachment_category_all"/>
+        </record>
+
+        <record id="ir_attachment_category_sc" model="ir.attachment.category">
+            <field name="name">SC 修改意见</field>
+            <field name="parent_id" ref="fast_attachment.ir_attachment_category_all"/>
+        </record>
+
+        <record id="ir_attachment_category_other" model="ir.attachment.category">
+            <field name="name">其它</field>
+            <field name="parent_id" ref="fast_attachment.ir_attachment_category_all"/>
+        </record>
+    </data>
+</odoo>

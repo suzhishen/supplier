@@ -3,30 +3,26 @@
     <data>
         <menuitem name="供应商协同端" id="supplier_synergy_menu" sequence="20"/>
 
-        <menuitem name="基础资料" id="blank_configuration_menu" parent="supplier_synergy_menu" action="blank_configuration_action_view" sequence="10"/>
+        <menuitem name="基础资料" id="blank_configuration_menu" parent="supplier_synergy_menu" action="blank_configuration_action_view" sequence="10" groups="supplier_users.jczl_group_category"/>
 <!--        <menuitem name="基础资料" id="blank_configuration_menu" parent="supplier_synergy_menu" sequence="10"/>-->
 <!--        <menuitem name="基础资料" id="blank_configuration_menu_line" parent="blank_configuration_menu" action="blank_configuration_action_view" sequence="10"/>-->
 
-        <menuitem name="订单中心" id="blank_order_menu" parent="supplier_synergy_menu"  action="supplier_order_blank_fob_action_view" sequence="20"/>
+        <menuitem name="订单中心" id="blank_order_menu" parent="supplier_synergy_menu"  action="supplier_order_blank_fob_action_view" sequence="20" groups="supplier_users.ddzx_group_category"/>
 <!--        <menuitem name="订单中心" id="blank_order_menu" parent="supplier_synergy_menu"  sequence="30"/>-->
 <!--        <menuitem name="订单中心" id="blank_order_menu_line" parent="blank_order_menu" action="supplier_order_blank_fob_action_view" sequence="10"/>-->
 
         <menuitem name="订单跟进" id="menu_fast_outsource_order_blank_line_action_fllow" parent="supplier_synergy_menu" sequence="30"
-                  action="fast_outsource_order_blank_line_action_fllow"/>
+                  action="fast_outsource_order_blank_line_action_fllow" groups="supplier_users.ddgj_group_category"/>
 
-        <menuitem id="packing_quantity_list_menu_line" name="装箱操作" parent="supplier_synergy_menu" sequence="35" action="fast_packing_action_fllow"/>
+        <menuitem id="packing_quantity_list_menu_line" name="装箱操作" parent="supplier_synergy_menu" sequence="35" action="fast_packing_action_fllow" />
 
-        <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40"/>
+        <menuitem id="blank_packing_list_menu_line" name="空白版装箱单" parent="supplier_synergy_menu" sequence="40" groups="supplier_users.kbbzxd_group_category"/>
         <menuitem id="blank_packing_list_menu_line_list" name="空白版装箱单" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_action_view" sequence="10"/>
+`
+        <menuitem id="report_difference_menu" parent="blank_packing_list_menu_line" name="收货差异表" action="report_difference_action"  groups="supplier_users.cybb_group_category"/>
 
-        <menuitem id="report_difference_menu" parent="blank_packing_list_menu_line" name="收货差异表" action="report_difference_action"/>
-<!--        <menuitem name="差异报表1" id="blank_packing_list_detail_menu_line" parent="blank_packing_list_menu_line" action="fast_blank_packing_list_report_action_view" sequence="40"/>-->
-
-<!--        <menuitem id="financial_management_menu_line" name="财务管理" parent="supplier_synergy_menu" sequence="40"/>-->
-<!--        <menuitem id="financial_management_menu_line_list" name="财务信息" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="10"/>-->
-<!--        <menuitem name="往来账" id="financial_management_detail_menu_line" parent="financial_management_menu_line" action="fast_blank_packing_list_report_action_view" sequence="20"/>-->
-
-        <menuitem id="fast_config_menu_line" name="配置" parent="supplier_synergy_menu" sequence="40"/>
+        <menuitem id="fast_config_menu_line" name="配置" parent="supplier_synergy_menu" sequence="40" groups="supplier_users.pz_group_category"/>
         <menuitem id="fast_packing_config_menu_line_list" name="配置装箱超出占比" parent="fast_config_menu_line" action="fast_packing_follow_config_action_view" sequence="10"/>
+        <menuitem id="fast_config_dev_menu_line" name="配置对接地址" parent="fast_config_menu_line" action="fast_config_dev_action_view" sequence="100"/>
     </data>
 </odoo>

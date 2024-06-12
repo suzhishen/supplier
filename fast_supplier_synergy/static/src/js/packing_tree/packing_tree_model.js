@@ -36,7 +36,10 @@ export class PackingTreeModel extends Model{
     _prepareData(result){
         this.state.order_datas = this.ormDatas
         this.state.foot_order_line_total = result.foot_order_line_total
+        this.state.foot_not_received_line_total = result.foot_not_received_line_total
         this.state.foot_incoming_line_total = result.foot_incoming_line_total
+        this.state.foot_packing_line_total = result.foot_packing_line_total
+        this.state.foot_not_packing_line_total = result.foot_not_packing_line_total
         this.state.foot_incomplete_line_total = result.foot_incomplete_line_total
     }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="maxima.web.X2ManyField" t-inherit="web.X2ManyField" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_cp_pager')]" position="inside">
+            <div t-if="props.value.count > 0 and showDownload">
+                <button type="button" class="btn btn-secondary fa fa-download o_list_export_xlsx" data-tooltip="Export All" aria-label="Export All" t-on-click="onDirectExportData"/>
+            </div>
+        </xpath>
+    </t>
+</templates>
+
+

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attachment_search_fast_attachment" model="ir.ui.view">
+        <field name="name">ir.attachment.search.fast_attachment</field>
+        <field name="model">ir.attachment</field>
+        <field name="arch" type="xml">
+            <search string="Attachments">
+                <field name="name" filter_domain="[('name','ilike',self)]" string="文件名称"/>
+                <field name="categ_id"/>
+                <field name="create_date"/>
+                <filter name="my_documents_filter"
+                        string="我的文件"
+                        domain="[('create_uid','=',uid)]"
+                        help="我创建的文件"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_categ_id" string="文件类别" domain="[]" context="{'group_by':'categ_id'}"/>
+                    <filter name="owner" string="所有者" domain="[]" context="{'group_by':'create_uid'}"/>
+                    <filter string="创建时间" name="creation_month" domain="[]"
+                            context="{'group_by':'create_date'}"/>
+                </group>
+                <searchpanel>
+                    <field name="categ_id" string="文件类别" icon="fa-filter" color="#875A7B" enable_counters="1"
+                           expand="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_document_file_tree_fast_attachment">
+        <field name="name">ir.attachment.tree.fast_attachment</field>
+        <field name="model">ir.attachment</field>
+        <field name="arch" type="xml">
+            <tree edit="false" create="false" delete="false">
+                <field name="name"/>
+                <field name="categ_id"/>
+                <field name="create_uid"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_document_file_form_fast_attachment">
+        <field name="name">ir.attachment.form.fast_attachment</field>
+        <field name="model">ir.attachment</field>
+        <field name="arch" type="xml">
+            <form string="Attachments">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="datas" filename="name" attrs="{'invisible':[('type','=','url')]}"
+                                   string="文件"/>
+                            <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                            <field name="mimetype"/>
+                            <field name="categ_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_document_file_kanban_fast_attachment">
+        <field name="name">ir.attachment.kanban.fast_attachment</field>
+        <field name="model">ir.attachment</field>
+        <field name="arch" type="xml">
+            <kanban edit="false" create="false" delete="false" import="false">
+                <field name="id"/>
+                <field name="mimetype"/>
+                <field name="type"/>
+                <field name="create_uid"/>
+                <field name="url"/>
+                <field name="create_date"/>
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_area oe_kanban_global_click o_kanban_attachment">
+                            <div class="row">
+                                <div class="offset-10">
+                                    <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                        <a role="button" class="dropdown-toggle o-no-caret btn"
+                                           data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu"
+                                           title="Dropdown menu">
+                                            <span class="fa fa-ellipsis-v"/>
+                                        </a>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a class="dropdown-item" type="object" name="action_download_file">下载</a>
+                                            <a t-if="widget.deletable" role="menuitem" type="delete"
+                                               class="dropdown-item">删除
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_image">
+                                <div class="o_kanban_image_wrapper">
+                                    <t t-set="webimage"
+                                       t-value="new RegExp('image.*(gif|jpeg|jpg|png)').test(record.mimetype.value)"/>
+                                    <div t-if="record.type.raw_value == 'url'"
+                                         class="o_url_image fa fa-link fa-3x text-muted" aria-label="Image is a link"/>
+                                    <img t-elif="webimage" t-attf-src="/web/image/#{record.id.raw_value}" width="100"
+                                         height="100" alt="Document" class="o_attachment_image"/>
+                                    <div t-else="!webimage" class="o_image o_image_thumbnail"
+                                         t-att-data-mimetype="record.mimetype.value"/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_details">
+                                <div class="o_kanban_details_wrapper">
+                                    <div t-att-title="record.name.raw_value" class="o_kanban_record_title">
+                                        <field name="name" class="o_text_overflow"/>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <t t-if="record.type.raw_value == 'url'">
+                                            <span class="o_document_url">
+                                                <i class="fa fa-globe" aria-label="Document url"/>
+                                                <field name="url" widget="url"/>
+                                            </span>
+                                        </t>
+                                        <samp t-else="" class="text-muted"></samp>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <time class="oe_kanban_bottom_left">
+                                            <field name="create_date" widget="date"/>
+                                        </time>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="create_uid" widget="many2one_avatar_user"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_attachment_fast_attachment" model="ir.actions.act_window">
+        <field name="name">文件</field>
+        <field name="view_mode">kanban,tree</field>
+        <field name="res_model">ir.attachment</field>
+        <field name="search_view_id" ref="view_attachment_search_fast_attachment"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_document_file_kanban_fast_attachment')}),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_document_file_tree_fast_attachment')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                创建新的文件
+            </p>
+        </field>
+    </record>
+</odoo>

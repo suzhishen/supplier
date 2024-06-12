@@ -1,0 +1,9 @@
+.o_form_view .o_inner_group {
+    --columns: 1;
+    gap: 0.1rem 16px !important;
+    margin-bottom: 0 !important;
+}
+
+.o_form_view .oe_title > h1, .o_form_view .oe_title > .h1 {
+    min-height: 0 !important;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="zebra_upc_template_tree" model="ir.ui.view">
+        <field name="name">zebra_upc_template_tree</field>
+        <field name="model">zebra.upc.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="remark"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="zebra_upc_template_form" model="ir.ui.view">
+        <field name="name">zebra_upc_template_form</field>
+        <field name="model">zebra.upc.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="code" required="1"/>
+                            <field name="remark"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="header_content" required="1"/>
+                        <field name="content" required="1"/>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="zebra_upc_template_action" model="ir.actions.act_window">
+        <field name="name">UPC模板</field>
+        <field name="res_model">zebra.upc.template</field>
+    </record>
+
+</odoo>

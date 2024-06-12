@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fast_data_product_template_download,fast_data_product_template_download,model_fast_data_product_template_download,,1,1,1,1

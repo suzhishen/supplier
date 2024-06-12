@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="fast.web.FormControlPanel" t-inherit="web.FormControlPanel" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_cp_top')]" position="after">
+            <div t-if="!env.isSmall" class="o_cp_action_buttons d-flex">
+                <div class="o_cp_action_button_left d-flex flex-grow-1">
+                    <t t-slot="control-panel-create-button"/>
+                    <t t-slot="control-panel-status-indicator"/>
+                </div>
+                <div class="o_cp_action_button_right d-flex flex-grow-1 justify-content-between">
+                    <t t-slot="control-panel-action-menu"/>
+                    <div t-if="pagerProps and pagerProps.total > 0" class="o_cp_pager" role="search">
+                        <Pager t-props="pagerProps"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[hasclass('o_cp_bottom_right')]" position="attributes">
+            <attribute name="t-if">env.isSmall</attribute>
+        </xpath>
+    </t>
+
+     <t t-name="fast.web.FormStatusIndicator" t-inherit="web.FormStatusIndicator" t-inherit-mode="extension" owl="1">
+
+         <xpath expr="//button[hasclass('o_form_button_save')]" position="attributes">
+             <attribute name="class" add="btn-primary" remove="btn-light" separator=" "/>
+         </xpath>
+
+         <xpath expr="//button/i[hasclass('fa-cloud-upload')]" position="after">
+             <span t-if="!env.isSmall">保存</span>
+         </xpath>
+
+         <xpath expr="//button/i[hasclass('fa-undo')]" position="after">
+             <span t-if="!env.isSmall">丢弃</span>
+         </xpath>
+
+         <xpath expr="//div/button[hasclass('o_form_button_cancel')]" position="attributes">
+             <attribute name="class" add="ms-md-1" separator=" "/>
+         </xpath>
+
+         <xpath expr="//div[hasclass('o_form_status_indicator')]" position="attributes">
+             <attribute name="t-att-class">{}</attribute>
+         </xpath>
+
+          <xpath expr="//div[hasclass('o_form_status_indicator_buttons')]" position="attributes">
+             <attribute name="t-att-class">{}</attribute>
+             <attribute name="t-if">props.model.root.mode === 'edit'</attribute>
+         </xpath>
+
+     </t>
+
+    <t t-name="fast.web.Breadcrumbs" t-inherit="web.Breadcrumbs" t-inherit-mode="extension" owl="1">
+        <xpath expr="//li/t[@t-slot='control-panel-status-indicator']" position="attributes">
+            <attribute name="t-if">env.isSmall</attribute>
+        </xpath>
+    </t>
+
+    <t t-name="fast.web.FormView" t-inherit="web.FormView" t-inherit-mode="extension" owl="1">
+        <xpath expr="//t[@t-set-slot='control-panel-create-button']/t[@t-if='canCreate']" position="before">
+            <t t-if="state.canEdit and model.root.mode === 'readonly'">
+                <button
+                    type="button"
+                    class="btn btn-primary o_form_button_edit mx-sm-1"
+                    t-att-disabled="state.isDisabled"
+                    data-hotkey="e"
+                    t-on-click.stop="edit"
+                    data-tooltip="编辑"
+                    aria-label="编辑">
+                    <i class="fa fa-edit" />
+                    编辑
+                </button>
+            </t>
+        </xpath>
+
+        <xpath expr="//t[@t-set-slot='control-panel-create-button']/t[@t-if='canCreate']" position="attributes">
+            <attribute name="t-if">state.canCreate and model.root.mode === 'readonly'</attribute>
+        </xpath>
+
+        <xpath expr="//ActionMenus" position="attributes">
+            <attribute name="items">state.actionMenuItems</attribute>
+        </xpath>
+
+    </t>
+
+</templates>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="blank_upc_30_55" model="zebra.upc.template">
+            <field name="name">打印空白版UPC</field>
+            <field name="code">BLANK_UPC_30_55</field>
+            <field name="remark">30*55</field>
+            <field name="header_content">
+^XA
+~TA000
+~JSN
+^LT0
+^MNW
+^MTD
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR6,6
+~SD15
+^JUS
+^LRN
+^CI27
+^PA0,1,1,0
+^MMT
+^PW240
+^LL440
+^LS0
+^XZ
+            </field>
+            <field name="content">
+^XA
+^FT47,380^A0B,45,56^FH\^CI28^FD{style_color}^FS^CI27
+^FT96,255^A0B,45,46^FH\^CI28^FD{size}^FS^CI27
+^BY2,3,106^FT211,409^BCB,,Y,N
+^FD{style_color}-{size}^FS
+^XZ
+            </field>
+        </record>
+
+        <record id="blank_upc_30_55_2" model="zebra.upc.template">
+            <field name="name">打印空白版UPC</field>
+            <field name="code">BLANK_UPC_30_55_2</field>
+            <field name="remark">30*55*2</field>
+            <field name="header_content">
+^XA
+~TA000
+~JSN
+^LT0
+^MNW
+^MTD
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR6,6
+~SD15
+^JUS
+^LRN
+^CI27
+^PA0,1,1,0
+^MMT
+^PW496
+^LL440
+^LS0
+^XZ
+            </field>
+            <field name="content">
+^XA
+^FT47,380^A0B,45,56^FH\^CI28^FD{style_color}^FS^CI27
+^FT96,255^A0B,45,46^FH\^CI28^FD{size}^FS^CI27
+^BY2,3,106^FT211,409^BCB,,Y,N
+^FD{style_color}-{size}^FS
+
+^FT301,377^A0B,45,56^FH\^CI28^FD{style_color}^FS^CI27
+^FT350,252^A0B,45,46^FH\^CI28^FD{size}^FS^CI27
+^BY2,3,106^FT465,407^BCB,,Y,N
+^FD{style_color}-{size}^FS
+^XZ
+            </field>
+        </record>
+
+        <record id="blank_upc_55_30" model="zebra.upc.template">
+            <field name="name">打印空白版UPC</field>
+            <field name="code">BLANK_UPC_55_30</field>
+            <field name="remark">55*30</field>
+            <field name="header_content">
+^XA
+~TA000
+~JSN
+^LT0
+^MNW
+^MTD
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR6,6
+~SD15
+^JUS
+^LRN
+^CI27
+^PA0,1,1,0
+^MMT
+^PW440
+^LL240
+^LS0
+^XZ
+            </field>
+            <field name="content">
+^XA
+^FT60,47^A0N,45,56^FH\^CI28^FD{style_color}^FS^CI27
+^FT185,96^A0N,45,46^FH\^CI28^FD{size}^FS^CI27
+^BY2,3,106^FT31,211^BCN,,Y,N
+^FD{style_color}-{size}^FS
+^XZ
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

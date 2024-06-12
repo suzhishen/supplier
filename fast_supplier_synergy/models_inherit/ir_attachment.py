@@ -7,6 +7,7 @@ class IrAttachmentExtend(models.Model):
     _inherit = 'ir.attachment'
 
     file_size_mb = fields.Char(string='文件大小 (KB)', compute='_compute_file_size_mb')
+    erp_id = fields.Integer(string='ERP文件ID')
 
     @api.depends('file_size')
     def _compute_file_size_mb(self):
@@ -14,5 +15,3 @@ class IrAttachmentExtend(models.Model):
             kb = attachment.file_size / 1024
             mb = round(kb, 0)
             attachment.file_size_mb = str(int(mb)) + 'KB'
-
-

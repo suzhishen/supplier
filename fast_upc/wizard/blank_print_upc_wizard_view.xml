@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="blank_print_upc_wizard_form_view" model="ir.ui.view">
+        <field name="name">blank_print_upc_wizard_form_view</field>
+        <field name="model">blank.print.upc</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="product_id" required="1"/>
+                        <field name="type" widget="radio" options="{'horizontal': True}" required="1"/>
+                        <field name="qty" required="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <widget name="custom_widget"/>
+                    <button special="cancel" data-hotkey="z" string="关闭"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="blank_print_upc_wizard_action" model="ir.actions.act_window">
+        <field name="name">打印UPC</field>
+        <field name="res_model">blank.print.upc</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_blank_print_upc_wizard_action" model="ir.actions.server">
+        <field name="name">打印UPC</field>
+        <field name="model_id" ref="fast_upc.model_blank_print_upc"/>
+        <field name="state">code</field>
+        <field name="code">action = model.open_blank_upc_action()</field>
+    </record>
+
+</odoo>

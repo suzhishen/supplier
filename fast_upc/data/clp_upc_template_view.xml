@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="zebra_upc_template_product_blank_clp_label" model="zebra.upc.template">
+            <field name="name">装箱单（75*50）二维</field>
+            <field name="code">Product_Blank_CLP_LABEL</field>
+            <field name="remark">75*50</field>
+            <field name="header_content">
+^XA
+~TA000
+~JSN
+^LT0
+^MNW
+^MTD
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR6,6
+~SD15
+^JUS
+^LRN
+^CI27
+^PA0,1,1,0
+^MMT
+^PW607
+^LL1039
+^LS0
+^XZ
+
+            </field>
+            <field name="content">
+^XA
+^FO11,9^GB577,121,2^FS
+^FT145,100^A0N,79,79^FH\^CI28^FD{box_number}^FS^CI27
+^FO11,131^GB577,402,2^FS
+^FO14,192^GB287,0,2^FS
+
+^FT320,480^BQN,2,10
+^BY12
+^FH\^FD>:{box_number}^FS
+
+^FO11,263^GB287,0,2^FS
+^FO11,330^GB287,0,2^FS
+^FO11,397^GB287,0,2^FS
+^FO11,466^GB290,0,2^FS
+^FO300,131^GB0,404,2^FS
+
+^CI28
+^FO20,140^A@N,55,55,E:SIMSUN.FNT^FD惠州乐达^FS
+
+^FO301,465^GB287,0,2^FS
+^CI28
+^FO20,205^A@N,55,55,E:SIMSUN.FNT^FD供应商：^FS
+^CI28
+^FO20,273^A@N,55,55,E:SIMSUN.FNT^FD{partner_name}^FS
+
+^CI28
+^FO20,340^A@N,55,55,E:SIMSUN.FNT^FD订单号：^FS
+^FT20,452^A0N,53,46^FH\^CI28^FD{po}^FS^CI27
+
+
+^CI28
+^FO20,473^A@N,55,55,E:SIMSUN.FNT^FD日期：^FS
+^FT306,517^A0N,51,51^FH\^CI28^FD{date}^FS^CI27
+
+
+{html}
+^XZ
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

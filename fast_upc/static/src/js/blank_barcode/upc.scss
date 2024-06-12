@@ -1,0 +1,55 @@
+.blank_barcode_upc {
+  width: 100%;
+  margin: 0 auto;
+  font-size: 18px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  .input-style-border {
+    height: 4rem;
+    width: 50%;
+    border: 1px solid var(--primary);
+  }
+
+  div {
+    width: 100%;
+  }
+
+  .td-qty {
+    display: flex;
+
+    input {
+      width: 50%;
+    }
+  }
+
+  .footer-button {
+    height: 80px;
+    line-height: 80px;
+
+    button {
+      height: 50px;
+      width: 100px;
+    }
+  }
+
+  .custom-upc-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    > div {
+      width: 32% !important;
+      input{
+        width: 100% !important;
+      }
+      span{
+        font-weight: bold;
+      }
+    }
+  }
+}

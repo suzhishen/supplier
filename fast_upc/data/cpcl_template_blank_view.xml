@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="0">
+
+        <record id="cpcl_template_create_blank_label" model="printer.cpcl.template">
+            <field name="name">空白版-生成空白版箱号标签（76*130）QR</field>
+            <field name="code">CREATE_BLANK_LABEL</field>
+            <field name="remark">76*130</field>
+            <field name="content">
+! 0 200 200 1000 1
+LINE 0 0 700 0 3
+CENTER
+TEXT 4 6 0 20 {package_name}
+LINE 0 160 700 160 3
+LEFT
+LINE 0 0 0 520 3
+
+LINE 568 0 568 520 3
+
+LINE 300 160 300 520 3
+TEXT 8 3 3 170 乐达空白版仓
+LINE 0 220 300 220 3
+
+TEXT 8 3 3 228 供应商:
+LINE 0 278 300 278 3
+TEXT 8 3 3 286 {vendor}
+LINE 0 336 300 336 3
+
+TEXT 8 3 3 344 订单号:
+LINE 0 394 300 394 3
+TEXT 8 3 3 402 {origin}
+LINE 0 452 700 452 3
+
+TEXT 8 3 3 460 日期:
+TEXT 8 3 310 460 {date}
+
+B QR 310 180 M 2 U 12
+MA,{qr_code}
+ENDQR
+LINE 0 520 700 520 3
+
+LEFT
+{order_lines}
+
+SETFF 1000 0
+FORM
+PRINT
+            </field>
+        </record>
+
+
+    </data>
+
+</odoo>

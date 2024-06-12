@@ -19,7 +19,7 @@
                         </div>
                         <group col="4" colspan="4">
                             <group>
-                                <field name="processing_plant" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
                                 <field name="order_quantity" readonly="1"/>
                             </group>
                             <group>
@@ -52,7 +52,7 @@
                                         <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
-                                        <field name="bom_price"/>
+<!--                                        <field name="bom_price"/>-->
 <!--                                        <field name="body"/>-->
                                         <field name="price"/>
                                         <field name="uom_po_name"  readonly="1"/>
@@ -75,7 +75,7 @@
                                         <field name="apply_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="ship_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
                                         <field name="return_qty" widget="uom_float" options="{'uomField':'assist_uom_name'}" sum="total"/>
-                                        <field name="bom_price"/>
+<!--                                        <field name="bom_price"/>-->
 <!--                                        <field name="body"/>-->
                                         <field name="price"/>
                                         <field name="uom_po_name"  readonly="1"/>
@@ -88,7 +88,7 @@
                                 <field name="partner_price_line" force_save="1" readonly="1" class="not_open_form_view">
                                     <tree>
                                         <field name="name"/>
-                                        <field name="partner_name"/>
+                                        <field name="company_id"/>
                                         <field name="process_price"/>
                                         <field name="management_price"/>
                                         <field name="other_price"/>
@@ -99,7 +99,7 @@
                                     <form>
                                         <group>
                                             <field name="name"/>
-                                            <field name="partner_name"/>
+                                            <field name="company_id"/>
                                             <field name="process_price"/>
                                             <field name="management_price"/>
                                             <field name="other_price"/>
@@ -130,12 +130,12 @@
             <field name="name">Supplier Order Blank FOB Tree</field>
             <field name="model">fast.supplier.order.blank</field>
             <field name="arch" type="xml">
-                <tree edit="false" create="false" string="Supplier Order Blank FOB Tree">
+                <tree  edit="false" create="false" string="Supplier Order Blank FOB Tree">
                     <!--                    <widget name="web_ribbon" title="待完成" bg_color="bg-info" attrs="{'invisible': [('state', 'not in', [draft,part,done,cancel])]}"/>-->
                     <!--                    <widget name="web_ribbon" title="已锁定" bg_color="bg-success" attrs="{'invisible': [('state', '=', False)]}"/>-->
                     <!--                    <widget name="web_ribbon" title="已锁定" bg_color="bg-success" attrs="{'invisible': [('state', '=', False)]}"/>-->
                     <field name="name"/>
-                    <field name="processing_plant"/>
+                    <field name="company_id"/>
                     <field name="order_quantity"/>
                     <field name="completed_quantity"/>
                     <field name="unfinished_quantity"/>
@@ -146,6 +146,7 @@
                            decoration-info="state=='part'" decoration-danger="state=='cancel'"/>
                     <field name="confirm_state" widget="badge" decoration-success="confirm_state=='have_confirm'"
                            decoration-danger="confirm_state=='not_confirm'"/>
+                    <field name="last_change_date" widget="badge"/>
                 </tree>
             </field>
         </record>
@@ -156,7 +157,7 @@
             <field name="arch" type="xml">
                 <search string="Supplier Order Blank FOB Search">
                     <field name="name"/>
-                    <field name="processing_plant"/>
+                    <field name="company_id"/>
                     <separator/>
                     <filter name="state_draft" string="待完成" domain="[('state', '=', 'draft')]"/>
                     <filter name="state_part" string="部分完成" domain="[('state', '=', 'part')]"/>

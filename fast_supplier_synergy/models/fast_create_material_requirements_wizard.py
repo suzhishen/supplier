@@ -79,8 +79,8 @@ class FastCreateMaterialRequirementsWizard(models.TransientModel):
               }) 
                 #    'reality_product_qty': 0,
                 # 'remark': 'order_type',
-        Dev_url = 'http://192.168.6.50:10010'
         headers = {'Content-Type': 'application/json'}
+        Dev_url = self.env['fast.config.dev'].sudo().get_dev_url()
         response = requests.post(url=f'{Dev_url}/supplier_sync_data_create_fast_blank_order_material_requirements_task', json={'params':{'datas':values}}, headers=headers)
         if response.status_code == 200:
             data = json.loads(response.text)

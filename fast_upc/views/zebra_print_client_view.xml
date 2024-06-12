@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_blank_upc_view" model="ir.actions.client">
+        <field name="name">空白版打印</field>
+        <field name="tag">blank_upc_view</field>
+        <field name="target">main</field>
+    </record>
+
+    <record id="action_blank_print_upc" model="ir.actions.client">
+        <field name="name">自定义</field>
+        <field name="tag">blank_print_upc</field>
+        <field name="context">{'close_footer':1}</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

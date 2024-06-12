@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <t t-name="web.LegacyAdaptedActionDialog.inherit" t-inherit="web.LegacyAdaptedActionDialog" t-inherit-mode="extension" owl="1">
+<!--        <xpath expr="//t[@t-slot='footer']" position="replace">-->
+<!--            <t t-if="!isLegacy">-->
+<!--                <t t-slot="buttons">-->
+<!--                    <button class="btn btn-primary o-default-button" t-on-click="data.close">Ok 111222</button>-->
+<!--                </t>-->
+<!--            </t>-->
+<!--        </xpath>-->
+        <xpath expr="//t[@t-if='!isLegacy']" position="attributes">
+            <attribute name="t-if">!isLegacy and !close_footer</attribute>
+        </xpath>
+    </t>
+    <t t-name="web.SelectCreateDialog.inherit" t-inherit="web.SelectCreateDialog" t-inherit-mode="extension" owl="1">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="t-props">{'size':size}</attribute>
+        </xpath>
+    </t>
+
+    <t t-name="web.X2ManyFieldDialog.inherit" t-inherit="web.X2ManyFieldDialog" t-inherit-mode="extension" owl="1">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="size">size</attribute>
+        </xpath>
+
+        <xpath expr="//button[@class='btn btn-primary o_form_button_cancel']" position="replace">
+            <button class="btn btn-primary o_form_button_cancel" t-on-click="() => this.close()" data-hotkey="j">关闭</button>
+        </xpath>
+    </t>
+
+<!--    <t t-name="web.Dialog.inherit" t-inherit="web.Dialog" t-inherit-mode="extension" owl="1">-->
+<!--        <xpath expr="//t[@t-set='close']" position="replace">-->
+<!--            <t t-set="close" t-value="close"/>-->
+<!--        </xpath>-->
+<!--    </t>-->
+
+
+</odoo>

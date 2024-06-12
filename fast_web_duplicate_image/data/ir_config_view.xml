@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_conf_web_copy_size" model="ir.config_parameter">
+            <field name="key">WEB_COPY_IMAGE_SIZE</field>
+            <field name="value" eval="50000 * 1024"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="fast_form_classic.web.StatusBarButtons" t-inherit="web.StatusBarButtons" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div/t/t[@t-foreach='slots']" position="attributes">
+            <attribute name="t-if">this.env.model.root.mode == 'readonly'</attribute>
+        </xpath>
+    </t>
+
+</templates>

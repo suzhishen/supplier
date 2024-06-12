@@ -12,9 +12,11 @@
                            <th class="po">PO#</th>
                            <th class="style">款号</th>
                            <th class="style-color">款色</th>
-                           <th class="boxed-size">订单数<span style="color: green"> / 已装箱数</span><span style="color: red"> / 未装箱数</span></th>
-                           <th class="apply_btn">申领物料</th>
-                           <th class="material-state">领料状态</th>
+                           <th class="boxed-size">订单数<span style="color: green"> / 已完成数</span><span style="color: red"> / 未完成数</span></th>
+<!--                           <th class="apply_btn">确认物料</th>-->
+<!--                           <th class="main-material-state">领料状态（主料）</th>-->
+<!--                           <th class="sub-material-state">领料状态（辅料）</th>-->
+                           <th class="change-date">订单明细变更时间</th>
                            <th class="qty">总需求数</th>
                            <th class="qty">总入仓数</th>
                            <th class="qty">总欠数</th>
@@ -44,38 +46,51 @@
                                         <span style="color: green"> / </span>
                                         <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: green"
                                               t-attf-class="{{line.product_qty &lt; 0 ? 'product-qty-less-than-zero':''}}"
-                                              t-esc="line.have_packed_qty"/>
-                                        <t t-if="line.product_qty - line.have_packed_qty > 0">
+                                              t-esc="line.done_qty"/>
+                                        <t t-if="line.product_qty - line.done_qty > 0">
                                             <span style="color: green"> / </span>
                                             <span t-att-class="data.product_tmpl_code + '-' + line.size_name" style="color: red"
-                                                  t-esc="line.product_qty - line.have_packed_qty"/>
+                                                  t-esc="line.product_qty - line.done_qty"/>
                                         </t>
                                     </div>
                                 </div>
                             </td>
-                            <!-- 申领物料 -->
-                             <th class="apply_btn">
-                                <button t-att-class="data.get_materials_type ? 'layui-btn layui-btn-warm' : 'layui-btn layui-btn-normal'" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">
-                                    <t t-if="data.get_materials_type">
-                                        更新物料
-                                    </t>
-                                    <t t-else="">
-                                        申领物料
-                                    </t>
-                                </button>
-                             </th>
-                            <!-- 领料状态 -->
-                            <td class="material-state">
-                                <div class="material-state-parent">
-                                    <span class="material-state-child" t-esc="data.materials_state"/>
-                                    <span class="material-state-btn" t-if="data.is_apply_material">
-                                        <button class="btn btn-link material-state-edit-btn" title="申领详情"
-                                                t-on-click="()=>this.viewStyleMaterialDetailInfo(data)">
-                                            <i class="fa fa-eye"/>
-                                        </button>
-                                    </span>
-                                </div>
-                            </td>
+<!--                            &lt;!&ndash; 确认物料 &ndash;&gt;-->
+<!--                             <th class="apply_btn">-->
+<!--                                <button t-att-class="data.get_materials_type ? 'layui-btn layui-btn-warm' : 'layui-btn layui-btn-normal'" t-on-click="()=>this.onlyConfirmStyleColorMaterialRequirementsClick(data)">-->
+<!--                                    <t t-if="data.get_materials_type">-->
+<!--                                        更新物料-->
+<!--                                    </t>-->
+<!--                                    <t t-else="">-->
+<!--                                        确认物料-->
+<!--                                    </t>-->
+<!--                                </button>-->
+<!--                             </th>-->
+<!--                            &lt;!&ndash; 领料状态（主料） &ndash;&gt;-->
+<!--                            <td class="main-material-state">-->
+<!--                                <div class="main-material-state-parent">-->
+<!--                                    <span class="main-material-state-child" t-esc="data.main_materials_state"/>-->
+<!--                                    <span class="main-material-state-btn" t-if="data.main_materials_state ==  '领料状态（主料）'">-->
+<!--                                        <button class="btn btn-link main-material-state-edit-btn" title="确认详情"-->
+<!--                                                t-on-click="()=>this.viewMainMaterialDetailInfo(data)">-->
+<!--                                            <i class="fa fa-eye"/>-->
+<!--                                        </button>-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                            &lt;!&ndash; 领料状态（辅料） &ndash;&gt;-->
+<!--                            <td class="sub-material-state">-->
+<!--                                <div class="sub-material-state-parent">-->
+<!--                                    <span class="sub-material-state-child" t-esc="data.sub_materials_state"/>-->
+<!--                                    <span class="sub-material-state-btn" t-if="data.sub_materials_state == '领料状态（辅料）'">-->
+<!--                                        <button class="btn btn-link sub-material-state-edit-btn" title="确认详情"-->
+<!--                                                t-on-click="()=>this.viewSubMaterialDetailInfo(data)">-->
+<!--                                            <i class="fa fa-eye"/>-->
+<!--                                        </button>-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                            </td>-->
+                            <td class="change-date"><span t-esc="data.last_change_date"/></td>
                             <td class="qty"><span t-esc="data.order_line_total"/></td>
                             <!-- 总入仓数 -->
                             <td class="qty">

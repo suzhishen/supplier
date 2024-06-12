@@ -11,12 +11,22 @@ const {onWillStart, onMounted} = owl;
 export class UpdateBasicFormController extends FormController {
     setup() {
         this.ormService = useService("orm");
+        this.notification = useService("notification");
         super.setup();
 
         onMounted(async () => {
             let self = this
             console.log('通过接口更新基础资料数据')
-            await this.ormService.call(this.props.resModel, 'update_basic_data', [], {'id': this.props.resId}).then(ruslt => {
+            await this.ormService.call(this.props.resModel, 'update_basic_data', [], {'id': this.props.resId}).then(result => {
+                if (result.code === 500) {
+                    this.notification.add(
+                        this.env._t(result.message),
+                        {
+                            title: '提示',
+                            type: "warning",
+                        }
+                    );
+                }
                 self.model.load();
             })
             // await this.model.load();

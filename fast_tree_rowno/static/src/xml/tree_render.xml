@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="fast.web.ListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="extension" owl="1">
+        <xpath expr="//thead//th[@t-if='hasSelectors']" position="before">
+            <th class="o_list_record_selector_cus">
+                #
+            </th>
+        </xpath>
+        <xpath expr="//tfoot//td[@t-if='hasSelectors']" position="before">
+            <td/>
+        </xpath>
+    </t>
+
+    <t t-name="fast.web.ListRenderer.RecordRow" t-inherit="web.ListRenderer.RecordRow" t-inherit-mode="extension" owl="1">
+        <xpath expr="//td[@t-if='hasSelectors']" position="before">
+            <td  class="o_list_record_selector_cus">
+                <span t-esc="record_index + 1"/>
+            </td>
+        </xpath>
+    </t>
+
+    <t t-name="fast.web.ListRenderer.Rows" t-inherit="web.ListRenderer.Rows" t-inherit-mode="extension" owl="1">
+        <xpath expr="//td[@t-if='withHandleColumn']" position="before">
+            <td/>
+        </xpath>
+
+        <xpath expr="//tr[@t-foreach='getEmptyRowIds']/td[@t-att-colspan='nbCols']" position="attributes">
+            <attribute name="t-att-colspan">nbCols+1</attribute>
+        </xpath>
+
+    </t>
+
+    <t t-name="fast.web.ListRenderer.GroupRow" t-inherit="web.ListRenderer.GroupRow" t-inherit-mode="extension" owl="1">
+        <xpath expr="//th[@t-att-colspan='getGroupNameCellColSpan(group)']" position="attributes">
+            <attribute name="t-att-colspan">getGroupNameCellColSpan(group) + 1</attribute>
+        </xpath>
+    </t>
+
+
+</templates>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <div t-name="fast_upc.blank_upc_view" class="o_action upc-view-wrapper" owl="1">
+        <div>
+            <button class="btn btn-primary" t-on-click="()=>this.click1()">打印（选择款号）</button>
+            <button class="btn btn-primary" t-on-click="()=>this.click2()">打印（自定义）</button>
+        </div>
+    </div>
+
+</templates>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="文档" id="fast_attachment_root" sequence="10"
+              groups="fast_attachment.attachment_root_group_read"
+              web_icon="fast_attachment,static/description/icon.png"/>
+
+    <menuitem id="fast_menu_action_attachment_fast_attachment" name="文件" action="action_attachment_fast_attachment"
+              parent="fast_attachment_root" sequence="10"/>
+
+    <menuitem id="fast_menu_ir_attachment_setting_root" name="配置" parent="fast_attachment_root" sequence="100"/>
+
+    <menuitem id="fast_menu_ir_attachment_category_action_form" name="文件类别"
+              action="ir_attachment_category_action_form"
+              parent="fast_menu_ir_attachment_setting_root" sequence="10"/>
+</odoo>

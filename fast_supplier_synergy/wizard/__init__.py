@@ -1,0 +1,1 @@
+from . import fast_supplier_order_blank_wizard

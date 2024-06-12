@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="zebra_upc_template_template_lot_label" model="zebra.upc.template">
+            <field name="name">打印批次（75*50）二维</field>
+            <field name="code">LOT_LABEL</field>
+            <field name="remark">75*50</field>
+            <field name="header_content">
+^XA
+~TA000
+~JSN
+^LT0
+^MNW
+^MTD
+^PON
+^PMN
+^LH0,0
+^JMA
+^PR6,6
+~SD15
+^JUS
+^LRN
+^CI28
+^PA0,1,1,0
+^XZ
+            </field>
+            <field name="content">
+^XA
+^MMT
+^PW599
+^LL400
+^LS0
+^FO214,8^A@N,35,35,E:SIMSUN.FNT^FD乐达面料仓^FS
+^FO2,46^GB597,0,1^FS
+^FB300,2,0,L,0
+^FO9,59^A@N,30,30,E:SIMSUN.FNT^FD供应商:{partner_name}^FS
+^FO328,59^A@N,30,30,E:SIMSUN.FNT^FD{partner_default_code}^FS
+^FB300,2,0,L,0
+^FO9,137^A@N,30,30,E:SIMSUN.FNT^FD编码:{default_code}^FS
+^FB300,2,0,L,0
+^FO9,213^A@N,30,30,E:SIMSUN.FNT^FD品名:{product_name}^FS
+^FB300,2,0,L,0
+^FO9,307^A@N,30,30,E:SIMSUN.FNT^FD缸号:{cylinder_number}^FS
+^FO9,350^A@N,30,30,E:SIMSUN.FNT^FD匹号:{match_number}^FS
+^FO200,350^A@N,30,30,E:SIMSUN.FNT^FD{product_qty}^FS
+^FT328,380^BQN,2,10
+^BY12
+^FH\^FD>:{qr_code}^FS
+^XZ
+            </field>
+        </record>
+
+    </data>
+
+</odoo>

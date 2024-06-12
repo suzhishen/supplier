@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="0">
+
+        <record id="cpcl_template_create_package_qr" model="printer.cpcl.template">
+            <field name="name">生成箱号（75*150）QR</field>
+            <field name="code">CREATE_PACKAGE_QR</field>
+            <field name="remark">75*50</field>
+            <field name="content">
+! 0 200 200 480 1
+SETMAG 1 1
+CENTER
+TEXT 7 5 0 16 {barcode}
+B QR 0 90 M 2 U 11
+MA,{barcode}
+ENDQR
+SETFF 480 0
+FORM
+PRINT
+            </field>
+        </record>
+
+        <record id="cpcl_template_create_location_qr" model="printer.cpcl.template">
+            <field name="name">生成库位（75*50）QR</field>
+            <field name="code">CREATE_location_QR</field>
+            <field name="remark">75*50</field>
+            <field name="content">
+! 0 200 200 480 1
+SETMAG 1 1
+CENTER
+TEXT 7 5 0 16 {name}
+B QR 0 90 M 2 U 11
+MA,{barcode}
+ENDQR
+SETFF 480 0
+FORM
+PRINT
+            </field>
+        </record>
+
+
+    </data>
+
+</odoo>

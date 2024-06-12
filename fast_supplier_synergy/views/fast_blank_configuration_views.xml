@@ -5,29 +5,88 @@
             <field name="name">Blank Configuration Form</field>
             <field name="model">fast.blank.configuration</field>
             <field name="arch" type="xml">
-                <form edit="false" create="false" delete="false" string="Blank Configuration Form" js_class="update_basic_form">
+                <form edit="false" create="false" delete="false" string="Blank Configuration Form"
+                      js_class="update_basic_form">
                     <header>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-
-                            <button class="oe_stat_button" name="action_get_attachment_view_diagram" type="object"
-                                    icon="fa-paperclip">
-                                <field name="diagram_attr_count" widget="statinfo"/>
+                            <button class="oe_stat_button" name="action_open_fast_supplier_quotation_main_action" type="object" icon="fa-credit-card-alt">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">我的报价</span>
+                                    <span>
+                                        <field name="fob_mtp_quotation_state" invisible="1"/>
+                                        <span class="o_stat_text text-danger"
+                                              attrs="{'invisible':[('fob_mtp_quotation_state', '!=', 'not_price')]}">
+                                            <field name="fob_mtp_quotation_state_show"/>
+                                        </span>
+                                        <span class="o_stat_text text-warning" style="font-size:10px !important"
+                                              attrs="{'invisible':[('fob_mtp_quotation_state', '!=', 'price_part_quoted')]}">
+                                            <field name="fob_mtp_quotation_state_show"/>
+                                        </span>
+                                        <span class="o_stat_text text-info" style="font-size:10px !important"
+                                              attrs="{'invisible':[('fob_mtp_quotation_state', '!=', 'price_quoted')]}">
+                                            <field name="fob_mtp_quotation_state_show"/>
+                                        </span>
+                                    </span>
+                                </div>
                             </button>
 
-                            <button class="oe_stat_button" name="action_get_attachment_view_process" type="object"
-                                    icon="fa-paperclip">
-                                <field name="process_attr_count" widget="statinfo"/>
+                            <button class="oe_stat_button" name="action_get_attachment_view_diagram" type="object" icon="fa-paperclip">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">纸样    <field name="diagram_attr_count"/></span>
+                                    <span>
+                                        <field name="diagram_attr_last_update_date" invisible="1"/>
+                                        <span class="o_stat_text text-warning" style="font-size:11px !important"
+                                        attrs="{'invisible':[('diagram_attr_last_update_date', '=', False)]}">
+                                            最后更新时间<field name="diagram_attr_last_update_date" style="display: block;position: relative;top: -2px;"/>
+                                        </span>
+                                    </span>
+                                </div>
                             </button>
 
-                            <button class="oe_stat_button" name="action_get_attachment_view_size" type="object"
-                                    icon="fa-paperclip">
-                                <field name="size_attr_count" widget="statinfo"/>
+                            <button class="oe_stat_button" name="action_get_attachment_view_process" type="object" icon="fa-paperclip">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">工艺单    <field name="process_attr_count"/></span>
+                                    <span>
+                                        <field name="process_attr_last_update_date" invisible="1"/>
+                                        <span class="o_stat_text text-warning" style="font-size:11px !important"
+                                        attrs="{'invisible':[('process_attr_last_update_date', '=', False)]}">
+                                            最后更新时间<field name="process_attr_last_update_date" style="display: block;position: relative;top: -2px;"/>
+                                        </span>
+                                    </span>
+                                </div>
                             </button>
+
+                            <button class="oe_stat_button" name="action_get_attachment_view_size" type="object" icon="fa-paperclip">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">尺寸表    <field name="size_attr_count"/></span>
+                                    <span>
+                                        <field name="size_attr_last_update_date" invisible="1"/>
+                                        <span class="o_stat_text text-warning" style="font-size:11px !important"
+                                        attrs="{'invisible':[('size_attr_last_update_date', '=', False)]}">
+                                            最后更新时间<field name="size_attr_last_update_date" style="display: block;position: relative;top: -2px;"/>
+                                        </span>
+                                    </span>
+                                </div>
+                            </button>
+
+<!--                            <button class="oe_stat_button" name="action_get_attachment_view_diagram" type="object" icon="fa-paperclip">-->
+<!--                                <field name="diagram_attr_count" widget="statinfo"/>-->
+<!--                            </button>-->
+
+<!--                            <button class="oe_stat_button" name="action_get_attachment_view_process" type="object"-->
+<!--                                    icon="fa-paperclip">-->
+<!--                                <field name="process_attr_count" widget="statinfo"/>-->
+<!--                            </button>-->
+
+<!--                            <button class="oe_stat_button" name="action_get_attachment_view_size" type="object"-->
+<!--                                    icon="fa-paperclip">-->
+<!--                                <field name="size_attr_count" widget="statinfo"/>-->
+<!--                            </button>-->
 
                             <button class="oe_stat_button" name="action_view_bom" type="object"
-                                    attrs="{'invisible':[('bom_count', '=', 0)]}" icon="fa-flask">
+                                     icon="fa-flask">
                                 <field string="款色BOM明细" name="bom_count" widget="statinfo"/>
                             </button>
 
@@ -80,11 +139,16 @@
                                     <tree decoration-danger="sum_price == 0" create="0" delete="0" edit="0">
                                         <field name="product_id" readonly="1" force_save="1"/>
                                         <field name="body" readonly="1" force_save="1" optional="show"/>
-                                        <field name="need_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="need_qty" readonly="1" force_save="1" widget="uom_float"
+                                               options="{'uomField':'assist_uom_id'}"/>
                                         <field name="loss_qty" readonly="1" force_save="1"/>
-                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
-                                        <field name="business_price" readonly="1" force_save="1" optional="hide" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
-                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float"
+                                               options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="business_price" readonly="1" force_save="1" optional="hide"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id', 'field_digits': True}"/>
                                         <field name="spec" readonly="1" force_save="1" optional="show"/>
                                         <field name="f_width" readonly="1" force_save="1" optional="show"/>
                                         <field name="g_weight" readonly="1" force_save="1" optional="show"/>
@@ -102,9 +166,12 @@
                                     <tree decoration-danger="sum_price == 0" create="0" delete="0" edit="0">
                                         <field name="product_id" readonly="1" force_save="1"/>
                                         <field name="body" readonly="1" force_save="1" optional="show"/>
-                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float" options="{'uomField':'assist_uom_id'}"/>
-                                        <field name="business_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
-                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"  options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="product_qty" readonly="1" force_save="1" widget="uom_float"
+                                               options="{'uomField':'assist_uom_id'}"/>
+                                        <field name="business_price" readonly="1" force_save="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                        <field name="sum_price" readonly="1" force_save="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id', 'field_digits': True}"/>
                                         <field name="assist_uom_id" readonly="1" force_save="1" optional="hide"/>
                                         <field name="assist_uom_id" readonly="1" force_save="1" optional="hide"/>
                                     </tree>
@@ -116,7 +183,7 @@
                                 <field name="secondary_process_line" nolabel="1" colspan="2">
                                     <tree create="0" delete="0" edit="0" decoration-danger="price == 0">
                                         <field name="name" readonly="1"/>
-                                        <field name="partner_id" readonly="1"/>
+                                        <field name="company_id" readonly="1"/>
                                         <field name="price" readonly="1"/>
                                         <field name="remark" readonly="1"/>
                                     </tree>
@@ -152,29 +219,18 @@
                     <field name="categ_name"/>
                     <field name="main_product_configuration_name"/>
                     <field name="assist_uom_name"/>
+                    <field name="last_update_date"/>
                 </tree>
             </field>
         </record>
 
-        <record id="blank_configuration_search_view" model="ir.ui.view">
-            <field name="name">Blank Configuration Search</field>
-            <field name="model">fast.blank.configuration</field>
-            <field name="arch" type="xml">
-                <search string="Blank Configuration Search">
-                    <field name="default_code"/>
-                    <field name="name"/>
-                    <field name="categ_name"/>
-                    <field name="main_product_configuration_name"/>
-                    <field name="assist_uom_name"/>
-                </search>
-            </field>
-        </record>
+
 
         <record id="blank_configuration_action_view" model="ir.actions.act_window">
             <field name="name">基础资料</field>
             <field name="res_model">fast.blank.configuration</field>
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="fast_supplier_synergy.blank_configuration_search_view"/>
+
             <field name="view_ids" eval="[(5, 0, 0),
                 (0, 0, {'view_mode': 'tree', 'view_id': ref('fast_supplier_synergy.blank_configuration_tree_view')}),
                 (0, 0, {'view_mode': 'form', 'view_id': ref('fast_supplier_synergy.blank_configuration_form_view')})]"/>

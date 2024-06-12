@@ -11,7 +11,6 @@ import json
 
 _logger = logging.getLogger(__name__)
 
-Dev_url = 'http://192.168.6.50:10010'
 BlankSize = ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', 'os', '2t', '3t', '4t', '4', '5', '6',
              '7', '8', '8/10', '10/12', '12/14', '14/16', '16', '18/20']
 
@@ -21,6 +20,7 @@ class FastBlankPackingList(models.Model):
     _description = "装箱单"
     _rec_name = 'partner_name'
 
+    company_id = fields.Many2one('res.company', string='所属公司', default=lambda self: self.env.user.company_id)
     # po = fields.Char(string='PO#')
     partner_name = fields.Char(string='加工厂')
     # tracking_number = fields.Char(string='装箱单号')
@@ -74,7 +74,8 @@ class FastBlankPackingList(models.Model):
             if not res.delivery_date or not res.shipping:
                 raise UserError(f'请确认运输方式及预计到货日期已经填写！')
             if res.synch_state == 'have_synch':
-                raise UserError(f'{res.po}该装箱单已经同步过了，请不要重复同步！')
+                raise UserError(f'{res.tracking_number}该装箱单已经同步过了，请不要重复同步！')
+                # raise UserError(f'{res.po}该装箱单已经同步过了，请不要重复同步！')
         values = {
             'params': {
                 'datas': []
@@ -101,6 +102,7 @@ class FastBlankPackingList(models.Model):
             values['params']['datas'][index].update({'detail_datas': detail_value})
 
         headers = {'Content-Type': 'application/json'}
+        Dev_url = self.env['fast.config.dev'].sudo().get_dev_url()
         response = requests.post(url=f'{Dev_url}/leda/update_package', json=values, headers=headers)
         result = response.json().get('result', False)
         if not (result and result.get('code', False) and result.get('code', False) == 200):
@@ -457,6 +459,7 @@ class FastBlankPackingListDetail(models.Model):
 
     erp_id = fields.Integer('erp_id')
     packing_list_id = fields.Many2one('fast.blank.packing_list', string='所属装箱单', ondelete='cascade')
+    company_id = fields.Many2one(related='packing_list_id.company_id', string='公司', store=True)
     blank_order_detail_id = fields.Many2one('fast.blank_order_detail', string='所属订单明细', ondelete='cascade')
     packing_detail_follow_id = fields.Many2one('fast.packing_detail_follow', string='所属装箱明细跟进',
                                                ondelete='cascade')
@@ -593,9 +596,9 @@ class FastBlankPackingListDetail(models.Model):
         po = kwargs.get('po') or ''
         product_code = kwargs.get('product_code') or ''
         group_records = self.search([]).read_group(
-            domain=[('product_color_name', '=', product_code)],
+            domain=[('product_color_name', '=', product_code), ('po', '=', po)],
             fields=list(self._fields.keys()),
-            groupby='product_name'
+            groupby=['product_name', 'po']
         )
         data = []
         for record in group_records:
@@ -640,10 +643,24 @@ class FastBlankPackingListDetail(models.Model):
     @api.model
     def get_rep_size_list(self):
         """ 调用接口，获取 erp 码数 """
-        response = requests.get(url=f'{Dev_url}/leda/fast_size_group', params={})
-        print(response.json())
-        return response.json()
+        def err_val(e):
+            return {
+                'code': 500,
+                'message': f"获取最新数据失败，请稍后再试，如果问题持续出现，请联系管理员！\n {e}"
+            }
+        try:
+            Dev_url = self.env['fast.config.dev'].sudo().get_dev_url()
+            response = requests.get(url=f'{Dev_url}/leda/fast_size_group', params={}, timeout=15)
+        except requests.exceptions.RequestException as e:
+            return err_val(e)
+        if response.status_code != 200:
+            return err_val(response.text)
+        # print(response.json())
+        # return response.json()
         # return {"code":"2000","msg":"成功","data":{"t":["XXS","XS","S","M","L","XL","2XL","3XL","4XL","5XL","6XL"],"s":["2T","3T","4T","4","5","6","7","8","8/10","10/12","12/14","14/16","16","18/20"]}}
+
+        data = json.loads(response.text)
+        return data
 
     def get_records_format_data(self):
         record = self.env['fast.blank.packing_list_detail'].sudo().search([('receive_state', '=', 'have_receive')],
@@ -773,11 +790,11 @@ class FastPackingDetailFollow(models.Model):
 
     packing_list_detail_line = fields.One2many('fast.blank.packing_list_detail', 'packing_detail_follow_id',
                                                string='相关装箱单明细')
+    company_id = fields.Many2one(related='packing_list_detail_line.company_id', string='公司', store=True)
     blank_order_detail_id = fields.Many2one('fast.blank_order_detail', string='所属订单明细', ondelete='cascade')
     po = fields.Char(string='PO#', related='blank_order_detail_id.po_name', store=True)
     processing_plant = fields.Char(related='blank_order_detail_id.processing_plant', string='加工厂', store=True)
-    synch_state = fields.Selection([('not_create', '未生成'), ('have_create', '已生成')], string='生成状态',
-                                   help="是否生成装箱单状态")
+    synch_state = fields.Selection([('not_create', '未生成'), ('have_create', '已生成')], string='生成状态', help="是否生成装箱单状态")
     product_color_name = fields.Char(string='款色')
     product_name = fields.Char(string='产品', help='变体')
     size = fields.Char(string='尺码')

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem name="打印模板"
+                  id="menu_zebra_upc_template_conf"
+                  parent="base.menu_administration"
+                  groups="base.group_no_one"
+                  sequence="99"/>
+
+        <menuitem name="UPC模板"
+                  id="menu_zebra_upc_template_action"
+                  parent="menu_zebra_upc_template_conf"
+                  sequence="10"
+                  action="fast_upc.zebra_upc_template_action"/>
+
+        <menuitem name="CPCL模板"
+                  id="menu_printer_cpcl_template_action"
+                  parent="menu_zebra_upc_template_conf"
+                  sequence="20"
+                  action="fast_upc.printer_cpcl_template_action"/>
+
+        <!--条码打印-->
+        <menuitem id="menu_zebra_upc_module"
+                  name="条码打印"
+                  groups="fast_upc.barcode_print_read"
+                  web_icon="fast_upc,static/description/icon.png"
+                  sequence="99">
+
+            <menuitem name="空白版"
+                  id="menu_action_blank_print_root"
+                  action="action_blank_upc_view"
+                  sequence="10"/>
+
+        </menuitem>
+
+    </data>
+</odoo>

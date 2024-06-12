@@ -24,15 +24,19 @@
                 </button>
                 <div class="o_list_selection_box alert alert-info-foot_order_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
                      role="alert">
-                    <strong>总需求数： <span class="font-monospace me-1"><span t-esc="model.state.foot_order_line_total"/></span></strong>
+                    <strong>需求总数： <span class="font-monospace me-1"><span t-esc="model.state.foot_order_line_total"/></span></strong>
                 </div>
                 <div class="o_list_selection_box alert alert-info-foot_incoming_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
                      role="alert">
-                    <strong>总入仓数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incoming_line_total"/></span></strong>
+                    <strong>已完成总数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incoming_line_total"/></span></strong>
                 </div>
+<!--                <div class="o_list_selection_box alert alert-info-foot_incomplete_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"-->
+<!--                     role="alert">-->
+<!--                    <strong>总欠数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incomplete_line_total"/></span></strong>-->
+<!--                </div>-->
                 <div class="o_list_selection_box alert alert-info-foot_incomplete_line_total d-inline-flex align-items-center ps-0 px-lg-2 py-0 mb-0 ms-0 ms-md-2"
                      role="alert">
-                    <strong>总欠数： <span class="font-monospace me-1"><span t-esc="model.state.foot_incomplete_line_total"/></span></strong>
+                    <strong>未完成总数： <span class="font-monospace me-1"><span t-esc="model.state.foot_not_received_line_total"/></span></strong>
                 </div>
 <!--                <button type="button" class="btn btn-primary ms-md-2" t-on-click="()=>this.create_package()">创建装箱单</button>-->
             </t>

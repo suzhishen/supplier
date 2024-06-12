@@ -1,0 +1,70 @@
+/**********************************************************************************
+*
+*    Copyright (c) 2017-today MuK IT GmbH.
+*
+*    This file is part of MuK Backend Theme
+*    (see https://mukit.at).
+*
+*    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+*
+**********************************************************************************/
+
+.o_list_view .o_list_renderer {
+  overflow-x: initial;
+  height: 100vh !important;
+
+  thead, thead tr:nth-child(1) th {
+    position: sticky;
+    border: none;
+    z-index: 1;
+    top: 0;
+  }
+
+  tfoot, tfoot tr:nth-child(1) td {
+    color: $white;
+  }
+
+  .o_list_table thead .o_list_number_th {
+    text-align: left !important;
+  }
+
+  .o_list_table tbody > tr > td.o_list_number:not(.o_list_record_selector){
+    text-align: left !important;
+  }
+
+  .o_list_table thead .flex-row-reverse{
+    margin: 0 !important;
+    padding: 0 !important;
+    flex-direction: row !important;
+
+  }
+  .o_list_table .o_list_footer .o_list_number{
+    text-align: left !important;
+  }
+
+}
+
+td[data-tooltip="total"] {
+  color: #ffffff !important;
+}
+
+.o_form_view .o_field_widget .o_list_table.table-striped > tfoot > tr > td {
+  color: #ffffff !important;
+}
+
+.o_form_sheet  .o_list_renderer .o_list_table thead .o_list_number_th {
+    text-align: left !important;
+}
+.o_form_sheet .o_list_renderer .o_list_table tbody > tr > td.o_list_number:not(.o_list_record_selector) {
+    text-align: left !important;
+    direction: ltr;
+}
+.o_form_sheet .o_list_renderer .o_list_table tfoot .o_list_number {
+    text-align: left !important;
+    direction: ltr;
+}
+.o_form_sheet .flex-row-reverse {
+    flex-direction: row !important;
+}
+
+

@@ -6,11 +6,12 @@
     <title>Demo</title>
 
     <link rel="stylesheet" href="/web/static/lib/bootstrap/dist/css/bootstrap.css"/>
-    <script type="text/javascript" src="../../bootstrap/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
-    <script type="text/javascript" src="../../layui/layui.js"></script>
     <link href="../../layui/css/layui.css" rel="stylesheet">
     <link href="./packing_add_data_render_view.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../layui/layui.js"></script>
     <style></style>
 </head>
 <body>
@@ -337,9 +338,9 @@
             var have_synch_packed_qty = datas.have_synch_packed_qty
             var product_qty = datas.product_qty
             var quantity = datas.quantity + datas.product_qty
-            if (!product_qty && !data_list.includes(size_name)) {
-                return
-            }
+            // if (!product_qty && !data_list.includes(size_name)) {
+            //     return
+            // }
             html += `<label for="${size_name}"><div class="input-group-text btnSize"><span>尺码</span><span>：</span><span data-quantity="${quantity}" data-have_synch_packed_qty="${have_synch_packed_qty}" style="width: 35%;display: inline-flex;">${size_name}</span></div></label>
             <div class="input-group-text btnQuantity"><span>未装箱数</span><span>：</span><span data-quantity="${quantity}" data-have_synch_packed_qty="${have_synch_packed_qty}" class="size_quty_${size_name}">${product_qty}</span></div>
                 <input placeholder="件数" id="single_${size_name}" data-size_name="${size_name}" type="text" class="layui-input">

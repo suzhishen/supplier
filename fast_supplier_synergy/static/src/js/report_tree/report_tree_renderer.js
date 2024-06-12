@@ -1,11 +1,12 @@
 /** @odoo-module */
-
+import {useService} from "@web/core/utils/hooks";
 import {Component, onWillUnmount, onMounted, onWillStart, onWillUpdateProps, useState, useEffect, xml} from "@odoo/owl";
 
 
 export class report_tree_renderer extends Component {
     setup() {
         this.orm = this.props.list.model.orm
+        this.notification = useService("notification");
         this.sizeList = {}
         this.sizeS = []
         this.sizeT = []
@@ -14,7 +15,25 @@ export class report_tree_renderer extends Component {
         })
         this.difference_data = []
         onWillStart(async () => {
+            let self = this
+            let code = 200
             const response = await this.orm.call('fast.blank.packing_list_detail', 'get_rep_size_list', [], {})
+            //     .then(result => {
+            //     console.log(result)
+            //     if (result.code !== 200) {
+            //         code = 500
+            //         self.notification.add(
+            //             self.env._t(result.message),
+            //             {
+            //                 title: '提示',
+            //                 type: "warning",
+            //             }
+            //         );
+            //     }
+            // })
+            // if (code !== 200){
+            //     return
+            // }
             this.sizeList = response.data
             const number = response.data.t.length - response.data.s.length
             if (number > 0) {

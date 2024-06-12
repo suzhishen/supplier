@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="0">
+
+        <record id="cpcl_template_create_blank_out_label" model="printer.cpcl.template">
+            <field name="name">空白版-出库（76*130）QR</field>
+            <field name="code">CREATE_BLANK_OUT_LABEL</field>
+            <field name="remark">76*130</field>
+            <field name="content">
+! 0 200 200 1000 1
+;款式
+VT 4 6 0 1000 STYLE:{style}
+LINE 100 0 100 1000 3
+
+VT 4 2 100 1000 XS
+VT 4 2 190 1000 {xs_qty}
+LINE 100 900 280 900 3
+
+VT 4 2 100 890 S
+VT 4 2 190 890 {s_qty}
+LINE 100 770 280 770 3
+
+VT 4 2 100 760 M
+VT 4 2 190 760 {m_qty}
+LINE 100 630 280 630 3
+
+VT 4 2 100 620 L
+VT 4 2 190 620 {l_qty}
+LINE 100 490 280 490 3
+
+VT 4 2 100 480 XL
+VT 4 2 190 480 {xl_qty}
+LINE 100 350 280 350 3
+
+VT 4 2 100 340 2XL
+VT 4 2 190 340 {size_2xl_qty}
+LINE 100 210 280 210 3
+
+VT 4 2 100 200 3XL
+VT 4 2 190 200 {size_3xl_qty}
+LINE 100 90 280 90 3
+
+VT 4 2 100 80 4XL
+VT 4 2 190 80 {size_4xl_qty}
+
+LINE 180 0 100 1000 3
+
+LINE 280 0 100 1000 3
+;生产班长
+VT 4 2 290 1000 生产班长：
+VT 4 6 390 1000 {department_name}
+;拣货员
+VT 4 2 290 630 拣货员：
+VT 4 6 390 630 {pick_user_name}
+;总数
+VT 4 3 290 210 {total_qty}
+;拣货日期
+VT 4 2 392 210 {pick_date}
+LINE 450 0 450 210 3
+
+;拣货单号
+VT 4 2 452 210 {picking_name}
+LINE 380 0 100 1000 3
+LINE 280 630 600 630 3
+
+LINE 280 210 600 210 3
+SETFF 1000 0
+FORM
+PRINT
+            </field>
+        </record>
+
+
+    </data>
+
+</odoo>

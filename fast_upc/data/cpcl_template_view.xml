@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="cpcl_template_create_fabric_label" model="printer.cpcl.template">
+            <field name="name">生成面料标签（75*50）QR</field>
+            <field name="code">CREATE_FABRIC_LABEL</field>
+            <field name="remark">75*50</field>
+            <field name="content">
+! 0 200 200 480 1
+CENTER
+TEXT 8 3 0 6 乐达面料仓
+LINE 0 60 630 60 3
+LEFT
+TEXT 3 2 5 65 供应商:{partner_name}
+TEXT 3 2 5 145 编码:{default_code}
+TEXT 3 2 5 225 品名:{product_name}
+TEXT 3 2 5 305 缸号-匹号:{qr_code}
+B QR 315 90 M 2 U 12
+MA, {qr_code}
+ENDQR
+SETFF 480 0
+FORM
+PRINT
+            </field>
+        </record>
+
+
+    </data>
+
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem name="账号管理" id="supplier_users_management_menu" sequence="30" groups="supplier_users.supplier_management"/>
+
+        <menuitem name="账号管理" id="supplier_users_menu" parent="supplier_users_management_menu" action="supplier_users.supplier_user_res_user_extend_action_view"/>
+    </data>
+</odoo>

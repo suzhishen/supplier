@@ -204,12 +204,25 @@ export class PackingTreeRender extends Component {
                     console.log(next_result)
                     // 更新前端数据
                     next_result.data.forEach(record => {
-                        $(`.${datas.product_tmpl_code}-${record.size}`).html(record.quantity)
+                        var all_quantity = $(`.All-${datas.po}-${datas.product_tmpl_code}-${record.size}`)[0].textContent
+                        $(`.${datas.po}-${datas.product_tmpl_code}-${record.size}`).html(record.quantity)
+                        $(`.Not-${datas.po}-${datas.product_tmpl_code}-${record.size}`).html(parseInt(all_quantity) - parseInt(record.quantity))
+                        if(parseInt(all_quantity) - parseInt(record.quantity) === 0){
+                            $(`.Not-${datas.po}-${datas.product_tmpl_code}-${record.size}`).hide()
+                            $(`.NotFh-${datas.po}-${datas.product_tmpl_code}-${record.size}`).hide()
+                        }else{
+                            $(`.Not-${datas.po}-${datas.product_tmpl_code}-${record.size}`).show()
+                            $(`.NotFh-${datas.po}-${datas.product_tmpl_code}-${record.size}`).show()
+                        }
                     })
                     // 未检测到数据更新则重置
                     if (!next_result.data.length){
                         datas.incomplete_line.forEach(record => {
-                            $(`.${datas.product_tmpl_code}-${record.size_name}`).html(0)
+                            var all_quantity = $(`.All-${datas.po}-${datas.product_tmpl_code}-${record.size_name}`)[0].textContent
+                            $(`.${datas.po}-${datas.product_tmpl_code}-${record.size_name}`).html(0)
+                            $(`.Not-${datas.po}-${datas.product_tmpl_code}-${record.size_name}`).html(parseInt(all_quantity))
+                            $(`.Not-${datas.po}-${datas.product_tmpl_code}-${record.size_name}`).show()
+                            $(`.NotFh-${datas.po}-${datas.product_tmpl_code}-${record.size_name}`).show()
                         })
                     }
                 })

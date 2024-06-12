@@ -14,13 +14,17 @@
     'depends': [
         'base',
         'mail',
-        'web'
+        'web',
+        'supplier_users',
+        'fast_attachment',
+        'fast_upc',
     ],
     'data': [
         'security/ir.model.access.csv',
         'security/supplier_security.xml',
         'data/blank_packing_list_detail_data.xml',
         'views/fast_blank_configuration_views.xml',
+        'views/fast_supplier_quotation_views.xml',
         'views/fast_blank_bom_views.xml',
         'views/fast_supplier_order_blank_views.xml',
         'views/fast_outsource_order_blank_line_fllow_views.xml',
@@ -28,8 +32,11 @@
         'views/ir_actions_client_views.xml',
         'views/fast_blank_packing_list_views.xml',
         'views/fast_packing_config_views.xml',
+        'views/fast_config_dev_views.xml',
         'views/report_forms_views.xml',
         'views/report_view.xml',
+        # 订单跟进（主辅料查看详情）
+        'wizard/fast_supplier_order_blank_wizard/fast_supplier_order_blank_wizard_view.xml',
         'views/menu_views.xml',
         'views/fast_create_material_requirements_wizard_views_apply_material.xml',
     ],
@@ -67,8 +74,8 @@
             'fast_supplier_synergy/static/src/js/report_forms/*.js',
             'fast_supplier_synergy/static/src/js/report_forms/*.xml',
             'fast_supplier_synergy/static/src/js/report_forms/*.scss',
-            # 进入form时更新基础数据
-            'fast_supplier_synergy/static/src/js/update_basic/*.js',
+            # # 进入form时更新基础数据
+            # 'fast_supplier_synergy/static/src/js/update_basic/*.js',
         ],
         'web.assets_common': [
             'fast_supplier_synergy/static/src/css/*.css',

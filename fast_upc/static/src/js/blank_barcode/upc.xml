@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <div t-name="fast_upc.blank_upc" class="o_action upc-wrapper" owl="1">
+        <div class="blank_barcode_upc o_action o_view_controller o_list_view">
+            <div>
+                请填写以下内容：
+                <div class="custom-upc-wrapper">
+                    <div>
+                        <span>空白版</span>
+                        <input placeholder="如：M10028" t-model="state.data.style"/>
+                    </div>
+                    <div>
+                        <span>颜色</span>
+                        <input placeholder="如：BLK" t-model="state.data.color"/>
+                    </div>
+                    <div>
+                        <span>尺码</span>
+                        <input placeholder="如：S" t-model="state.data.size"/>
+                    </div>
+                </div>
+                <p>请选择打印模板:</p>
+                <div class="print_label_type">
+                    <input type="radio" id="print_label_type"
+                        value="normal" t-model="state.print_label_type"/>
+                    <label for="type_normal" class="oe_label"
+                        style="display: inline;padding-right:10px">
+                        55*30
+                    </label>
+                    <input type="radio" id="print_label_type"
+                        value="single" t-model="state.print_label_type"/>
+                    <label for="type_single" class="oe_label"
+                        style="display: inline;padding-right:10px">
+                        30*55
+                    </label>
+                    <input type="radio" id="print_label_type"
+                        value="double" t-model="state.print_label_type"/>
+                    <label for="type_double" class="oe_label"
+                        style="display: inline;padding-right:10px">
+                        30*55*2
+                    </label>
+                </div>
+                <p>请填写打印数量:</p>
+                <input t-model="state.printCount" type="number" min="1" t-ref="barcodeInput"
+                       class="input-style input-style-border barcodeInput" placeholder="请输入需要打印数量"/>
+                <div class="footer-button">
+                    <button class="btn btn-primary print-button" t-on-click="()=>this.onDirectPrint()">打印</button>
+                    
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</templates>
